@@ -32,7 +32,7 @@ export const logIn = ({ myAccountId, myPrivateKey, network, localNode, localMirr
   }
 };
 
-function handleLocalNode(config: LogInType): Client {
+const handleLocalNode = (config: LogInType): Client => {
   let client: Client;
 
   if (config.localNode) {
@@ -47,4 +47,4 @@ function handleLocalNode(config: LogInType): Client {
 
   client.setOperator(config.myAccountId, config.myPrivateKey);
   return client;
-}
+};
