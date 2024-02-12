@@ -33,13 +33,7 @@ export const logIn = ({ myAccountId, myPrivateKey, network, localNode, localMirr
 };
 
 const handleLocalNode = (config: LogInType): Client => {
-  let client: Client;
-
-  if (config.localNode) {
-    client = Client.forNetwork(config.localNode);
-  } else {
-    client = Client.forLocalNode();
-  }
+  const client = config.localNode ? Client.forNetwork(config.localNode) : Client.forLocalNode();
 
   if (config.localMirrorNode) {
     client.setMirrorNetwork(config.localMirrorNode);
