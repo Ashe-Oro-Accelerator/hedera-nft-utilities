@@ -18,7 +18,7 @@
  *
  */
 
-import { AccountId } from "@hashgraph/sdk";
+import { AccountId } from '@hashgraph/sdk';
 
 export type LocalNode = {[key: string]: string | AccountId};
 

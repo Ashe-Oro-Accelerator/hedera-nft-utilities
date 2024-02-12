@@ -51,4 +51,4 @@ export type IncreaseNFTSupplyType = {
 
 export type MintedNFTType = { serialNumber: number; content: string };
 
-export type Network = NetworkName | "localnode";
+export type Network = NetworkName | 'localnode';

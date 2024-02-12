@@ -106,7 +106,7 @@ describe('increaseNFTSupply', () => {
   it('should get correct mirror node url for mainnet', async () => {
     const mockIncreaseNFTSupplyTypeMainnet = {
       ...mockIncreaseNFTSupplyType,
-      network: "mainnet" as Network,
+      network: 'mainnet' as Network,
       mirrorNodeUrl: undefined,
     };
 

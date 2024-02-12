@@ -59,7 +59,7 @@ describe('logIn', () => {
   });
 
   it('should create a client for local network with custom node', () => {
-    const localNode = {"127.0.0.1:50211": new AccountId(3)};
+    const localNode = {'127.0.0.1:50211': new AccountId(3)};
     logIn({ myAccountId, myPrivateKey, network: 'localnode', localNode: localNode });
 
     expect(Client.forNetwork).toHaveBeenCalled();
@@ -67,8 +67,8 @@ describe('logIn', () => {
   });
 
   it('should create a client for local network with custom node and mirror network', () => {
-    const localNode = {"127.0.0.1:50211": new AccountId(3)};
-    const mirrorNetwork = "mirrorNetwork";
+    const localNode = {'127.0.0.1:50211': new AccountId(3)};
+    const mirrorNetwork = 'mirrorNetwork';
     logIn({ myAccountId, myPrivateKey, network: 'localnode', localNode: localNode, localMirrorNode: mirrorNetwork });
 
     expect(Client.forNetwork).toHaveBeenCalled();

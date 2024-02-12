@@ -26,7 +26,7 @@ export const logIn = ({ myAccountId, myPrivateKey, network, localNode, localMirr
   if (!myPrivateKey) throw new Error(dictionary.createCollection.myPrivateKeyRequired);
 
   if (network == 'localnode') {
-    return handleLocalNode({ myAccountId, myPrivateKey, network, localNode, localMirrorNode })
+    return handleLocalNode({ myAccountId, myPrivateKey, network, localNode, localMirrorNode });
   } else {
     return Client.forName(network).setOperator(myAccountId, myPrivateKey);
   }
