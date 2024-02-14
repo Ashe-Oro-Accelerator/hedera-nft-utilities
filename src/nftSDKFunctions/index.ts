@@ -17,7 +17,7 @@
  * limitations under the License.
  *
  */
-import { Client, CustomFee, NftId, PrivateKey } from '@hashgraph/sdk';
+import { Client, CustomFixedFee, CustomRoyaltyFee, NftId, PrivateKey } from '@hashgraph/sdk';
 import { NetworkName } from '@hashgraph/sdk/lib/client/Client';
 import { CreateCollectionKeysType } from '../types/create-collection.module';
 import { JsonMetadataFromCSVInterface } from '../types/json-metadata-from-csv.module';
@@ -27,6 +27,8 @@ import { logIn } from './log-in';
 import { createJsonMetadataFromCSV } from './create-json-metadata-from-csv';
 import { mintUniqueMetadataFunction } from './mint-unique-metadata-function';
 import { mintSharedMetadataFunction } from './mint-shared-metadata-function';
+import { estimateCreateCollectionInDollars } from './estimate-create-collection-in-dollars';
+import { estimateCreateCollectionInHbar } from './estimate-create-collection-in-hbar';
 
 export class HederaNFTSDK {
   accountId: string;
@@ -56,7 +58,7 @@ export class HederaNFTSDK {
     treasuryAccount?: string;
     keys?: CreateCollectionKeysType;
     maxSupply?: number;
-    customFees?: CustomFee[];
+    customFees?: CustomFixedFee[] | CustomRoyaltyFee[];
   }) {
     return createCollectionFunction({
       client: this.client,
@@ -68,6 +70,60 @@ export class HederaNFTSDK {
       treasuryAccountPrivateKey,
       maxSupply,
       customFees,
+    });
+  }
+
+  estimateCreateCollectionInDollars({
+    collectionName,
+    collectionSymbol,
+    treasuryAccountPrivateKey,
+    treasuryAccount,
+    keys,
+    customFees,
+  }: {
+    collectionName: string;
+    collectionSymbol: string;
+    treasuryAccountPrivateKey?: string;
+    treasuryAccount?: string;
+    keys?: CreateCollectionKeysType;
+    customFees?: CustomFixedFee[] | CustomRoyaltyFee[];
+  }) {
+    return estimateCreateCollectionInDollars({
+      collectionName,
+      collectionSymbol,
+      keys,
+      treasuryAccount,
+      treasuryAccountPrivateKey,
+      customFees,
+    });
+  }
+
+  estimateCreateCollectionInHbar({
+    collectionName,
+    collectionSymbol,
+    treasuryAccountPrivateKey,
+    treasuryAccount,
+    keys,
+    customFees,
+    mirrorNodeUrl,
+  }: {
+    collectionName: string;
+    collectionSymbol: string;
+    treasuryAccountPrivateKey?: string;
+    treasuryAccount?: string;
+    keys?: CreateCollectionKeysType;
+    customFees?: CustomFixedFee[] | CustomRoyaltyFee[];
+    mirrorNodeUrl?: string;
+  }) {
+    return estimateCreateCollectionInHbar({
+      collectionName,
+      collectionSymbol,
+      keys,
+      treasuryAccount,
+      treasuryAccountPrivateKey,
+      customFees,
+      network: this.network,
+      mirrorNodeUrl,
     });
   }
 
