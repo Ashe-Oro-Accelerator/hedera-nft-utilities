@@ -19,14 +19,20 @@
  */
 import { myAccountId, mySecondAccountId } from '../__mocks__/consts';
 import { dictionary } from '../../utils/constants/dictionary';
-import { feeFactoryInstance } from '../e2e/e2e-consts';
 import { estimateCreateCollectionInHbar } from '../../nftSDKFunctions/estimate-create-collection-in-hbar';
+import { FeeFactory } from '../../feeFactory';
 
 const expectToBeCloseToWithinMargin = (actual: number, expected: number, margin: number = 0.03) => {
   const difference = Math.abs(actual - expected);
   const acceptableDifference = Math.abs(expected * margin);
   expect(difference).toBeLessThanOrEqual(acceptableDifference);
 };
+
+let feeFactoryInstance: FeeFactory;
+
+beforeAll(() => {
+  feeFactoryInstance = new FeeFactory();
+});
 
 describe('estimateCreateCollectionInHbars', () => {
   it('should work properly with default values', async () => {

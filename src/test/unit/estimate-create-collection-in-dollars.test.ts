@@ -20,7 +20,13 @@
 import { estimateCreateCollectionInDollars } from '../../nftSDKFunctions/estimate-create-collection-in-dollars';
 import { myAccountId, myPrivateKey, mySecondAccountId } from '../__mocks__/consts';
 import { dictionary } from '../../utils/constants/dictionary';
-import { feeFactoryInstance } from '../e2e/e2e-consts';
+import { FeeFactory } from '../../feeFactory';
+
+let feeFactoryInstance: FeeFactory;
+
+beforeAll(() => {
+  feeFactoryInstance = new FeeFactory();
+});
 
 describe('estimateCreateCollectionInDollars', () => {
   it('should work properly', async () => {
