@@ -22,7 +22,7 @@ import axios from 'axios';
 import { validatePropsForIncreaseNFTSupply } from '../utils/validate-props';
 import { IncreaseNFTSupplyType } from '../types/mint-token.module';
 import { mintSharedMetadataFunction } from './mint-shared-metadata-function';
-import { getMirrorNodeUrlForNetwork } from '../utils/hedera/getMirrorNodeUrlForNetwork';
+import { getMirrorNodeUrlForNetwork } from '../utils/hedera/get-mirror-node-url-for-network';
 
 export const increaseNFTSupply = async ({ client, network, nftId, amount, batchSize, supplyKey, mirrorNodeUrl }: IncreaseNFTSupplyType) => {
   validatePropsForIncreaseNFTSupply({ nftId, amount, supplyKey, batchSize });

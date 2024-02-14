@@ -20,7 +20,7 @@
 import { validatePropsForCreateCollection } from '../utils/validate-props';
 import { EstimateCreateCollectionInHbarsType } from '../types/estimate-create-collection';
 import { estimateCreateCollectionInDollars } from './estimate-create-collection-in-dollars';
-import { getHbarPriceInDollars } from '../helpers/getHbarPriceInDollars';
+import { getHbarPriceInDollars } from '../helpers/get-hbar-price-in-dollars';
 
 export const estimateCreateCollectionInHbar = async ({
   collectionName,

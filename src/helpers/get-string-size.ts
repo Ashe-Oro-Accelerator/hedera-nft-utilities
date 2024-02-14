@@ -17,15 +17,9 @@
  * limitations under the License.
  *
  */
-import { HbarPrice } from '../types/estimate-create-collection';
-import { fetchHbarExchangeRate } from '../utils/hedera/fetchHbarExchangeRate';
+import { Blob } from 'buffer';
 
-export const getHbarPriceInDollars = async (network: string, mirrorNodeUrl?: string): Promise<HbarPrice> => {
-  const { current_rate, timestamp } = await fetchHbarExchangeRate(network, mirrorNodeUrl);
-  const hbarPriceInCents = current_rate.cent_equivalent / current_rate.hbar_equivalent;
-
-  return {
-    priceInDollars: hbarPriceInCents / 100,
-    timestamp,
-  };
+export const getStringSize = (str?: string): number => {
+  if (!str) return 0;
+  return new Blob([str]).size;
 };
