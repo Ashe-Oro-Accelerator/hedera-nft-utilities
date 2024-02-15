@@ -17,16 +17,17 @@
  * limitations under the License.
  *
  */
-import 'dotenv/config';
-import { FeeFactory } from '../../feeFactory';
-import { HederaNFTSDK } from '../../nftSDKFunctions';
+import { HbarExchangeRate } from '../../types/estimate-create-collection';
+import { dictionary } from '../constants/dictionary';
+import { getMirrorNodeUrlForNetwork } from './get-mirror-node-url-for-network';
+import axios from 'axios';
 
-export const operatorAccountId = process.env.SECOND_ACCOUNT_ID!;
-export const operatorPrivateKey = process.env.SECOND_PRIVATE_KEY!;
-
-export const secondAccountId = process.env.SECOND_ACCOUNT_ID!;
-export const secondPrivateKey = process.env.SECOND_PRIVATE_KEY!;
-
-export const nftSDK = new HederaNFTSDK(operatorAccountId, operatorPrivateKey, 'testnet');
-
-export const feeFactoryInstance = new FeeFactory();
+export const fetchHbarExchangeRate = async (network: string, mirrorNodeUrl?: string): Promise<HbarExchangeRate> => {
+  try {
+    const url = mirrorNodeUrl || getMirrorNodeUrlForNetwork(network);
+    const { data } = await axios.get<HbarExchangeRate>(`${url}/network/exchangerate`);
+    return data;
+  } catch {
+    throw new Error(dictionary.errors.cannotFetchHbarExchangeRate);
+  }
+};

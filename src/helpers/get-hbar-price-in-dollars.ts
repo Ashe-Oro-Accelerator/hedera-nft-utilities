@@ -17,16 +17,15 @@
  * limitations under the License.
  *
  */
-import 'dotenv/config';
-import { FeeFactory } from '../../feeFactory';
-import { HederaNFTSDK } from '../../nftSDKFunctions';
+import { HbarPrice } from '../types/estimate-create-collection';
+import { fetchHbarExchangeRate } from '../utils/hedera/fetch-hbar-exchange-rate';
 
-export const operatorAccountId = process.env.SECOND_ACCOUNT_ID!;
-export const operatorPrivateKey = process.env.SECOND_PRIVATE_KEY!;
+export const getHbarPriceInDollars = async (network: string, mirrorNodeUrl?: string): Promise<HbarPrice> => {
+  const { current_rate, timestamp } = await fetchHbarExchangeRate(network, mirrorNodeUrl);
+  const hbarPriceInCents = current_rate.cent_equivalent / current_rate.hbar_equivalent;
 
-export const secondAccountId = process.env.SECOND_ACCOUNT_ID!;
-export const secondPrivateKey = process.env.SECOND_PRIVATE_KEY!;
-
-export const nftSDK = new HederaNFTSDK(operatorAccountId, operatorPrivateKey, 'testnet');
-
-export const feeFactoryInstance = new FeeFactory();
+  return {
+    priceInDollars: hbarPriceInCents / 100,
+    timestamp,
+  };
+};

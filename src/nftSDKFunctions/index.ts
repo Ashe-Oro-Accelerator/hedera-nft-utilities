@@ -28,6 +28,7 @@ import { logIn } from './log-in';
 import { mintSharedMetadataFunction } from './mint-shared-metadata-function';
 import { mintUniqueMetadataFunction } from './mint-unique-metadata-function';
 import { LocalNode } from '../types/login.module';
+import { estimateNftMintingCostFunction } from './estimate-nft-minting-cost-function';
 
 export class HederaNFTSDK {
   accountId: string;
@@ -38,7 +39,13 @@ export class HederaNFTSDK {
   constructor(accountId: string, privateKey: string, network: Network, localNode?: LocalNode, localMirrorNode?: string) {
     this.accountId = accountId;
     this.privateKey = privateKey;
-    this.client = logIn({ myAccountId: accountId, myPrivateKey: privateKey, network: network, localNode: localNode, localMirrorNode: localMirrorNode });
+    this.client = logIn({
+      myAccountId: accountId,
+      myPrivateKey: privateKey,
+      network: network,
+      localNode: localNode,
+      localMirrorNode: localMirrorNode,
+    });
     this.network = network;
   }
 
@@ -70,6 +77,10 @@ export class HederaNFTSDK {
       maxSupply,
       customFees,
     });
+  }
+
+  estimateNftMintingCost({ amountOfNfts, mirrorNodeUrl }: { amountOfNfts: number; mirrorNodeUrl?: string }) {
+    return estimateNftMintingCostFunction({ amountOfNfts, mirrorNodeUrl, network: this.network });
   }
 
   createJsonMetadataFromCSV({

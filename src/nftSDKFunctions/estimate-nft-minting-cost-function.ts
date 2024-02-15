@@ -17,16 +17,18 @@
  * limitations under the License.
  *
  */
-import 'dotenv/config';
-import { FeeFactory } from '../../feeFactory';
-import { HederaNFTSDK } from '../../nftSDKFunctions';
+import { getHbarPriceInDollars } from '../helpers/get-hbar-price-in-dollars';
+import { AVERAGE_COST_OF_MINT_1_AVERAGE_METADATA_JSON } from '../utils/constants/minting';
 
-export const operatorAccountId = process.env.SECOND_ACCOUNT_ID!;
-export const operatorPrivateKey = process.env.SECOND_PRIVATE_KEY!;
-
-export const secondAccountId = process.env.SECOND_ACCOUNT_ID!;
-export const secondPrivateKey = process.env.SECOND_PRIVATE_KEY!;
-
-export const nftSDK = new HederaNFTSDK(operatorAccountId, operatorPrivateKey, 'testnet');
-
-export const feeFactoryInstance = new FeeFactory();
+export const estimateNftMintingCostFunction = async ({
+  amountOfNfts,
+  network,
+  mirrorNodeUrl,
+}: {
+  amountOfNfts: number;
+  network: string;
+  mirrorNodeUrl?: string;
+}) => {
+  const hbarPrice = await getHbarPriceInDollars(network, mirrorNodeUrl);
+  return (amountOfNfts * AVERAGE_COST_OF_MINT_1_AVERAGE_METADATA_JSON) / hbarPrice.priceInDollars;
+};
