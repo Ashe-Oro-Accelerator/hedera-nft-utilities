@@ -19,7 +19,7 @@
  */
 import { validatePropsForCreateCollection } from '../utils/validate-props';
 import { tokenCreateUsage } from './token-create-usage';
-import { FeeTool } from '../helpers/calculatePrice';
+import { FeeTool } from '../helpers/calculate-price';
 import { EstimateCreateCollectionType } from '../types/estimate-create-collection';
 import { getTokenCreateWithFeesUsage } from '../helpers/get-token-create-with-fees-usage';
 

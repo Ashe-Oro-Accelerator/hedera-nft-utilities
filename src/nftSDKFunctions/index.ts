@@ -36,8 +36,16 @@ export class HederaNFTSDK {
   privateKey: string;
   client: Client;
   network: Network;
+  mirrorNodeUrl?: string;
 
-  constructor(accountId: string, privateKey: string, network: Network, localNode?: LocalNode, localMirrorNode?: string) {
+  constructor(
+    accountId: string,
+    privateKey: string,
+    network: Network,
+    localNode?: LocalNode,
+    localMirrorNode?: string,
+    mirrorNodeUrl?: string
+  ) {
     this.accountId = accountId;
     this.privateKey = privateKey;
     this.client = logIn({
@@ -48,6 +56,7 @@ export class HederaNFTSDK {
       localMirrorNode: localMirrorNode,
     });
     this.network = network;
+    this.mirrorNodeUrl = mirrorNodeUrl;
   }
 
   createCollection({
@@ -112,7 +121,6 @@ export class HederaNFTSDK {
     treasuryAccount,
     keys,
     customFees,
-    mirrorNodeUrl,
   }: {
     collectionName: string;
     collectionSymbol: string;
@@ -120,7 +128,6 @@ export class HederaNFTSDK {
     treasuryAccount?: string;
     keys?: CreateCollectionKeysType;
     customFees?: CustomFeeType[];
-    mirrorNodeUrl?: string;
   }) {
     return estimateCreateCollectionInHbar({
       collectionName,
@@ -130,7 +137,7 @@ export class HederaNFTSDK {
       treasuryAccountPrivateKey,
       customFees,
       network: this.network,
-      mirrorNodeUrl,
+      mirrorNodeUrl: this.mirrorNodeUrl,
     });
   }
 
@@ -201,13 +208,11 @@ export class HederaNFTSDK {
     amount,
     batchSize = 5,
     supplyKey,
-    mirrorNodeUrl,
   }: {
     nftId: NftId;
     amount: number;
     batchSize?: number;
     supplyKey?: PrivateKey;
-    mirrorNodeUrl?: string;
   }) {
     return increaseNFTSupply({
       client: this.client,
@@ -216,7 +221,7 @@ export class HederaNFTSDK {
       amount,
       batchSize,
       supplyKey: supplyKey || PrivateKey.fromString(this.privateKey),
-      mirrorNodeUrl,
+      mirrorNodeUrl: this.mirrorNodeUrl,
     });
   }
 }
