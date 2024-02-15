@@ -24,6 +24,10 @@ import { mintToken } from '../../nftSDKFunctions/mint-token';
 import { estimateNftMintingCostFunction } from '../../nftSDKFunctions/estimate-nft-minting-cost-function';
 import { AVERAGE_COST_OF_MINT_1_AVERAGE_METADATA_JSON } from '../../utils/constants/minting';
 
+afterAll(async () => {
+  nftSDK.client.close();
+});
+
 describe('mintSharedMetadata function e2e', () => {
   const testCases = [{ amount: 1 }, { amount: 3 }, { amount: 10 }];
 
@@ -49,11 +53,12 @@ describe('mintSharedMetadata function e2e', () => {
           network: 'testnet',
         });
 
+        const expectedCost =
+          (mintTokenReceipt.totalSupply.toString() * AVERAGE_COST_OF_MINT_1_AVERAGE_METADATA_JSON) / exchangeRateInDollars;
+
         expect(tokenId).toBeDefined();
         expect(mintTokenReceipt).toBeDefined();
-        expect((mintTokenReceipt.totalSupply.toString() * AVERAGE_COST_OF_MINT_1_AVERAGE_METADATA_JSON) / exchangeRateInDollars).toEqual(
-          estimatedCost
-        );
+        expect(expectedCost).toEqual(estimatedCost);
       },
       LONG_E2E_TIMEOUT
     );

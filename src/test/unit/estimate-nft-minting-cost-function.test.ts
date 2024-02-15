@@ -25,36 +25,36 @@ jest.mock('../../helpers/get-hbar-price-in-dollars');
 
 describe('estimateNftMintingCostFunction', () => {
   it('should correctly estimate the cost for minting NFTs', async () => {
-    (getHbarPriceInDollars as jest.Mock).mockResolvedValue({ priceInDollars: 10 });
+    (getHbarPriceInDollars as jest.Mock).mockResolvedValue({ priceInDollars: 0.0824 });
 
     const result = await estimateNftMintingCostFunction({
       amountOfNfts: 5,
       network: 'testnet',
     });
 
-    expect(result).toBe((5 * AVERAGE_COST_OF_MINT_1_AVERAGE_METADATA_JSON) / 10);
+    expect(result).toBe(1.2135922330097089);
   });
 
   it('should correctly estimate the cost for minting a single NFT', async () => {
-    (getHbarPriceInDollars as jest.Mock).mockResolvedValue({ priceInDollars: 10 });
+    (getHbarPriceInDollars as jest.Mock).mockResolvedValue({ priceInDollars: 0.0824 });
 
     const result = await estimateNftMintingCostFunction({
       amountOfNfts: 1,
       network: 'testnet',
     });
 
-    expect(result).toBe(AVERAGE_COST_OF_MINT_1_AVERAGE_METADATA_JSON / 10);
+    expect(result).toBe(0.24271844660194175);
   });
 
   it('should correctly estimate the cost for minting multiple NFTs', async () => {
-    (getHbarPriceInDollars as jest.Mock).mockResolvedValue({ priceInDollars: 10 });
+    (getHbarPriceInDollars as jest.Mock).mockResolvedValue({ priceInDollars: 0.0824 });
 
     const result = await estimateNftMintingCostFunction({
       amountOfNfts: 10,
       network: 'testnet',
     });
 
-    expect(result).toBe((10 * AVERAGE_COST_OF_MINT_1_AVERAGE_METADATA_JSON) / 10);
+    expect(result).toBe(2.4271844660194177);
   });
 
   it('should handle errors from getHbarPriceInDollars', async () => {
