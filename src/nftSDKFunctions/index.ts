@@ -18,7 +18,7 @@
  *
  */
 import { Client, CustomFixedFee, CustomRoyaltyFee, NftId, PrivateKey } from '@hashgraph/sdk';
-import { CreateCollectionKeysType } from '../types/create-collection.module';
+import { CreateCollectionKeysType, CustomFeeType } from '../types/create-collection.module';
 import { JsonMetadataFromCSVInterface } from '../types/json-metadata-from-csv.module';
 import { Network } from '../types/mint-token.module';
 import { createCollectionFunction } from './create-collection';
@@ -40,7 +40,13 @@ export class HederaNFTSDK {
   constructor(accountId: string, privateKey: string, network: Network, localNode?: LocalNode, localMirrorNode?: string) {
     this.accountId = accountId;
     this.privateKey = privateKey;
-    this.client = logIn({ myAccountId: accountId, myPrivateKey: privateKey, network: network, localNode: localNode, localMirrorNode: localMirrorNode });
+    this.client = logIn({
+      myAccountId: accountId,
+      myPrivateKey: privateKey,
+      network: network,
+      localNode: localNode,
+      localMirrorNode: localMirrorNode,
+    });
     this.network = network;
   }
 
@@ -59,7 +65,7 @@ export class HederaNFTSDK {
     treasuryAccount?: string;
     keys?: CreateCollectionKeysType;
     maxSupply?: number;
-    customFees?: CustomFixedFee[] | CustomRoyaltyFee[];
+    customFees?: CustomFeeType[];
   }) {
     return createCollectionFunction({
       client: this.client,
@@ -87,7 +93,7 @@ export class HederaNFTSDK {
     treasuryAccountPrivateKey?: string;
     treasuryAccount?: string;
     keys?: CreateCollectionKeysType;
-    customFees?: CustomFixedFee[] | CustomRoyaltyFee[];
+    customFees?: CustomFeeType[];
   }) {
     return estimateCreateCollectionInDollars({
       collectionName,
@@ -113,7 +119,7 @@ export class HederaNFTSDK {
     treasuryAccountPrivateKey?: string;
     treasuryAccount?: string;
     keys?: CreateCollectionKeysType;
-    customFees?: CustomFixedFee[] | CustomRoyaltyFee[];
+    customFees?: CustomFeeType[];
     mirrorNodeUrl?: string;
   }) {
     return estimateCreateCollectionInHbar({

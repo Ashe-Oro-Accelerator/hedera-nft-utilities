@@ -95,7 +95,7 @@ export class FeeTool {
         const usageItem = item as UsageKeys;
         const compiledFormula = math.parse(formula).compile();
 
-        if (usage[validFeeComponent][usageItem] === undefined) {
+        if (!usage[validFeeComponent][usageItem]) {
           return;
         }
         usage[validFeeComponent][usageItem] = compiledFormula.evaluate(valuesForFormulaExecution);
@@ -112,10 +112,12 @@ export class FeeTool {
   }
 
   private sumHederaUsage(usage1: HederaUsage, usage2: HederaUsage): number {
+    const usageComponents = ['node', 'network', 'service'];
+    const usageKeys = ['constant', 'bpt', 'vpt', 'rbh', 'sbh', 'gas', 'bpr', 'sbpr', 'min', 'max'];
     let sum = 0;
 
-    for (const component of ['node', 'network', 'service'] as UsageComponents[]) {
-      for (const subKey of ['constant', 'bpt', 'vpt', 'rbh', 'sbh', 'gas', 'bpr', 'sbpr', 'min', 'max'] as UsageKeys[]) {
+    for (const component of usageComponents as UsageComponents[]) {
+      for (const subKey of usageKeys as UsageKeys[]) {
         const value1 = usage1[component][subKey];
         const value2 = usage2[component][subKey];
         if (value1 && value2) {

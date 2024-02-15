@@ -17,7 +17,8 @@
  * limitations under the License.
  *
  */
-import { Client, CustomFixedFee, CustomRoyaltyFee, PrivateKey } from '@hashgraph/sdk';
+import { Client, PrivateKey } from '@hashgraph/sdk';
+import { CustomFeeType } from './create-collection.module';
 
 export type sharedMintingValidationProps = {
   batchSize?: number;
@@ -48,7 +49,7 @@ export type validateCreateCollectionProps = {
   collectionSymbol?: string;
   treasuryAccountPrivateKey?: string;
   treasuryAccount?: string;
-  customFees?: CustomFixedFee[] | CustomRoyaltyFee[];
+  customFees?: CustomFeeType[];
 };
 
 export type fixedFeeValidationProps = {

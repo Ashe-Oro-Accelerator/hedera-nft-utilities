@@ -19,22 +19,23 @@
  */
 import { TokenCreateUsage, TokenCreateWithFeesUsage } from '../types/estimate-create-collection';
 import { CustomFixedFee, CustomRoyaltyFee } from '@hashgraph/sdk';
+import { CustomFeeType } from '../types/create-collection.module';
 
 export const getTokenCreateWithFeesUsage = ({
   customFees,
   tokenUsage,
 }: {
-  customFees?: CustomFixedFee[] | CustomRoyaltyFee[];
+  customFees?: CustomFeeType[];
   tokenUsage?: TokenCreateUsage;
 }): TokenCreateWithFeesUsage | undefined => {
   const commonUsageData = tokenUsage;
   if (!commonUsageData) return;
 
-  const fixedFees = customFees?.filter((fee: CustomFixedFee | CustomRoyaltyFee): fee is CustomFixedFee => {
+  const fixedFees = customFees?.filter((fee: CustomFeeType): fee is CustomFixedFee => {
     return !!fee._toProtobuf().fixedFee;
   });
 
-  const royaltyFees = customFees?.filter((fee: CustomFixedFee | CustomRoyaltyFee): fee is CustomRoyaltyFee => {
+  const royaltyFees = customFees?.filter((fee: CustomFeeType): fee is CustomRoyaltyFee => {
     return !!fee._toProtobuf().royaltyFee;
   });
 

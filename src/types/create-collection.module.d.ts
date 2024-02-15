@@ -19,6 +19,8 @@
  */
 import { Client, CustomFixedFee, CustomRoyaltyFee, Key, PrivateKey } from '@hashgraph/sdk';
 
+export type CustomFeeType = CustomFixedFee | CustomRoyaltyFee;
+
 export type CreateCollectionKeysType = {
   admin?: PrivateKey;
   KYC?: Key;
@@ -38,5 +40,5 @@ export type CreateCollectionType = {
   treasuryAccount?: string;
   treasuryAccountPrivateKey?: string;
   maxSupply?: number;
-  customFees?: CustomFixedFee[] | CustomRoyaltyFee[];
+  customFees?: CustomFeeType[];
 };
