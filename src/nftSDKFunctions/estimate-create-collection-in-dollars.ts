@@ -23,14 +23,14 @@ import { FeeTool } from '../helpers/calculatePrice';
 import { EstimateCreateCollectionType } from '../types/estimate-create-collection';
 import { getTokenCreateWithFeesUsage } from '../helpers/get-token-create-with-fees-usage';
 
-export const estimateCreateCollectionInDollars = async ({
+export const estimateCreateCollectionInDollars = ({
   collectionName,
   collectionSymbol,
   keys,
   treasuryAccount,
   treasuryAccountPrivateKey,
   customFees,
-}: EstimateCreateCollectionType) => {
+}: EstimateCreateCollectionType): number => {
   validatePropsForCreateCollection({
     collectionName,
     collectionSymbol,

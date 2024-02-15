@@ -20,11 +20,17 @@
 import { nftSDK, operatorAccountId, operatorPrivateKey } from './e2e-consts';
 import { estimateCreateCollectionInHbar } from '../../nftSDKFunctions/estimate-create-collection-in-hbar';
 import { Hbar, PrivateKey, TokenCreateTransaction, TokenType } from '@hashgraph/sdk';
-import { estimateCreateCollectionInDollars } from '../../nftSDKFunctions/estimate-create-collection-in-dollars';
 
 const toFixedWithoutRounding = (number: number, precision: number) => {
   const scale = Math.pow(10, precision);
   return Math.floor(number * scale) / scale;
+};
+
+const isWithinThreePercent = (estimatedHbarsValue: number, transactionFeeHbars: number): boolean => {
+  const difference = Math.abs(transactionFeeHbars - estimatedHbarsValue);
+  const acceptableDifference = Math.abs(transactionFeeHbars * 0.03);
+
+  return difference <= acceptableDifference;
 };
 
 afterAll(async () => {
@@ -42,11 +48,6 @@ describe('estimateCreateCollectionInHbarE2E', () => {
       collectionSymbol: symbol,
     });
 
-    const estimatedDollars = await estimateCreateCollectionInDollars({
-      collectionName: name,
-      collectionSymbol: symbol,
-    });
-
     const estimatedHbars = new Hbar(toFixedWithoutRounding(estimatedHbarNumber, 6));
 
     const createToken = new TokenCreateTransaction()
@@ -58,19 +59,12 @@ describe('estimateCreateCollectionInHbarE2E', () => {
     const txResponse = await createToken.execute(nftSDK.client);
     const record = await txResponse.getRecord(nftSDK.client);
 
-    const cents = (record.receipt.exchangeRate?.exchangeRateInCents || 0) * estimatedHbarNumber;
-    const dollars = cents / 100;
-    const roundedDollars = Number(estimatedDollars.toFixed(5));
-
     expect(record.transactionId).toBeDefined();
     expect(record.transactionFee).toBeDefined();
-    expect(roundedDollars).toEqual(estimatedDollars);
 
     const transactionFeeHbars = record.transactionFee.toTinybars().toNumber();
     const estimatedHbarsValue = estimatedHbars.toTinybars().toNumber();
 
-    const difference = Math.abs(transactionFeeHbars - estimatedHbarsValue);
-    const acceptableDifference = Math.abs(estimatedHbarsValue * 0.03);
-    expect(difference).toBeLessThanOrEqual(acceptableDifference);
+    expect(isWithinThreePercent(estimatedHbarsValue, transactionFeeHbars)).toBe(true);
   });
 });

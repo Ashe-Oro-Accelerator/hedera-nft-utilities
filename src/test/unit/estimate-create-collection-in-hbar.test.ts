@@ -21,12 +21,9 @@ import { myAccountId, mySecondAccountId } from '../__mocks__/consts';
 import { dictionary } from '../../utils/constants/dictionary';
 import { estimateCreateCollectionInHbar } from '../../nftSDKFunctions/estimate-create-collection-in-hbar';
 import { FeeFactory } from '../../feeFactory';
+import { getHbarPriceInDollars } from '../../helpers/get-hbar-price-in-dollars';
 
-const expectToBeCloseToWithinMargin = (actual: number, expected: number, margin: number = 0.03) => {
-  const difference = Math.abs(actual - expected);
-  const acceptableDifference = Math.abs(expected * margin);
-  expect(difference).toBeLessThanOrEqual(acceptableDifference);
-};
+jest.mock('../../helpers/get-hbar-price-in-dollars');
 
 let feeFactoryInstance: FeeFactory;
 
@@ -36,16 +33,20 @@ beforeAll(() => {
 
 describe('estimateCreateCollectionInHbars', () => {
   it('should work properly with default values', async () => {
+    (getHbarPriceInDollars as jest.Mock).mockResolvedValue({ priceInDollars: 10 });
+
     const hbars = await estimateCreateCollectionInHbar({
       collectionName: 'test',
       network: 'testnet',
       collectionSymbol: 'test2',
     });
 
-    expectToBeCloseToWithinMargin(hbars, 10.374939759036144);
+    expect(hbars).toEqual(0.086112);
   });
 
   it('should work properly with royalty fee', async () => {
+    (getHbarPriceInDollars as jest.Mock).mockResolvedValue({ priceInDollars: 10 });
+
     const royaltyFee = feeFactoryInstance.royaltyFee({
       collectorAccountId: myAccountId,
       numerator: 11,
@@ -65,10 +66,12 @@ describe('estimateCreateCollectionInHbars', () => {
       customFees: [royaltyFee],
     });
 
-    expectToBeCloseToWithinMargin(hbars, 20.766144578313252);
+    expect(hbars).toEqual(0.17235899999999998);
   });
 
   it('should work properly with fixed fees', async () => {
+    (getHbarPriceInDollars as jest.Mock).mockResolvedValue({ priceInDollars: 10 });
+
     const fixedFee = feeFactoryInstance.fixedFee({
       allCollectorsAreExempt: false,
       collectorAccountId: myAccountId,
@@ -82,7 +85,7 @@ describe('estimateCreateCollectionInHbars', () => {
       customFees: [fixedFee, fixedFee],
     });
 
-    expectToBeCloseToWithinMargin(hbars, 20.77578313253012);
+    expect(hbars).toEqual(0.172439);
   });
 
   it('should throw an error when invalid parameters are passed', async () => {

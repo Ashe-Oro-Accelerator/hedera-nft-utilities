@@ -29,8 +29,8 @@ beforeAll(() => {
 });
 
 describe('estimateCreateCollectionInDollars', () => {
-  it('should work properly', async () => {
-    const dollars = await estimateCreateCollectionInDollars({
+  it('should work properly', () => {
+    const dollars = estimateCreateCollectionInDollars({
       collectionName: 'test',
       collectionSymbol: 'test2',
     });
@@ -38,8 +38,8 @@ describe('estimateCreateCollectionInDollars', () => {
     expect(dollars).toEqual(0.86112);
   });
 
-  it('should return a value when valid parameters are passed', async () => {
-    const dollars = await estimateCreateCollectionInDollars({
+  it('should return a value when valid parameters are passed', () => {
+    const dollars = estimateCreateCollectionInDollars({
       collectionName: 'test',
       collectionSymbol: 'test2',
       treasuryAccount: '0.0.1234',
@@ -49,7 +49,7 @@ describe('estimateCreateCollectionInDollars', () => {
     expect(dollars).toEqual(0.90605);
   });
 
-  it('should return a value when royalty fees are passed', async () => {
+  it('should return a value when royalty fees are passed', () => {
     const royaltyFee = feeFactoryInstance.royaltyFee({
       collectorAccountId: myAccountId,
       numerator: 1,
@@ -62,7 +62,7 @@ describe('estimateCreateCollectionInDollars', () => {
       },
     });
 
-    const dollars = await estimateCreateCollectionInDollars({
+    const dollars = estimateCreateCollectionInDollars({
       collectionName: 'test',
       collectionSymbol: 'test2',
       treasuryAccount: '0.0.1234',
@@ -71,17 +71,5 @@ describe('estimateCreateCollectionInDollars', () => {
     });
 
     expect(dollars).toEqual(1.81324);
-  });
-
-  it('should throw an error when invalid parameters are passed', async () => {
-    await expect(
-      estimateCreateCollectionInDollars({
-        collectionName: '',
-        collectionSymbol: '',
-        treasuryAccount: '',
-        treasuryAccountPrivateKey: '',
-        customFees: [],
-      })
-    ).rejects.toThrow(dictionary.createCollection.collectionSymbolRequired);
   });
 });

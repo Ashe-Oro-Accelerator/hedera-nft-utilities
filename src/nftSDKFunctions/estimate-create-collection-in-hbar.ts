@@ -40,7 +40,7 @@ export const estimateCreateCollectionInHbar = async ({
     customFees,
   });
 
-  const totalCostInDollars = await estimateCreateCollectionInDollars({
+  const totalCostInDollars = estimateCreateCollectionInDollars({
     collectionName,
     collectionSymbol,
     keys,
