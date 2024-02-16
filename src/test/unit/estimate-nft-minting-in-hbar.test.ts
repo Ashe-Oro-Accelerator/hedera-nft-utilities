@@ -18,16 +18,16 @@
  *
  */
 import { getHbarPriceInDollars } from '../../helpers/get-hbar-price-in-dollars';
-import { estimateNftMintingCostFunction } from '../../nftSDKFunctions/estimate-nft-minting-cost-function';
+import { estimateNftMintingInHbar } from '../../nftSDKFunctions/estimate-nft-minting-in-hbar';
 import { AVERAGE_COST_OF_MINT_1_AVERAGE_METADATA_JSON } from '../../utils/constants/minting';
 
 jest.mock('../../helpers/get-hbar-price-in-dollars');
 
-describe('estimateNftMintingCostFunction', () => {
+describe('estimateNftMintingInHbar', () => {
   it('should correctly estimate the cost for minting NFTs', async () => {
     (getHbarPriceInDollars as jest.Mock).mockResolvedValue({ priceInDollars: 0.0824 });
 
-    const result = await estimateNftMintingCostFunction({
+    const result = await estimateNftMintingInHbar({
       amountOfNfts: 5,
       network: 'testnet',
     });
@@ -38,7 +38,7 @@ describe('estimateNftMintingCostFunction', () => {
   it('should correctly estimate the cost for minting a single NFT', async () => {
     (getHbarPriceInDollars as jest.Mock).mockResolvedValue({ priceInDollars: 0.0824 });
 
-    const result = await estimateNftMintingCostFunction({
+    const result = await estimateNftMintingInHbar({
       amountOfNfts: 1,
       network: 'testnet',
     });
@@ -49,7 +49,7 @@ describe('estimateNftMintingCostFunction', () => {
   it('should correctly estimate the cost for minting multiple NFTs', async () => {
     (getHbarPriceInDollars as jest.Mock).mockResolvedValue({ priceInDollars: 0.0824 });
 
-    const result = await estimateNftMintingCostFunction({
+    const result = await estimateNftMintingInHbar({
       amountOfNfts: 10,
       network: 'testnet',
     });
@@ -61,7 +61,7 @@ describe('estimateNftMintingCostFunction', () => {
     (getHbarPriceInDollars as jest.Mock).mockRejectedValue(new Error('Network error'));
 
     await expect(
-      estimateNftMintingCostFunction({
+      estimateNftMintingInHbar({
         amountOfNfts: 5,
         network: 'testnet',
       })

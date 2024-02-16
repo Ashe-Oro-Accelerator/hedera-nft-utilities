@@ -20,7 +20,7 @@
 import { getHbarPriceInDollars } from '../helpers/get-hbar-price-in-dollars';
 import { AVERAGE_COST_OF_MINT_1_AVERAGE_METADATA_JSON } from '../utils/constants/minting';
 
-export const estimateNftMintingCostFunction = async ({
+export const estimateNftMintingInHbar = async ({
   amountOfNfts,
   network,
   mirrorNodeUrl,
