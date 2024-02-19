@@ -106,8 +106,8 @@ describe('createCollectionFunction e2e', () => {
 
   it.only('creates a collection with autoRenewAccount test', async () => {
     const transaction = await new TokenCreateTransaction()
-      .setTokenName("test_name")
-      .setTokenSymbol("test_symbol")
+      .setTokenName('test_name')
+      .setTokenSymbol('test_symbol')
       .setTokenType(TokenType.NonFungibleUnique)
       .setSupplyKey(PrivateKey.fromString(operatorPrivateKey))
       .setAutoRenewAccountId(secondAccountId)
@@ -116,9 +116,6 @@ describe('createCollectionFunction e2e', () => {
       .sign(PrivateKey.fromString(secondPrivateKey));
 
     await transaction.execute(nftSDK.client);
-
-    console.log('operatorAccountId', operatorAccountId);
-    console.log('secondAccountId', secondAccountId);
   }, LONG_E2E_TIMEOUT);
 
   it('creates a collection with auto renew period', async () => {
@@ -137,7 +134,7 @@ describe('createCollectionFunction e2e', () => {
   }, LONG_E2E_TIMEOUT);
 
   it('creates a collection with memo', async () => {
-    const expectedMemo = "test_memo";
+    const expectedMemo = 'test_memo';
     const tokenId = await nftSDK.createCollection({
       collectionName: 'test_name_memo',
       collectionSymbol: 'TNM',
