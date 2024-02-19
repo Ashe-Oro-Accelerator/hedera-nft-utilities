@@ -30,6 +30,11 @@ export type validateCreateCollectionProps = {
   treasuryAccountPrivateKey?: string;
   treasuryAccount?: string;
   customFees?: CustomFee[];
+  expirationTime?: Date;
+  autoRenewAccount?: string;
+  autoRenewAccountPrivateKey?: string;
+  autoRenewPeriod?: number;
+  memo?: string;
 };
 
 export type fixedFeeValidationProps = {
