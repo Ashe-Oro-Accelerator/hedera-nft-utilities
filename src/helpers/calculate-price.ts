@@ -95,7 +95,7 @@ export class FeeTool {
         const usageItem = item as UsageKeys;
         const compiledFormula = math.parse(formula).compile();
 
-        if (usage[validFeeComponent][usageItem] === undefined) {
+        if (usage[validFeeComponent][usageItem] === undefined || usage[validFeeComponent][usageItem] === null) {
           return;
         }
         usage[validFeeComponent][usageItem] = compiledFormula.evaluate(valuesForFormulaExecution);
