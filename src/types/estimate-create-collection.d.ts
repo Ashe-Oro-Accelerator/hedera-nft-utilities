@@ -17,8 +17,7 @@
  * limitations under the License.
  *
  */
-import { CreateCollectionKeysType } from './create-collection.module';
-import { CustomFixedFee, CustomRoyaltyFee } from '@hashgraph/sdk';
+import { CreateCollectionKeysType, CustomFeeType } from './create-collection.module';
 
 export type UsageComponents = 'node' | 'network' | 'service';
 export type UsageKeys = 'constant' | 'bpt' | 'vpt' | 'rbh' | 'sbh' | 'gas' | 'bpr' | 'sbpr' | 'min' | 'max';
@@ -31,7 +30,7 @@ export type EstimateCreateCollectionType = {
   keys?: CreateCollectionKeysType;
   treasuryAccount?: string;
   treasuryAccountPrivateKey?: string;
-  customFees?: CustomFixedFee[] | CustomRoyaltyFee[];
+  customFees?: CustomFeeType[];
 };
 
 export type EstimateCreateCollectionInHbarsType = EstimateCreateCollectionType & {
