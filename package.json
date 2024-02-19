@@ -54,6 +54,7 @@
     "json2csv": "6.0.0-alpha.2",
     "jsonschema": "^1.4.1",
     "lodash": "^4.17.21",
+    "mathjs": "^12.3.2",
     "zod": "^3.22.4"
   },
   "devDependencies": {
