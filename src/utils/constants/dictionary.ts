@@ -42,6 +42,7 @@ export const dictionary = {
     uploadService: {
       uploadingMetadata: 'Uploading metadata file...',
     },
+    cannotFetchHbarExchangeRate: 'Can not fetch Hbar exchange rate.',
   },
 
   createCollection: {

@@ -17,18 +17,16 @@
  * limitations under the License.
  *
  */
-export type FixedFeeType = {
-  collectorAccountId: string;
-  hbarAmount?: number;
-  amount?: number;
-  denominatingTokenId?: string;
-  allCollectorsAreExempt?: boolean;
-};
+import { estimateNftMintingInDollars } from '../../nftSDKFunctions/estimate-nft-minting-in-dollars';
 
-export type RoyaltyFeeType = {
-  collectorAccountId: string;
-  numerator: number;
-  denominator: number;
-  fallbackFee?: FixedFeeType;
-  allCollectorsAreExempt?: boolean;
-};
+describe('estimateNftMintingInDollars', () => {
+  it('should return correct estimate for 1 NFT', async () => {
+    const result = await estimateNftMintingInDollars({ amountOfNfts: 1 });
+    expect(result).toBe(0.02);
+  });
+
+  it('should return correct estimate for multiple NFTs', async () => {
+    const result = await estimateNftMintingInDollars({ amountOfNfts: 5 });
+    expect(result).toBe(0.1);
+  });
+});

@@ -17,18 +17,18 @@
  * limitations under the License.
  *
  */
-export type FixedFeeType = {
-  collectorAccountId: string;
-  hbarAmount?: number;
-  amount?: number;
-  denominatingTokenId?: string;
-  allCollectorsAreExempt?: boolean;
-};
+import { getHbarPriceInDollars } from '../helpers/get-hbar-price-in-dollars';
+import { AVERAGE_COST_OF_MINT_1_AVERAGE_METADATA_JSON } from '../utils/constants/minting';
 
-export type RoyaltyFeeType = {
-  collectorAccountId: string;
-  numerator: number;
-  denominator: number;
-  fallbackFee?: FixedFeeType;
-  allCollectorsAreExempt?: boolean;
+export const estimateNftMintingInHbar = async ({
+  amountOfNfts,
+  network,
+  mirrorNodeUrl,
+}: {
+  amountOfNfts: number;
+  network: string;
+  mirrorNodeUrl?: string;
+}) => {
+  const hbarPrice = await getHbarPriceInDollars(network, mirrorNodeUrl);
+  return (amountOfNfts * AVERAGE_COST_OF_MINT_1_AVERAGE_METADATA_JSON) / hbarPrice.priceInDollars;
 };

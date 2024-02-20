@@ -17,18 +17,9 @@
  * limitations under the License.
  *
  */
-export type FixedFeeType = {
-  collectorAccountId: string;
-  hbarAmount?: number;
-  amount?: number;
-  denominatingTokenId?: string;
-  allCollectorsAreExempt?: boolean;
-};
 
-export type RoyaltyFeeType = {
-  collectorAccountId: string;
-  numerator: number;
-  denominator: number;
-  fallbackFee?: FixedFeeType;
-  allCollectorsAreExempt?: boolean;
+import { AVERAGE_COST_OF_MINT_1_AVERAGE_METADATA_JSON } from '../utils/constants/minting';
+
+export const estimateNftMintingInDollars = async ({ amountOfNfts }: { amountOfNfts: number }) => {
+  return amountOfNfts * AVERAGE_COST_OF_MINT_1_AVERAGE_METADATA_JSON;
 };
