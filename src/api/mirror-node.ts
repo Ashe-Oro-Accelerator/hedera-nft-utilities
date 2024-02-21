@@ -51,7 +51,7 @@ export async function getNFTsFromToken(network: NetworkName, tokenId: string, li
   return allNFTs;
 }
 
-export async function getSingleNFTMetadata(network: NetworkName, tokenId: string, serialNumber: number): Promise<NFTDetails> {
+export async function getSingleNFTDetails(network: NetworkName, tokenId: string, serialNumber: number): Promise<NFTDetails> {
   const baseUrl = getMirrorNodeUrlForNetwork(network);
   const nftURL = `${baseUrl}/tokens/${tokenId}/nfts/${serialNumber}`;
 
@@ -86,8 +86,6 @@ export async function getMetadataObjectsForValidation(
       if (error.response?.status === 429) {
         errorMessage = dictionary.errors.tooManyRequests(error.response.statusText, error.response.status);
       } else {
-        // console.log(dictionary.errors.unknownErrorWhileFetching(serialNumber));
-        //MOVETODO
         errorMessage = dictionary.errors.unknownErrorWhileFetching(serialNumber);
       }
     }
