@@ -86,8 +86,6 @@ export async function getMetadataObjectsForValidation(
       if (error.response?.status === 429) {
         errorMessage = dictionary.errors.tooManyRequests(error.response.statusText, error.response.status);
       } else {
-        // console.log(dictionary.errors.unknownErrorWhileFetching(serialNumber));
-        //MOVETODO
         errorMessage = dictionary.errors.unknownErrorWhileFetching(serialNumber);
       }
     }
