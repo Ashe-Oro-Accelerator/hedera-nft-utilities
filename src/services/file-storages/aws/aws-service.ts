@@ -25,13 +25,6 @@ import { S3Client } from '@aws-sdk/client-s3';
 import { Upload } from '@aws-sdk/lib-storage';
 import { FileStorage } from '../../../types/file-storage-service';
 
-export class AWSS3UploadError extends Error {
-  constructor(message: string) {
-    super(message);
-    this.name = 'AWSS3UploadError';
-  }
-}
-
 export class AWSService implements FileStorage {
   public client: S3Client | null = null;
   public awsAccessKeyId?: string;
@@ -56,7 +49,7 @@ export class AWSService implements FileStorage {
 
   public async uploadFile(file: Blob): Promise<string> {
     if (!this.client) {
-      throw new AWSS3UploadError('No AWS S3 client initialized!');
+      throw new Error('No AWS S3 client initialized!');
     }
 
     const buffer = new Uint8Array(await file.arrayBuffer());
@@ -83,12 +76,12 @@ export class AWSService implements FileStorage {
       const resDone = await res.done();
 
       if (!resDone) {
-        throw new AWSS3UploadError(dictionary.errors.awsUploadIssue);
+        throw new Error(dictionary.errors.awsUploadIssue);
       }
 
       return `https://${this.awsS3Bucket}.s3.amazonaws.com/${fileName}`;
     } catch (error) {
-      throw new AWSS3UploadError(dictionary.errors.awsUploadingError(errorToMessage(error)));
+      throw new Error(dictionary.errors.awsUploadingError(errorToMessage(error)));
     }
   }
 }

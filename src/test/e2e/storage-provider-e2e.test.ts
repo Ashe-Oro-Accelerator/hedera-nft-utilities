@@ -26,13 +26,13 @@ import { nftStorageApiKey, pinataApiKey, pinataJwtKey, pinataSecretApiKey } from
 import { VERY_LONG_E2E_TIMEOUT } from '../__mocks__/consts';
 import { exampleNFTMetadata } from '../__mocks__/exampleNFTMetadata';
 
-describe('UploadService Integration Test', () => {
+describe('UploadService E2E Test', () => {
   let filePath: string;
   let fileBuffer: Buffer;
   let blob: Blob;
 
   beforeAll(() => {
-    filePath = 'src/test/__mocks__/photo.jpeg';
+    filePath = 'src/test/__mocks__/exampleFiles/photo.jpeg';
     fileBuffer = fs.readFileSync(filePath);
     blob = new Blob([fileBuffer]);
   });
@@ -42,11 +42,38 @@ describe('UploadService Integration Test', () => {
     async () => {
       const nftStorageConfig = new NftStorageService('https://api.nft.storage/', 'upload', [nftStorageApiKey]);
       const uploadService = new UploadService(nftStorageConfig);
-      const result = await uploadService.uploadFiles([blob]);
+      const result = await uploadService.uploadBlobFiles([blob]);
 
       expect(result[0].content).toEqual(blob);
       expect(result[0].url).toBeDefined();
       expect(result).toHaveLength(1);
+    },
+    VERY_LONG_E2E_TIMEOUT
+  );
+
+  test(
+    'should upload file by path successfully using NftStorageService',
+    async () => {
+      const nftStorageConfig = new NftStorageService('https://api.nft.storage/', 'upload', [nftStorageApiKey]);
+      const uploadService = new UploadService(nftStorageConfig);
+      const result = await uploadService.uploadFilesFromPath([filePath]);
+
+      expect(result[0].url).toBeDefined();
+      expect(result).toHaveLength(1);
+    },
+    VERY_LONG_E2E_TIMEOUT
+  );
+
+  test(
+    'should upload files by path directory successfully using NftStorageService',
+    async () => {
+      const nftStorageConfig = new NftStorageService('https://api.nft.storage/', 'upload', [nftStorageApiKey]);
+      const uploadService = new UploadService(nftStorageConfig);
+      const result = await uploadService.uploadFilesFromPath(['src/test/__mocks__/exampleFiles']);
+
+      expect(result[0].url).toBeDefined();
+      expect(result[1].url).toBeDefined();
+      expect(result).toHaveLength(2);
     },
     VERY_LONG_E2E_TIMEOUT
   );
@@ -69,11 +96,38 @@ describe('UploadService Integration Test', () => {
     async () => {
       const pinataStorageConfig = new PinataService(pinataJwtKey, pinataApiKey, pinataSecretApiKey);
       const uploadService = new UploadService(pinataStorageConfig);
-      const result = await uploadService.uploadFiles([blob]);
+      const result = await uploadService.uploadBlobFiles([blob]);
 
       expect(result[0].content).toEqual(blob);
       expect(result[0].url).toBeDefined();
       expect(result).toHaveLength(1);
+    },
+    VERY_LONG_E2E_TIMEOUT
+  );
+
+  test(
+    'should upload file by path successfully using PinataService',
+    async () => {
+      const pinataStorageConfig = new PinataService(pinataJwtKey, pinataApiKey, pinataSecretApiKey);
+      const uploadService = new UploadService(pinataStorageConfig);
+      const result = await uploadService.uploadFilesFromPath([filePath]);
+
+      expect(result[0].url).toBeDefined();
+      expect(result).toHaveLength(1);
+    },
+    VERY_LONG_E2E_TIMEOUT
+  );
+
+  test(
+    'should upload files by path directory successfully using PinataService',
+    async () => {
+      const pinataStorageConfig = new PinataService(pinataJwtKey, pinataApiKey, pinataSecretApiKey);
+      const uploadService = new UploadService(pinataStorageConfig);
+      const result = await uploadService.uploadFilesFromPath(['src/test/__mocks__/exampleFiles']);
+
+      expect(result[0].url).toBeDefined();
+      expect(result[1].url).toBeDefined();
+      expect(result).toHaveLength(2);
     },
     VERY_LONG_E2E_TIMEOUT
   );
@@ -96,7 +150,7 @@ describe('UploadService Integration Test', () => {
     async () => {
       const mockStorageConfig = new MockStorageService();
       const uploadService = new UploadService(mockStorageConfig);
-      const result = await uploadService.uploadFiles([blob]);
+      const result = await uploadService.uploadBlobFiles([blob]);
       expect(result).toBeDefined();
       expect(result[0].url).toEqual(
         'This is only test FileStorage provider. Returned metadataUri is example. ipfs://bafkreidj7l5335mcdw5g5k2keqdmevnzjee342ztgd23hedfqoj6yxjbpq'

@@ -41,7 +41,7 @@ describe('UploadService Integration Test', () => {
   test('should upload files successfully using MockStorageService', async () => {
     const mockStorageConfig = new TestCustomService();
     const uploadService = new UploadService(mockStorageConfig);
-    const result = await uploadService.uploadFiles([blob]);
+    const result = await uploadService.uploadBlobFiles([blob]);
     expect(result).toBeDefined();
     expect(result[0].url).toEqual('Test service is working');
   });

@@ -47,7 +47,48 @@ export class UploadService {
     this.service = service;
   }
 
-  public async uploadFiles(files: (Blob | BufferFile)[]): Promise<UploadServiceReturn[]> {
+  public async uploadFilesFromPath(paths: string[]): Promise<UploadServiceReturn[]> {
+    const result = await Promise.all(
+      paths.map(async (path) => {
+        const isDirectory = fs.lstatSync(path).isDirectory();
+        let files: string[] = [];
+
+        if (isDirectory) {
+          files = fs.readdirSync(path).map((file) => `${path}/${file}`);
+        } else {
+          files = [path];
+        }
+
+        if (files.length < 0) {
+          throw new Error(dictionary.errors.noFiles);
+        }
+
+        try {
+          return await Promise.all(
+            map(
+              filter(files, (file) => fs.existsSync(file)),
+              async (file) => {
+                const fileContent = fs.readFileSync(file);
+                const blob = new Blob([fileContent]);
+                const url = await this.service.uploadFile(blob);
+
+                return {
+                  content: blob,
+                  url,
+                };
+              }
+            )
+          );
+        } catch (e) {
+          throw new Error(errorToMessage(e));
+        }
+      })
+    );
+
+    return result.flat();
+  }
+
+  public async uploadBlobFiles(files: (Blob | BufferFile)[]): Promise<UploadServiceReturn[]> {
     if (files.length < 0) {
       throw new Error(dictionary.errors.noFiles);
     }
@@ -80,7 +121,7 @@ export class UploadService {
     }
   }
 
-  public async handleUpload(metadata: Partial<NFTMetadata> | NFTMetadata): Promise<UploadServiceReturn | null> {
+  public async handleBlobUpload(metadata: Partial<NFTMetadata> | NFTMetadata): Promise<UploadServiceReturn | null> {
     if (!metadata) {
       throw new Error(dictionary.errors.noMetadata);
     }
@@ -101,7 +142,7 @@ export class UploadService {
   }
 
   public async uploadMetadataList(metadatas: (Hip412Metadata | NFTMetadata)[]): Promise<UploadServiceReturn[]> {
-    const metadataUris = await Promise.all(map(metadatas, async (metadata) => this.handleUpload(metadata)));
+    const metadataUris = await Promise.all(map(metadatas, async (metadata) => this.handleBlobUpload(metadata)));
 
     return filter(metadataUris, (metadataUri): metadataUri is UploadServiceReturn => !isNull(metadataUri));
   }
