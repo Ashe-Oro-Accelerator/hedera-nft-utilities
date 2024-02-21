@@ -33,7 +33,7 @@ describe('UploadService Integration Test', () => {
   let blob: Blob;
 
   beforeAll(() => {
-    filePath = 'src/test/__mocks__/photo.jpeg';
+    filePath = 'src/test/__mocks__/exampleFiles/photo.jpeg';
     fileBuffer = fs.readFileSync(filePath);
     blob = new Blob([fileBuffer]);
   });
