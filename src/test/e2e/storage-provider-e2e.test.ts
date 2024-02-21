@@ -39,7 +39,7 @@ describe('UploadService E2E Test', () => {
   });
 
   test(
-    'should upload files successfully using AWSStorageService',
+    'should upload files successfully using AWSService',
     async () => {
       const awsStorageConfig = new AWSService(awsAccessKey, awsSecretKey, 'eu-central-1', 'hederatest');
       const uploadService = new UploadService(awsStorageConfig);
@@ -53,7 +53,7 @@ describe('UploadService E2E Test', () => {
   );
 
   test(
-    'should upload file by path successfully using PinataService',
+    'should upload file by path successfully using AWSService',
     async () => {
       const awsStorageConfig = new AWSService(awsAccessKey, awsSecretKey, 'eu-central-1', 'hederatest');
       const uploadService = new UploadService(awsStorageConfig);
@@ -66,7 +66,7 @@ describe('UploadService E2E Test', () => {
   );
 
   test(
-    'should upload files by path directory successfully using PinataService',
+    'should upload files by path directory successfully using AWSService',
     async () => {
       const awsStorageConfig = new AWSService(awsAccessKey, awsSecretKey, 'eu-central-1', 'hederatest');
       const uploadService = new UploadService(awsStorageConfig);
@@ -80,7 +80,7 @@ describe('UploadService E2E Test', () => {
   );
 
   test(
-    'should upload metadata successfully using PinataService',
+    'should upload metadata successfully using AWSService',
     async () => {
       const awsStorageConfig = new AWSService(awsAccessKey, awsSecretKey, 'eu-central-1', 'hederatest');
       const uploadService = new UploadService(awsStorageConfig);
