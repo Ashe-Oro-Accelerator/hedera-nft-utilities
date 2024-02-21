@@ -21,6 +21,8 @@
 import axios from 'axios';
 import { Metadata, RiskResult, Weights, KeyTypes, RiskLevelTypes, RiskLevels } from '../types/risk.module';
 
+type Network = 'mainnet' | 'testnet' | 'previewnet' | 'localNode';
+
 // Default weights for risk score calculation
 const defaultWeights: Weights = {
   keys: {
@@ -63,11 +65,28 @@ const calculateRiskScoreFromData = (metadata: Metadata): RiskResult => {
   };
 };
 
-const calculateRiskScoreFromTokenId = async (tokenId: string, network: string = 'mainnet'): Promise<RiskResult> => {
-  const uri =
-    network === 'mainnet'
-      ? `https://mainnet-public.mirrornode.hedera.com/api/v1/tokens/${tokenId}/`
-      : `https://testnet.mirrornode.hedera.com/api/v1/tokens/${tokenId}/`;
+const calculateRiskScoreFromTokenId = async (tokenId: string, network: Network = 'mainnet', localNodeURL?: string): Promise<RiskResult> => {
+  let uri = '';
+
+  switch (network) {
+    case 'mainnet':
+      uri = `https://mainnet-public.mirrornode.hedera.com/api/v1/tokens/${tokenId}/`;
+      break;
+    case 'testnet':
+      uri = `https://testnet.mirrornode.hedera.com/api/v1/tokens/${tokenId}/`;
+      break;
+    case 'previewnet':
+      uri = `https://previewnet.mirrornode.hedera.com/api/v1/tokens/${tokenId}/`;
+      break;
+    case 'localNode':
+      if (!localNodeURL) {
+        throw new Error('localNodeURL is required for local node network');
+      }
+      uri = `${localNodeURL}/api/v1/tokens/${tokenId}/`;
+      break;
+    default:
+      throw new Error('Invalid network');
+  }
 
   const { data: metadata } = await axios.get<Metadata>(uri);
 
