@@ -69,7 +69,7 @@ export class AWSService implements FileStorage {
         },
         tags: [],
         queueSize: 4,
-        partSize: 1024 * 1024 * 5,
+        partSize: 1024 * 1024 * 5, // Maximum part size is 5MB
         leavePartsOnError: false, // optional manually handle dropped parts
       });
 

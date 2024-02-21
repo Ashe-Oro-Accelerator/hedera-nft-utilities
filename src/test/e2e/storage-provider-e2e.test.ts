@@ -22,9 +22,10 @@ import { UploadService } from '../../services/upload-service';
 import { NftStorageService } from '../../services/file-storages/nft-storage/nft-storage-service';
 import { PinataService } from '../../services/file-storages/pinata/pinata-service';
 import { MockStorageService } from '../../services/file-storages/mock-storage/mock-storage-service';
-import { nftStorageApiKey, pinataApiKey, pinataJwtKey, pinataSecretApiKey } from './e2e-consts';
+import { awsSecretKey, awsAccessKey, nftStorageApiKey, pinataApiKey, pinataJwtKey, pinataSecretApiKey } from './e2e-consts';
 import { VERY_LONG_E2E_TIMEOUT } from '../__mocks__/consts';
 import { exampleNFTMetadata } from '../__mocks__/exampleNFTMetadata';
+import { AWSService } from '../../services/file-storages/aws/aws-service';
 
 describe('UploadService E2E Test', () => {
   let filePath: string;
@@ -36,6 +37,60 @@ describe('UploadService E2E Test', () => {
     fileBuffer = fs.readFileSync(filePath);
     blob = new Blob([fileBuffer]);
   });
+
+  test(
+    'should upload files successfully using AWSStorageService',
+    async () => {
+      const awsStorageConfig = new AWSService(awsAccessKey, awsSecretKey, 'eu-central-1', 'hederatest');
+      const uploadService = new UploadService(awsStorageConfig);
+      const result = await uploadService.uploadBlobFiles([blob]);
+
+      expect(result[0].content).toEqual(blob);
+      expect(result[0].url).toBeDefined();
+      expect(result).toHaveLength(1);
+    },
+    VERY_LONG_E2E_TIMEOUT
+  );
+
+  test(
+    'should upload file by path successfully using PinataService',
+    async () => {
+      const awsStorageConfig = new AWSService(awsAccessKey, awsSecretKey, 'eu-central-1', 'hederatest');
+      const uploadService = new UploadService(awsStorageConfig);
+      const result = await uploadService.uploadFilesFromPath([filePath]);
+
+      expect(result[0].url).toBeDefined();
+      expect(result).toHaveLength(1);
+    },
+    VERY_LONG_E2E_TIMEOUT
+  );
+
+  test(
+    'should upload files by path directory successfully using PinataService',
+    async () => {
+      const awsStorageConfig = new AWSService(awsAccessKey, awsSecretKey, 'eu-central-1', 'hederatest');
+      const uploadService = new UploadService(awsStorageConfig);
+      const result = await uploadService.uploadFilesFromPath(['src/test/__mocks__/exampleFiles']);
+
+      expect(result[0].url).toBeDefined();
+      expect(result[1].url).toBeDefined();
+      expect(result).toHaveLength(2);
+    },
+    VERY_LONG_E2E_TIMEOUT
+  );
+
+  test(
+    'should upload metadata successfully using PinataService',
+    async () => {
+      const awsStorageConfig = new AWSService(awsAccessKey, awsSecretKey, 'eu-central-1', 'hederatest');
+      const uploadService = new UploadService(awsStorageConfig);
+      const result = await uploadService.uploadMetadataList([exampleNFTMetadata]);
+
+      expect(result[0].url).toBeDefined();
+      expect(result).toHaveLength(1);
+    },
+    VERY_LONG_E2E_TIMEOUT
+  );
 
   test(
     'should upload files successfully using NftStorageService',
@@ -148,13 +203,11 @@ describe('UploadService E2E Test', () => {
   test(
     'should upload files successfully using MockStorageService',
     async () => {
-      const mockStorageConfig = new MockStorageService();
+      const mockStorageConfig = new MockStorageService('https://www.mockstorage.com/');
       const uploadService = new UploadService(mockStorageConfig);
       const result = await uploadService.uploadBlobFiles([blob]);
       expect(result).toBeDefined();
-      expect(result[0].url).toEqual(
-        'This is only test FileStorage provider. Returned metadataUri is example. ipfs://bafkreidj7l5335mcdw5g5k2keqdmevnzjee342ztgd23hedfqoj6yxjbpq'
-      );
+      expect(result[0].url).toEqual('https://www.mockstorage.com/');
     },
     VERY_LONG_E2E_TIMEOUT
   );

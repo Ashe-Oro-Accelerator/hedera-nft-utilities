@@ -31,6 +31,8 @@ export const nftStorageApiKey = process.env.NFTSTORAGE_API_KEY!;
 export const pinataApiKey = process.env.PINATA_API_KEY!;
 export const pinataSecretApiKey = process.env.PINATA_SECRET_API_KEY!;
 export const pinataJwtKey = process.env.PINATA_JWT_KEY!;
+export const awsAccessKey = process.env.AWS_ACCESS_KEY!;
+export const awsSecretKey = process.env.AWS_SECRET_KEY!;
 
 export const nftSDK = new HederaNFTSDK(operatorAccountId, operatorPrivateKey, 'testnet');
 

@@ -18,9 +18,15 @@
  *
  */
 import { FileStorage } from '../../../types/file-storage-service';
+import { FileStorageURL } from '../../upload-service';
 
 export class MockStorageService implements FileStorage {
+  public serviceUrl: string;
+  constructor(serviceUrl: FileStorageURL) {
+    this.serviceUrl = serviceUrl;
+  }
+
   public async uploadFile(): Promise<string> {
-    return 'This is only test FileStorage provider. Returned metadataUri is example. ipfs://bafkreidj7l5335mcdw5g5k2keqdmevnzjee342ztgd23hedfqoj6yxjbpq';
+    return this.serviceUrl;
   }
 }
