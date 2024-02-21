@@ -19,7 +19,15 @@
  */
 import { Validator, defaultSchemaVersion } from './validator';
 import localValidation from './local-validation';
-import { defaultWeights, defaultRiskLevels, calculateRiskScoreFromData, calculateRiskScoreFromTokenId, calculateRiskLevel } from './risk';
+import {
+  defaultWeights,
+  defaultRiskLevels,
+  calculateRiskScoreFromData,
+  calculateRiskScoreFromTokenId,
+  calculateRiskLevel,
+  updateWeights,
+  updateRiskLevels,
+} from './risk';
 import { calculateRarity, calculateRarityFromData, calculateTraitOccurrenceFromData } from './rarity';
 
 import { Attribute, Localization, File, Instance, Error, Problem, ValidationResult, Schema } from './types/validator.module';
@@ -43,6 +51,8 @@ export {
   calculateRiskScoreFromData,
   calculateRiskScoreFromTokenId,
   calculateRiskLevel,
+  updateWeights,
+  updateRiskLevels,
 
   // rarity calculation
   calculateRarity,

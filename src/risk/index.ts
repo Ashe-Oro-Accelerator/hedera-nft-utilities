@@ -19,13 +19,7 @@
  */
 
 import axios from 'axios';
-import {
-  Metadata,
-  RiskResult,
-  Weights,
-  KeyTypes,
-  RiskLevelTypes,
-} from '../types/risk.module';
+import { Metadata, RiskResult, Weights, KeyTypes, RiskLevelTypes, RiskLevels } from '../types/risk.module';
 
 // Default weights for risk score calculation
 const defaultWeights: Weights = {
@@ -44,11 +38,19 @@ const defaultWeights: Weights = {
 };
 
 // Default thresholds for risk level calculation
-const defaultRiskLevels = {
+const defaultRiskLevels: RiskLevels = {
   NORISK: 0,
   LOW: 40,
   MEDIUM: 199,
   HIGH: 2000,
+};
+
+const updateWeights = (newWeights: Weights) => {
+  Object.assign(defaultWeights, newWeights);
+};
+
+const updateRiskLevels = (newRiskLevels: RiskLevels) => {
+  Object.assign(defaultRiskLevels, newRiskLevels);
 };
 
 const calculateRiskScoreFromData = (metadata: Metadata): RiskResult => {
@@ -61,10 +63,7 @@ const calculateRiskScoreFromData = (metadata: Metadata): RiskResult => {
   };
 };
 
-const calculateRiskScoreFromTokenId = async (
-  tokenId: string,
-  network: string = 'mainnet'
-): Promise<RiskResult> => {
+const calculateRiskScoreFromTokenId = async (tokenId: string, network: string = 'mainnet'): Promise<RiskResult> => {
   const uri =
     network === 'mainnet'
       ? `https://mainnet-public.mirrornode.hedera.com/api/v1/tokens/${tokenId}/`
@@ -97,10 +96,7 @@ const calculateRiskScore = (metadata: Metadata): number => {
     riskScore += defaultWeights.properties.supply_type_infinite;
   }
 
-  if (
-    metadata.supply_type === 'FINITE' &&
-    Number(metadata.max_supply) == Number(metadata.total_supply)
-  ) {
+  if (metadata.supply_type === 'FINITE' && Number(metadata.max_supply) == Number(metadata.total_supply)) {
     riskScore -= defaultWeights.keys.supply_key;
   }
 
@@ -126,4 +122,6 @@ export {
   calculateRiskScoreFromData,
   calculateRiskScoreFromTokenId,
   calculateRiskLevel, // built-in in "calculateRiskScore" functions
+  updateWeights,
+  updateRiskLevels,
 };
