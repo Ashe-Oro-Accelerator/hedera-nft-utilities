@@ -28,11 +28,11 @@ export class PinataService implements FileStorage {
   private serviceUrl: FileStorageURL = 'https://api.pinata.cloud/';
   private uploadUrl: FileStorageUploadUrl = 'pinning/pinFileToIPFS';
   private instance: AxiosInstance;
-  public pinataJwtKey: string;
-  public pinataApiKey: string;
-  public pinataSecretApiKey: string;
+  public pinataJwtKey?: string;
+  public pinataApiKey?: string;
+  public pinataSecretApiKey?: string;
 
-  constructor(pinataJwtKey: string, pinataApiKey: string, pinataSecretApiKey: string) {
+  constructor(pinataJwtKey?: string, pinataApiKey?: string, pinataSecretApiKey?: string) {
     this.pinataJwtKey = pinataJwtKey;
     this.pinataApiKey = pinataApiKey;
     this.pinataSecretApiKey = pinataSecretApiKey;

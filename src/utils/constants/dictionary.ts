@@ -25,7 +25,7 @@ export const dictionary = {
     // file storages
 
     // pinata
-    pinataError: 'API keys for Pinata not found. Please set "PINATA_API_KEY" and "PINATA_SECRET_API_KEY" or please set "PINATA_JWT_KEY" ',
+    pinataError: 'Cannot create Pinata provider. Please pass pinataJwtKey OR (pinataApiKey AND pinataSecretApiKey).',
 
     awsUploadIssue: 'Error encountered using AWS SDK. Please restart the app and try again.',
     awsUploadingError: (message: string) => `Failed to upload file to AWS S3: ${message}`,
@@ -54,7 +54,8 @@ export const dictionary = {
     treasuryAccountPrivateKeySignRequired:
       'If you want to use treasuryAccount to sign, you need to pass the treasuryAccountPrivateKey also',
     collectionNotCreated: 'Something went wrong while creating the collection',
-    autoRenewAccountPrivateKeySignRequired: 'If you want to use autoRenewAccount to sign, you need to pass the autoRenewAccountPrivateKey also',
+    autoRenewAccountPrivateKeySignRequired:
+      'If you want to use autoRenewAccount to sign, you need to pass the autoRenewAccountPrivateKey also',
     tooManyCustomFees: 'You can only have 10 custom fees',
     collectorAccountIdRequired: 'collectorAccountId is required',
     numeratorRequired: 'numerator is required',

@@ -51,7 +51,11 @@ describe('PinataService', () => {
     expect(result).toEqual('ipfs://testHash');
   });
 
-  it('should throw an error when no API keys are provided', () => {
-    expect(() => new PinataService('', '', '')).toThrow(dictionary.errors.pinataError);
+  it('should throw an error when no JWT or ApiKey keys are provided', () => {
+    expect(() => new PinataService(undefined, undefined, 'test')).toThrow(dictionary.errors.pinataError);
+  });
+
+  it('should throw an error when no JWT or SecretKey keys are provided', () => {
+    expect(() => new PinataService(undefined, 'test', undefined)).toThrow(dictionary.errors.pinataError);
   });
 });

@@ -79,7 +79,7 @@ export class AWSService implements FileStorage {
         throw new Error(dictionary.errors.awsUploadIssue);
       }
 
-      return `https://${this.awsS3Bucket}.s3.amazonaws.com/${fileName}`;
+      return resDone.Location || '';
     } catch (error) {
       throw new Error(dictionary.errors.awsUploadingError(errorToMessage(error)));
     }

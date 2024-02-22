@@ -27,6 +27,8 @@ import { VERY_LONG_E2E_TIMEOUT } from '../__mocks__/consts';
 import { exampleNFTMetadata } from '../__mocks__/exampleNFTMetadata';
 import { AWSService } from '../../services/file-storages/aws/aws-service';
 
+const itif = (condition: any) => (condition ? it : it.skip);
+
 describe('UploadService E2E Test', () => {
   let filePath: string;
   let fileBuffer: Buffer;
@@ -38,7 +40,7 @@ describe('UploadService E2E Test', () => {
     blob = new Blob([fileBuffer]);
   });
 
-  test(
+  itif(awsAccessKey && awsSecretKey)(
     'should upload files successfully using AWSService',
     async () => {
       const awsStorageConfig = new AWSService(awsAccessKey, awsSecretKey, 'eu-central-1', 'hederatest');
@@ -52,7 +54,7 @@ describe('UploadService E2E Test', () => {
     VERY_LONG_E2E_TIMEOUT
   );
 
-  test(
+  itif(awsAccessKey && awsSecretKey)(
     'should upload file by path successfully using AWSService',
     async () => {
       const awsStorageConfig = new AWSService(awsAccessKey, awsSecretKey, 'eu-central-1', 'hederatest');
@@ -65,7 +67,7 @@ describe('UploadService E2E Test', () => {
     VERY_LONG_E2E_TIMEOUT
   );
 
-  test(
+  itif(awsAccessKey && awsSecretKey)(
     'should upload files by path directory successfully using AWSService',
     async () => {
       const awsStorageConfig = new AWSService(awsAccessKey, awsSecretKey, 'eu-central-1', 'hederatest');
@@ -79,7 +81,7 @@ describe('UploadService E2E Test', () => {
     VERY_LONG_E2E_TIMEOUT
   );
 
-  test(
+  itif(awsAccessKey && awsSecretKey)(
     'should upload metadata successfully using AWSService',
     async () => {
       const awsStorageConfig = new AWSService(awsAccessKey, awsSecretKey, 'eu-central-1', 'hederatest');
@@ -92,7 +94,7 @@ describe('UploadService E2E Test', () => {
     VERY_LONG_E2E_TIMEOUT
   );
 
-  test(
+  it(
     'should upload files successfully using NftStorageService',
     async () => {
       const nftStorageConfig = new NftStorageService('https://api.nft.storage/', 'upload', [nftStorageApiKey]);
@@ -106,7 +108,7 @@ describe('UploadService E2E Test', () => {
     VERY_LONG_E2E_TIMEOUT
   );
 
-  test(
+  it(
     'should upload file by path successfully using NftStorageService',
     async () => {
       const nftStorageConfig = new NftStorageService('https://api.nft.storage/', 'upload', [nftStorageApiKey]);
@@ -119,7 +121,7 @@ describe('UploadService E2E Test', () => {
     VERY_LONG_E2E_TIMEOUT
   );
 
-  test(
+  it(
     'should upload files by path directory successfully using NftStorageService',
     async () => {
       const nftStorageConfig = new NftStorageService('https://api.nft.storage/', 'upload', [nftStorageApiKey]);
@@ -133,7 +135,7 @@ describe('UploadService E2E Test', () => {
     VERY_LONG_E2E_TIMEOUT
   );
 
-  test(
+  it(
     'should upload metadata successfully using NftStorageService',
     async () => {
       const nftStorageConfig = new NftStorageService('https://api.nft.storage/', 'upload', [nftStorageApiKey]);
@@ -146,7 +148,7 @@ describe('UploadService E2E Test', () => {
     VERY_LONG_E2E_TIMEOUT
   );
 
-  test(
+  it(
     'should upload files successfully using PinataService',
     async () => {
       const pinataStorageConfig = new PinataService(pinataJwtKey, pinataApiKey, pinataSecretApiKey);
@@ -160,7 +162,7 @@ describe('UploadService E2E Test', () => {
     VERY_LONG_E2E_TIMEOUT
   );
 
-  test(
+  it(
     'should upload file by path successfully using PinataService',
     async () => {
       const pinataStorageConfig = new PinataService(pinataJwtKey, pinataApiKey, pinataSecretApiKey);
@@ -173,7 +175,7 @@ describe('UploadService E2E Test', () => {
     VERY_LONG_E2E_TIMEOUT
   );
 
-  test(
+  it(
     'should upload files by path directory successfully using PinataService',
     async () => {
       const pinataStorageConfig = new PinataService(pinataJwtKey, pinataApiKey, pinataSecretApiKey);
@@ -187,7 +189,7 @@ describe('UploadService E2E Test', () => {
     VERY_LONG_E2E_TIMEOUT
   );
 
-  test(
+  it(
     'should upload metadata successfully using PinataService',
     async () => {
       const pinataStorageConfig = new PinataService(pinataJwtKey, pinataApiKey, pinataSecretApiKey);
@@ -200,7 +202,7 @@ describe('UploadService E2E Test', () => {
     VERY_LONG_E2E_TIMEOUT
   );
 
-  test(
+  it(
     'should upload files successfully using MockStorageService',
     async () => {
       const mockStorageConfig = new MockStorageService('https://www.mockstorage.com/');
