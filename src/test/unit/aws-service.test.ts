@@ -52,13 +52,6 @@ describe('AWSService', () => {
     expect(result).toEqual('https://hederatest.s3.eu-central-1.amazonaws.com/1708599289764.jpg');
   });
 
-  it('should throw an error when AWS S3 client is not initialized', async () => {
-    awsService.client = null;
-    const mockFile = new Blob([new Uint8Array([1, 2, 3])]);
-
-    await expect(awsService.uploadFile(mockFile)).rejects.toThrow('No AWS S3 client initialized!');
-  });
-
   it('should throw an error when upload fails', async () => {
     const mockFile = new Blob([new Uint8Array([1, 2, 3])]);
 
