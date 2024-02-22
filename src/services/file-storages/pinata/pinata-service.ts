@@ -47,10 +47,6 @@ export class PinataService implements FileStorage {
   }
 
   public async uploadFile(file: Blob): Promise<string> {
-    if (!(this.pinataJwtKey || (this.pinataApiKey && this.pinataSecretApiKey))) {
-      throw new Error(dictionary.errors.pinataError);
-    }
-
     const formData = new FormData();
 
     formData.append('file', file);
