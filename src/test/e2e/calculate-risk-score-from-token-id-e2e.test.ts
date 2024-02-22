@@ -21,7 +21,7 @@ import { calculateRiskScoreFromTokenId } from '../../risk';
 
 describe('calculateRiskScoreFromTokenIdE2E', () => {
   it('should calculate risk score for a given token ID', async () => {
-    const riskResults = await calculateRiskScoreFromTokenId('0.0.878200');
+    const riskResults = await calculateRiskScoreFromTokenId({ tokenId: '0.0.878200' });
 
     expect(riskResults.riskScore).toBe(20);
     expect(riskResults.riskLevel).toBe('LOW');

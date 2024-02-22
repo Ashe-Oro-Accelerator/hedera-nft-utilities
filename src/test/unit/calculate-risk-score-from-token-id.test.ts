@@ -33,7 +33,7 @@ describe('calculateRiskScoreFromTokenId', () => {
   it('should calculate risk score for a given token ID', async () => {
     mockAxios.get.mockResolvedValueOnce(exampleMetadata);
 
-    const riskResults = await calculateRiskScoreFromTokenId('0.0.123456');
+    const riskResults = await calculateRiskScoreFromTokenId({ tokenId: '0.0.123456' });
 
     expect(riskResults.riskScore).toBe(20);
     expect(riskResults.riskLevel).toBe('LOW');

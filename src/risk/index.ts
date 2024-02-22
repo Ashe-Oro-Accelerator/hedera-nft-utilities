@@ -47,17 +47,17 @@ const defaultRiskLevels: RiskLevels = {
   HIGH: 2000,
 };
 
-const updateWeights = (newWeights: Weights) => {
-  Object.assign(defaultWeights, newWeights);
-};
-
-const updateRiskLevels = (newRiskLevels: RiskLevels) => {
-  Object.assign(defaultRiskLevels, newRiskLevels);
-};
-
-const calculateRiskScoreFromData = (metadata: Metadata): RiskResult => {
-  const riskScore = calculateRiskScore(metadata);
-  const riskLevel = calculateRiskLevel(riskScore);
+const calculateRiskScoreFromData = ({
+  metadata,
+  customWeights,
+  customRiskLevels,
+}: {
+  metadata: Metadata;
+  customWeights?: Weights;
+  customRiskLevels?: RiskLevels;
+}): RiskResult => {
+  const riskScore = calculateRiskScore(metadata, customWeights);
+  const riskLevel = calculateRiskLevel({ score: riskScore, customRiskLevels });
 
   return {
     riskScore,
@@ -65,7 +65,19 @@ const calculateRiskScoreFromData = (metadata: Metadata): RiskResult => {
   };
 };
 
-const calculateRiskScoreFromTokenId = async (tokenId: string, network: Network = 'mainnet', localNodeURL?: string): Promise<RiskResult> => {
+const calculateRiskScoreFromTokenId = async ({
+  tokenId,
+  network = 'mainnet',
+  localNodeURL,
+  customWeights,
+  customRiskLevels,
+}: {
+  tokenId: string;
+  network?: Network;
+  localNodeURL?: string;
+  customWeights?: Weights;
+  customRiskLevels?: RiskLevels;
+}): Promise<RiskResult> => {
   let uri = '';
 
   switch (network) {
@@ -90,8 +102,8 @@ const calculateRiskScoreFromTokenId = async (tokenId: string, network: Network =
 
   const { data: metadata } = await axios.get<Metadata>(uri);
 
-  const riskScore = calculateRiskScore(metadata);
-  const riskLevel = calculateRiskLevel(riskScore);
+  const riskScore = calculateRiskScore(metadata, customWeights);
+  const riskLevel = calculateRiskLevel({ score: riskScore, customRiskLevels });
 
   return {
     riskScore,
@@ -99,34 +111,36 @@ const calculateRiskScoreFromTokenId = async (tokenId: string, network: Network =
   };
 };
 
-const calculateRiskScore = (metadata: Metadata): number => {
+const calculateRiskScore = (metadata: Metadata, customWeights?: Weights): number => {
+  const weights = customWeights ? customWeights : defaultWeights;
   let riskScore = 0;
 
   // Iterate through the properties of the object
   for (const key in metadata) {
     // Check if the property is present in the weights object and not null
-    if (metadata[key] && (key as KeyTypes) in defaultWeights.keys) {
+    if (metadata[key] && (key as KeyTypes) in weights.keys) {
       // If it is, add the associated risk weight to the risk score
-      riskScore += defaultWeights.keys[key as KeyTypes];
+      riskScore += weights.keys[key as KeyTypes];
     }
   }
 
   if (metadata.supply_type === 'INFINITE' && metadata.supply_key) {
-    riskScore += defaultWeights.properties.supply_type_infinite;
+    riskScore += weights.properties.supply_type_infinite;
   }
 
   if (metadata.supply_type === 'FINITE' && Number(metadata.max_supply) == Number(metadata.total_supply)) {
-    riskScore -= defaultWeights.keys.supply_key;
+    riskScore -= weights.keys.supply_key;
   }
 
   return riskScore;
 };
 
-const calculateRiskLevel = (score: number): string => {
+const calculateRiskLevel = ({ score, customRiskLevels }: { score: number; customRiskLevels?: RiskLevels }): string => {
+  const riskLevels = customRiskLevels ? customRiskLevels : defaultRiskLevels;
   let riskLevel = '';
 
-  for (const key in defaultRiskLevels) {
-    if (score <= defaultRiskLevels[key as RiskLevelTypes]) {
+  for (const key in riskLevels) {
+    if (score <= riskLevels[key as RiskLevelTypes]) {
       riskLevel = key;
       break;
     }
@@ -141,6 +155,4 @@ export {
   calculateRiskScoreFromData,
   calculateRiskScoreFromTokenId,
   calculateRiskLevel, // built-in in "calculateRiskScore" functions
-  updateWeights,
-  updateRiskLevels,
 };

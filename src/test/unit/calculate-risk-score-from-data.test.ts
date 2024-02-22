@@ -17,8 +17,8 @@
  * limitations under the License.
  *
  */
-import { calculateRiskScoreFromData, updateRiskLevels, updateWeights } from '../../risk';
-import { Metadata } from '../../types/risk.module';
+import { calculateRiskScoreFromData } from '../../risk';
+import { Metadata, RiskLevels, Weights } from '../../types/risk.module';
 
 const metadata: Metadata = {
   supply_type: 'testSupply',
@@ -26,12 +26,35 @@ const metadata: Metadata = {
   max_supply: 'testMaxSupply',
   total_supply: 'testTotalSupply',
 };
+
+const customRiskLevels: RiskLevels = {
+  NORISK: 0,
+  LOW: 10,
+  MEDIUM: 400,
+  HIGH: 500,
+};
+
+const customWeights: Weights = {
+  keys: {
+    admin_key: 200,
+    wipe_key: 200,
+    freeze_key: 200,
+    supply_key: 200,
+    kyc_key: 200,
+    pause_key: 200,
+    fee_schedule_key: 200,
+  },
+  properties: {
+    supply_type_infinite: 200,
+  },
+};
+
 describe('CalculateRiskScoreFromData', () => {
   it('should calculate risk score with default metadata object', () => {
     const metadataWithDifferentSupplyType: Metadata = {
       ...metadata,
     };
-    const { riskScore, riskLevel } = calculateRiskScoreFromData(metadataWithDifferentSupplyType);
+    const { riskScore, riskLevel } = calculateRiskScoreFromData({ metadata: metadataWithDifferentSupplyType });
 
     expect(riskScore).toBe(20);
     expect(riskLevel).toBe('LOW');
@@ -42,7 +65,7 @@ describe('CalculateRiskScoreFromData', () => {
       ...metadata,
       fee_schedule_key: 'fee_schedule_key',
     };
-    const { riskScore, riskLevel } = calculateRiskScoreFromData(metadataWithDifferentSupplyKey);
+    const { riskScore, riskLevel } = calculateRiskScoreFromData({ metadata: metadataWithDifferentSupplyKey });
 
     expect(riskScore).toBe(60);
     expect(riskLevel).toBe('MEDIUM');
@@ -53,7 +76,7 @@ describe('CalculateRiskScoreFromData', () => {
       ...metadata,
       pause_key: 'pause_key',
     };
-    const { riskScore, riskLevel } = calculateRiskScoreFromData(metadataWithDifferentSupplyKey);
+    const { riskScore, riskLevel } = calculateRiskScoreFromData({ metadata: metadataWithDifferentSupplyKey });
 
     expect(riskScore).toBe(70);
     expect(riskLevel).toBe('MEDIUM');
@@ -64,68 +87,52 @@ describe('CalculateRiskScoreFromData', () => {
       ...metadata,
       admin_key: 'admin_key',
     };
-    const { riskScore, riskLevel } = calculateRiskScoreFromData(metadataWithDifferentSupplyKey);
+    const { riskScore, riskLevel } = calculateRiskScoreFromData({ metadata: metadataWithDifferentSupplyKey });
 
     expect(riskScore).toBe(220);
     expect(riskLevel).toBe('HIGH');
   });
 
-  it('should calculate risk score with custom weights', () => {
-    updateWeights({
-      keys: {
-        admin_key: 200,
-        wipe_key: 200,
-        freeze_key: 200,
-        supply_key: 200,
-        kyc_key: 200,
-        pause_key: 200,
-        fee_schedule_key: 200,
-      },
-      properties: {
-        supply_type_infinite: 200,
-      },
-    });
-
+  it('should calculate risk score with custom weights and custom risk levels', () => {
     const metadataWithDifferentSupplyKey: Metadata = {
       ...metadata,
       kyc_key: 'kyc_key',
     };
-    const { riskScore, riskLevel } = calculateRiskScoreFromData(metadataWithDifferentSupplyKey);
+    const { riskScore, riskLevel } = calculateRiskScoreFromData({
+      metadata: metadataWithDifferentSupplyKey,
+      customWeights,
+      customRiskLevels,
+    });
+
+    expect(riskScore).toBe(400);
+    expect(riskLevel).toBe('MEDIUM');
+  });
+
+  it('should calculate risk score with custom weights ', () => {
+    const metadataWithDifferentSupplyKey: Metadata = {
+      ...metadata,
+      kyc_key: 'kyc_key',
+    };
+    const { riskScore, riskLevel } = calculateRiskScoreFromData({
+      metadata: metadataWithDifferentSupplyKey,
+      customWeights,
+    });
 
     expect(riskScore).toBe(400);
     expect(riskLevel).toBe('HIGH');
   });
 
-  it('should calculate risk score with custom weights and custom risk levels', () => {
-    updateRiskLevels({
-      NORISK: 0,
-      LOW: 10,
-      MEDIUM: 400,
-      HIGH: 500,
-    });
-
-    updateWeights({
-      keys: {
-        admin_key: 200,
-        wipe_key: 200,
-        freeze_key: 200,
-        supply_key: 200,
-        kyc_key: 200,
-        pause_key: 200,
-        fee_schedule_key: 200,
-      },
-      properties: {
-        supply_type_infinite: 200,
-      },
-    });
-
+  it('should calculate risk score with custom risk levels ', () => {
     const metadataWithDifferentSupplyKey: Metadata = {
       ...metadata,
       kyc_key: 'kyc_key',
     };
-    const { riskScore, riskLevel } = calculateRiskScoreFromData(metadataWithDifferentSupplyKey);
+    const { riskScore, riskLevel } = calculateRiskScoreFromData({
+      metadata: metadataWithDifferentSupplyKey,
+      customRiskLevels,
+    });
 
-    expect(riskScore).toBe(400);
+    expect(riskScore).toBe(70);
     expect(riskLevel).toBe('MEDIUM');
   });
 });
