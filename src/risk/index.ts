@@ -20,6 +20,7 @@
 
 import axios from 'axios';
 import { Metadata, RiskResult, Weights, KeyTypes, RiskLevelTypes, RiskLevels } from '../types/risk.module';
+import { getMirrorNodeUrlForNetwork } from '../utils/hedera/get-mirror-node-url-for-network';
 
 type Network = 'mainnet' | 'testnet' | 'previewnet' | 'localNode';
 
@@ -82,13 +83,13 @@ const calculateRiskScoreFromTokenId = async ({
 
   switch (network) {
     case 'mainnet':
-      uri = `https://mainnet-public.mirrornode.hedera.com/api/v1/tokens/${tokenId}/`;
+      uri = `${getMirrorNodeUrlForNetwork('mainnet')}/tokens/${tokenId}/`;
       break;
     case 'testnet':
-      uri = `https://testnet.mirrornode.hedera.com/api/v1/tokens/${tokenId}/`;
+      uri = `${getMirrorNodeUrlForNetwork('testnet')}/tokens/${tokenId}/`;
       break;
     case 'previewnet':
-      uri = `https://previewnet.mirrornode.hedera.com/api/v1/tokens/${tokenId}/`;
+      uri = `${getMirrorNodeUrlForNetwork('previewnet')}/tokens/${tokenId}/`;
       break;
     case 'localNode':
       if (!localNodeURL) {
