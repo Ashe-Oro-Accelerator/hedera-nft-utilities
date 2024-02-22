@@ -37,7 +37,7 @@ export class PinataService implements FileStorage {
     this.pinataApiKey = pinataApiKey;
     this.pinataSecretApiKey = pinataSecretApiKey;
 
-    if (!pinataJwtKey || !(pinataApiKey && pinataSecretApiKey)) {
+    if (!(pinataJwtKey || (pinataApiKey && pinataSecretApiKey))) {
       throw new Error(dictionary.errors.pinataError);
     }
 

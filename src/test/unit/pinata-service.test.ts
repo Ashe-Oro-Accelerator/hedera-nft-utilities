@@ -30,8 +30,6 @@ describe('PinataService', () => {
   const pinataApiKey = 'testApiKey';
   const pinataSecretApiKey = 'testSecretApiKey';
 
-  let pinataService: PinataService;
-
   beforeEach(() => {
     const mockResponse = {
       data: {
@@ -40,10 +38,28 @@ describe('PinataService', () => {
     };
     mockAxios.create.mockReturnValue(mockAxios);
     mockAxios.post.mockResolvedValue(mockResponse);
-    pinataService = new PinataService(pinataJwtKey, pinataApiKey, pinataSecretApiKey);
   });
 
   it('should return the expected string when uploadFile is called', async () => {
+    const pinataService = new PinataService(pinataJwtKey, pinataApiKey, pinataSecretApiKey);
+    const mockFile = new Blob([new Uint8Array([1, 2, 3])]);
+
+    const result = await pinataService.uploadFile(mockFile);
+
+    expect(result).toEqual('ipfs://testHash');
+  });
+
+  it('should return the expected string when only JWTToken is passed', async () => {
+    const pinataService = new PinataService(pinataJwtKey, undefined, undefined);
+    const mockFile = new Blob([new Uint8Array([1, 2, 3])]);
+
+    const result = await pinataService.uploadFile(mockFile);
+
+    expect(result).toEqual('ipfs://testHash');
+  });
+
+  it('should return the expected string when only ApiKey and SecretKey is passed', async () => {
+    const pinataService = new PinataService(undefined, pinataApiKey, pinataSecretApiKey);
     const mockFile = new Blob([new Uint8Array([1, 2, 3])]);
 
     const result = await pinataService.uploadFile(mockFile);
