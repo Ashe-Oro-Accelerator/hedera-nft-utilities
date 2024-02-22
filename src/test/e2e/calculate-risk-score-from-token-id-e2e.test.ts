@@ -20,7 +20,7 @@
 import { calculateRiskScoreFromTokenId } from '../../risk';
 import { PrivateKey } from '@hashgraph/sdk';
 import { nftSDK } from './e2e-consts';
-import { LONG_E2E_TIMEOUT } from '../__mocks__/consts';
+import { LONG_E2E_TIMEOUT, MIRROR_NODE_DELAY } from '../__mocks__/consts';
 
 describe('calculateRiskScoreFromTokenIdE2E', () => {
   it(
@@ -36,7 +36,7 @@ describe('calculateRiskScoreFromTokenIdE2E', () => {
       });
 
       // Wait for the token to be created and metadata to be available. Otherwise, it will throw 404
-      await new Promise((resolve) => setTimeout(resolve, 10000));
+      await new Promise((resolve) => setTimeout(resolve, MIRROR_NODE_DELAY));
       const riskResults = await calculateRiskScoreFromTokenId({ tokenId, network: 'testnet' });
 
       expect(riskResults.riskScore).toBe(40);
