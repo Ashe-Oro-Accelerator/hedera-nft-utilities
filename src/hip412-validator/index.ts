@@ -109,11 +109,11 @@ export class Hip412Validator {
     const filesForValidation = fs
       .readdirSync(directoryPath)
       .filter((file) => file.endsWith('.json') || file.endsWith('.txt'))
+      // Sorts the file names numerically ensuring that files are ordered naturally (e.g., '1', '2', '10' instead of '1', '10', '2').
       .sort((a, b) => {
         const numA = parseInt(a.match(/\d+/)?.[0] ?? '0', 10);
         const numB = parseInt(b.match(/\d+/)?.[0] ?? '0', 10);
         return numA - numB;
-        // Sorts the file names numerically ensuring that files are ordered naturally (e.g., '1', '2', '10' instead of '1', '10', '2').
       });
     if (filesForValidation.length === 0) {
       return {
