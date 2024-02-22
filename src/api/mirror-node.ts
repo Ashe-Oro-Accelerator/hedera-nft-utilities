@@ -37,12 +37,12 @@ export async function getNFTsFromToken(network: NetworkName, tokenId: string, li
   const nftsURL = `${baseUrl}/tokens/${tokenId}/nfts?limit=${limit}`;
 
   let nextLink: string = nftsURL;
-  let allNFTs: NFTDetails[] = [];
+  const allNFTs: NFTDetails[] = [];
 
   do {
     try {
       const response = await axios.get<NFTS>(nextLink);
-      allNFTs = allNFTs.concat(response.data.nfts);
+      allNFTs.push(...response.data.nfts);
       nextLink = response.data.links.next ? new URL(response.data.links.next, baseUrl).href : '';
     } catch (error) {
       throw new Error(errorToMessage(error));
@@ -51,7 +51,7 @@ export async function getNFTsFromToken(network: NetworkName, tokenId: string, li
   return allNFTs;
 }
 
-export async function getSingleNFTMetadata(network: NetworkName, tokenId: string, serialNumber: number): Promise<NFTDetails> {
+export async function getSingleNFTDetails(network: NetworkName, tokenId: string, serialNumber: number): Promise<NFTDetails> {
   const baseUrl = getMirrorNodeUrlForNetwork(network);
   const nftURL = `${baseUrl}/tokens/${tokenId}/nfts/${serialNumber}`;
 

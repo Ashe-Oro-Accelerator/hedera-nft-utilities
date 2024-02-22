@@ -71,6 +71,11 @@ export class HederaNFTSDK {
     keys,
     maxSupply,
     customFees,
+    expirationTime,
+    autoRenewAccount,
+    autoRenewAccountPrivateKey,
+    autoRenewPeriod,
+    memo
   }: {
     collectionName: string;
     collectionSymbol: string;
@@ -79,6 +84,11 @@ export class HederaNFTSDK {
     keys?: CreateCollectionKeysType;
     maxSupply?: number;
     customFees?: CustomFeeType[];
+    expirationTime?: Date;
+    autoRenewAccount?: string;
+    autoRenewAccountPrivateKey?: string;
+    autoRenewPeriod?: number;
+    memo?: string;
   }) {
     return createCollectionFunction({
       client: this.client,
@@ -90,6 +100,11 @@ export class HederaNFTSDK {
       treasuryAccountPrivateKey,
       maxSupply,
       customFees,
+      expirationTime,
+      autoRenewAccount,
+      autoRenewAccountPrivateKey,
+      autoRenewPeriod,
+      memo
     });
   }
 

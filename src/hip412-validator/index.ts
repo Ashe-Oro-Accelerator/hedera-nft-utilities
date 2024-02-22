@@ -26,7 +26,7 @@ import { errorToMessage } from '../helpers/error-to-message';
 import { MetadataObject } from '../types/csv.module';
 import { dictionary } from '../utils/constants/dictionary';
 import { REQUIRED } from '../utils/constants/nfts-limit-error';
-import { getMetadataObjectsForValidation, getNFTsFromToken, getSingleNFTMetadata } from '../api/mirror-node';
+import { getMetadataObjectsForValidation, getNFTsFromToken, getSingleNFTDetails } from '../api/mirror-node';
 import { uriDecoder } from '../helpers/uri-decoder';
 import { ValidationError } from '../utils/validation-error';
 
@@ -109,11 +109,11 @@ export class Hip412Validator {
     const filesForValidation = fs
       .readdirSync(directoryPath)
       .filter((file) => file.endsWith('.json') || file.endsWith('.txt'))
+      // Sorts the file names numerically ensuring that files are ordered naturally (e.g., '1', '2', '10' instead of '1', '10', '2').
       .sort((a, b) => {
         const numA = parseInt(a.match(/\d+/)?.[0] ?? '0', 10);
         const numB = parseInt(b.match(/\d+/)?.[0] ?? '0', 10);
         return numA - numB;
-        // Sorts the file names numerically ensuring that files are ordered naturally (e.g., '1', '2', '10' instead of '1', '10', '2').
       });
     if (filesForValidation.length === 0) {
       return {
@@ -126,14 +126,11 @@ export class Hip412Validator {
       };
     }
 
-    let allFilesValid = true;
-
     for (const file of filesForValidation) {
       const filePath = path.join(directoryPath, file);
       const validationResult = this.validateLocalFile(filePath);
 
       if (!validationResult.isValid) {
-        allFilesValid = false;
         errors.push({
           fileName: file,
           general: validationResult.errors,
@@ -141,7 +138,7 @@ export class Hip412Validator {
       }
     }
 
-    return { isValid: allFilesValid, errors };
+    return { isValid: errors.length === 0, errors };
   }
 
   static validateOnChainArrayOfObjects = (
@@ -185,7 +182,7 @@ export class Hip412Validator {
   }
 
   static async validateSingleOnChainNFTMetadata(network: NetworkName, tokenId: string, serialNumber: number, ipfsGateway?: string) {
-    const nft = await getSingleNFTMetadata(network, tokenId, serialNumber);
+    const nft = await getSingleNFTDetails(network, tokenId, serialNumber);
     const decodedNFTMetadataURL = uriDecoder(nft, ipfsGateway);
 
     const metadataObject = await getMetadataObjectsForValidation(decodedNFTMetadataURL[0].metadata, decodedNFTMetadataURL[0].serialNumber);
