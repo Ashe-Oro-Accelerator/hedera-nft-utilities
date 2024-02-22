@@ -17,6 +17,7 @@
  * limitations under the License.
  *
  */
+import { AccountId, NftId, PrivateKey, TokenId } from '@hashgraph/sdk';
 import {
   validateCreateCollectionProps,
   uniqueMintingValidationProps,
@@ -28,38 +29,45 @@ import {
 import { dictionary } from './constants/dictionary';
 
 export const validatePropsForSharedNFTMinting = (props: sharedMintingValidationProps) => {
-  validateSupplyKey(props);
-  validateBatchSize(props);
-  validateTokenId(props);
-  validateAmount(props);
+  validateBatchSize(props.batchSize);
+  validTokenId(props.tokenId);
+  validateAmount(props.amount);
   validateMetaData(props);
 };
 
 export const validatePropsForUniqueNFTMinting = (props: uniqueMintingValidationProps) => {
   validateMetadataForUnique(props);
-  validateBatchSize(props);
-  validateTokenId(props);
-  validateSupplyKey(props);
+  validateBatchSize(props.batchSize);
+  validTokenId(props.tokenId);
 };
 
 export const validatePropsForCreateCollection = (props: validateCreateCollectionProps) => {
   validateAccountAndPrivateKey(props);
+  if (props.treasuryAccount) validAccountId(props.treasuryAccount);
+  if (props.treasuryAccountPrivateKey) validPrivateKey(props.treasuryAccountPrivateKey);
+
+  validateAutoRenewAccount(props);
+  if (props.autoRenewAccount) validAccountId(props.autoRenewAccount);
+  if (props.autoRenewAccountPrivateKey) validPrivateKey(props.autoRenewAccountPrivateKey);
+
   validateCollectionSymbol(props);
   validateCollectionName(props);
-  validateClient(props);
   validateCustomFees(props);
-  validateAutoRenewAccount(props);
 };
 
 export const validatePropsForFixedFeeFunction = (props: fixedFeeValidationProps) => {
-  validateCollectorAccountId(props);
+  validAccountId(props.collectorAccountId);
   hbarAmountOrAmountAndDenominatingToken(props);
 };
 
 export const validatePropsForRoyaltyFeeFunction = (props: royaltyFeeValidationProps) => {
-  validateCollectorAccountId(props);
-  validateNumerator(props);
-  validateDenominator(props);
+  validAccountId(props.collectorAccountId);
+};
+
+export const validatePropsForIncreaseNFTSupply = (props: increaseNFTSupplyValidationProps) => {
+  validateBatchSize(props.batchSize);
+  validNftId(props.nftId);
+  validateAmount(props.amount);
 };
 
 const hbarAmountOrAmountAndDenominatingToken = (props: fixedFeeValidationProps) => {
@@ -71,35 +79,43 @@ const hbarAmountOrAmountAndDenominatingToken = (props: fixedFeeValidationProps) 
   }
 };
 
-const validateNumerator = (props: royaltyFeeValidationProps) => {
-  if (Object.prototype.hasOwnProperty.call(props, 'numerator')) {
-    if (!props.numerator) throw new Error(dictionary.createCollection.numeratorRequired);
-  }
-};
-
-const validateDenominator = (props: royaltyFeeValidationProps) => {
-  if (Object.prototype.hasOwnProperty.call(props, 'denominator')) {
-    if (!props.denominator) throw new Error(dictionary.createCollection.denominatorRequired);
-  }
-};
-
-const validateCollectorAccountId = (props: fixedFeeValidationProps) => {
-  if (Object.prototype.hasOwnProperty.call(props, 'collectorAccountId')) {
-    if (!props.collectorAccountId) throw new Error(dictionary.createCollection.collectorAccountIdRequired);
-  }
-};
-
 const validateCustomFees = (props: validateCreateCollectionProps) => {
   if (Object.prototype.hasOwnProperty.call(props, 'collectionSymbol')) {
     if (props.customFees && props.customFees.length > 10) throw new Error(dictionary.createCollection.tooManyCustomFees);
   }
 };
 
-export const validatePropsForIncreaseNFTSupply = (props: increaseNFTSupplyValidationProps) => {
-  validateSupplyKey(props);
-  validateBatchSize(props);
-  validateNFTId(props);
-  validateAmount(props);
+const validPrivateKey = (privateKey: string) => {
+  try {
+    PrivateKey.fromString(privateKey);
+  } catch (error) {
+    throw new Error(dictionary.validation.invalidPrivateKey);
+  }
+};
+
+const validTokenId = (tokenId: string) => {
+  try {
+    TokenId.fromString(tokenId);
+  } catch (error) {
+    throw new Error(dictionary.hederaActions.tokenIdRequired);
+  }
+};
+
+const validNftId = (nftId: string) => {
+  try {
+    NftId.fromString(nftId);
+  } catch (error) {
+    throw new Error(dictionary.hederaActions.nftIdRequired);
+  }
+};
+
+const validAccountId = (accountId: string) => {
+  if (!accountId) throw new Error(dictionary.createCollection.accountIdRequired);
+  try {
+    AccountId.fromString(accountId);
+  } catch (error) {
+    throw new Error(dictionary.validation.invalidAccountId);
+  }
 };
 
 const validateAccountAndPrivateKey = (props: validateCreateCollectionProps) => {
@@ -125,53 +141,20 @@ const validateAutoRenewAccount = (props: validateCreateCollectionProps) => {
 };
 
 const validateCollectionSymbol = (props: validateCreateCollectionProps) => {
-  if (Object.prototype.hasOwnProperty.call(props, 'collectionSymbol')) {
-    if (!props.collectionSymbol) throw new Error(dictionary.createCollection.collectionSymbolRequired);
-  }
+  if (!props.collectionSymbol) throw new Error(dictionary.createCollection.collectionSymbolRequired);
 };
 
 const validateCollectionName = (props: validateCreateCollectionProps) => {
-  if (Object.prototype.hasOwnProperty.call(props, 'collectionName')) {
-    if (!props.collectionName) throw new Error(dictionary.createCollection.collectionNameRequired);
-  }
+  if (!props.collectionName) throw new Error(dictionary.createCollection.collectionNameRequired);
 };
 
-const validateClient = (props: validateCreateCollectionProps) => {
-  if (Object.prototype.hasOwnProperty.call(props, 'client')) {
-    if (!props.client) throw new Error(dictionary.createCollection.clientRequired);
-  }
+const validateBatchSize = (batchSize: number) => {
+  if (batchSize > 10) throw new Error(dictionary.hederaActions.maxBatchSize);
+  if (batchSize < 1) throw new Error(dictionary.hederaActions.minBatchSize);
 };
 
-const validateSupplyKey = (props: sharedMintingValidationProps) => {
-  if (Object.prototype.hasOwnProperty.call(props, 'supplyKey')) {
-    if (!props.supplyKey) throw new Error(dictionary.hederaActions.supplyKeyRequired);
-  }
-};
-
-const validateBatchSize = (props: sharedMintingValidationProps) => {
-  if (Object.prototype.hasOwnProperty.call(props, 'batchSize')) {
-    if (!props.batchSize) throw new Error(dictionary.mintToken.batchSizeUndefined);
-    if (props.batchSize > 10) throw new Error(dictionary.hederaActions.maxBatchSize);
-    if (props.batchSize < 1) throw new Error(dictionary.hederaActions.minBatchSize);
-  }
-};
-
-const validateTokenId = (props: sharedMintingValidationProps) => {
-  if (Object.prototype.hasOwnProperty.call(props, 'tokenId')) {
-    if (!props.tokenId) throw new Error(dictionary.hederaActions.tokenIdRequired);
-  }
-};
-
-const validateNFTId = (props: increaseNFTSupplyValidationProps) => {
-  if (Object.prototype.hasOwnProperty.call(props, 'nftId')) {
-    if (!props.nftId) throw new Error(dictionary.hederaActions.nftIdRequired);
-  }
-};
-
-const validateAmount = (props: sharedMintingValidationProps) => {
-  if (Object.prototype.hasOwnProperty.call(props, 'amount')) {
-    if (!props.amount || props.amount < 1) throw new Error(dictionary.hederaActions.minAmount);
-  }
+const validateAmount = (amount: number) => {
+  if (!amount || amount < 1) throw new Error(dictionary.hederaActions.minAmount);
 };
 
 const validateMetaData = (props: sharedMintingValidationProps) => {

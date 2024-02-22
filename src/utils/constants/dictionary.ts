@@ -24,7 +24,13 @@ export const dictionary = {
     unhandledError: 'Unknown error.',
     cannotFetchHbarExchangeRate: 'Can not fetch Hbar exchange rate.',
   },
-
+  validation: {
+    invalidAccountId: 'Invalid AccountId.',
+    invalidPublicKey: 'Invalid PublicKey.',
+    invalidPrivateKey: 'Invalid PrivateKey.',
+    invalidTokenId: 'Invalid TokenId.',
+    invalidNftId: 'Invalid NftId.',
+  },
   createCollection: {
     clientRequired: 'client is required. You need to log in first.',
     myPrivateKeyRequired: 'myPrivateKey is required',
@@ -36,7 +42,7 @@ export const dictionary = {
     collectionNotCreated: 'Something went wrong while creating the collection',
     autoRenewAccountPrivateKeySignRequired: 'If you want to use autoRenewAccount to sign, you need to pass the autoRenewAccountPrivateKey also',
     tooManyCustomFees: 'You can only have 10 custom fees',
-    collectorAccountIdRequired: 'collectorAccountId is required',
+    accountIdRequired: 'accountId is required',
     numeratorRequired: 'numerator is required',
     denominatorRequired: 'denominator is required',
     hbarAmountOrAmountAndDenominatingToken:

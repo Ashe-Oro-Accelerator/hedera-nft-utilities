@@ -21,32 +21,31 @@ import { Client, PrivateKey } from '@hashgraph/sdk';
 import { CustomFeeType } from './create-collection.module';
 
 export type sharedMintingValidationProps = {
-  batchSize?: number;
-  tokenId?: string;
-  amount?: number;
-  metaData?: string;
-  supplyKey?: PrivateKey;
+  batchSize: number;
+  tokenId: string;
+  amount: number;
+  metaData: string;
+  supplyKey: PrivateKey;
 };
 
 export type uniqueMintingValidationProps = {
-  batchSize?: number;
-  tokenId?: string;
-  supplyKey?: PrivateKey;
+  batchSize: number;
+  tokenId: string;
+  supplyKey: PrivateKey;
   pathToMetadataURIsFile?: string;
   metadataArray?: string[];
 };
 
 export type increaseNFTSupplyValidationProps = {
-  nftId?: NftId;
-  batchSize?: number;
-  amount?: number;
-  supplyKey?: PrivateKey;
+  nftId: NftId;
+  batchSize: number;
+  amount: number;
+  supplyKey: PrivateKey;
 };
 
 export type validateCreateCollectionProps = {
-  client?: Client;
-  collectionName?: string;
-  collectionSymbol?: string;
+  collectionName: string;
+  collectionSymbol: string;
   treasuryAccountPrivateKey?: string;
   treasuryAccount?: string;
   customFees?: CustomFeeType[];
@@ -58,14 +57,14 @@ export type validateCreateCollectionProps = {
 };
 
 export type fixedFeeValidationProps = {
-  collectorAccountId?: string;
+  collectorAccountId: string;
   hbarAmount?: number;
   amount?: number;
   denominatingTokenId?: string;
 };
 
 export type royaltyFeeValidationProps = {
-  collectorAccountId?: string;
+  collectorAccountId: string;
   numerator: number;
   denominator: number;
 };
