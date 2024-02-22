@@ -23,7 +23,7 @@ import { NftStorageService } from '../../services/file-storages/nft-storage/nft-
 import { PinataService } from '../../services/file-storages/pinata/pinata-service';
 import { MockStorageService } from '../../services/file-storages/mock-storage/mock-storage-service';
 import { awsSecretKey, awsAccessKey, nftStorageApiKey, pinataApiKey, pinataJwtKey, pinataSecretApiKey } from './e2e-consts';
-import { VERY_LONG_E2E_TIMEOUT } from '../__mocks__/consts';
+import { LONG_E2E_TIMEOUT } from '../__mocks__/consts';
 import { exampleNFTMetadata } from '../__mocks__/exampleNFTMetadata';
 import { AWSService } from '../../services/file-storages/aws/aws-service';
 
@@ -51,7 +51,7 @@ describe('UploadService E2E Test', () => {
       expect(result[0].url).toBeDefined();
       expect(result).toHaveLength(1);
     },
-    VERY_LONG_E2E_TIMEOUT
+    LONG_E2E_TIMEOUT
   );
 
   itif(awsAccessKey && awsSecretKey)(
@@ -64,7 +64,7 @@ describe('UploadService E2E Test', () => {
       expect(result[0].url).toBeDefined();
       expect(result).toHaveLength(1);
     },
-    VERY_LONG_E2E_TIMEOUT
+    LONG_E2E_TIMEOUT
   );
 
   itif(awsAccessKey && awsSecretKey)(
@@ -78,7 +78,7 @@ describe('UploadService E2E Test', () => {
       expect(result[1].url).toBeDefined();
       expect(result).toHaveLength(2);
     },
-    VERY_LONG_E2E_TIMEOUT
+    LONG_E2E_TIMEOUT
   );
 
   itif(awsAccessKey && awsSecretKey)(
@@ -91,7 +91,7 @@ describe('UploadService E2E Test', () => {
       expect(result[0].url).toBeDefined();
       expect(result).toHaveLength(1);
     },
-    VERY_LONG_E2E_TIMEOUT
+    LONG_E2E_TIMEOUT
   );
 
   it(
@@ -105,7 +105,7 @@ describe('UploadService E2E Test', () => {
       expect(result[0].url).toBeDefined();
       expect(result).toHaveLength(1);
     },
-    VERY_LONG_E2E_TIMEOUT
+    LONG_E2E_TIMEOUT
   );
 
   it(
@@ -118,7 +118,7 @@ describe('UploadService E2E Test', () => {
       expect(result[0].url).toBeDefined();
       expect(result).toHaveLength(1);
     },
-    VERY_LONG_E2E_TIMEOUT
+    LONG_E2E_TIMEOUT
   );
 
   it(
@@ -132,7 +132,7 @@ describe('UploadService E2E Test', () => {
       expect(result[1].url).toBeDefined();
       expect(result).toHaveLength(2);
     },
-    VERY_LONG_E2E_TIMEOUT
+    LONG_E2E_TIMEOUT
   );
 
   it(
@@ -145,7 +145,7 @@ describe('UploadService E2E Test', () => {
       expect(result[0].url).toBeDefined();
       expect(result).toHaveLength(1);
     },
-    VERY_LONG_E2E_TIMEOUT
+    LONG_E2E_TIMEOUT
   );
 
   it(
@@ -159,7 +159,7 @@ describe('UploadService E2E Test', () => {
       expect(result[0].url).toBeDefined();
       expect(result).toHaveLength(1);
     },
-    VERY_LONG_E2E_TIMEOUT
+    LONG_E2E_TIMEOUT
   );
 
   it(
@@ -172,7 +172,7 @@ describe('UploadService E2E Test', () => {
       expect(result[0].url).toBeDefined();
       expect(result).toHaveLength(1);
     },
-    VERY_LONG_E2E_TIMEOUT
+    LONG_E2E_TIMEOUT
   );
 
   it(
@@ -186,7 +186,7 @@ describe('UploadService E2E Test', () => {
       expect(result[1].url).toBeDefined();
       expect(result).toHaveLength(2);
     },
-    VERY_LONG_E2E_TIMEOUT
+    LONG_E2E_TIMEOUT
   );
 
   it(
@@ -199,7 +199,7 @@ describe('UploadService E2E Test', () => {
       expect(result[0].url).toBeDefined();
       expect(result).toHaveLength(1);
     },
-    VERY_LONG_E2E_TIMEOUT
+    LONG_E2E_TIMEOUT
   );
 
   it(
@@ -211,6 +211,6 @@ describe('UploadService E2E Test', () => {
       expect(result).toBeDefined();
       expect(result[0].url).toEqual('https://www.mockstorage.com/');
     },
-    VERY_LONG_E2E_TIMEOUT
+    LONG_E2E_TIMEOUT
   );
 });

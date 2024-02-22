@@ -26,7 +26,6 @@ import { BufferFile } from '../types/buffer-file.module';
 import { dictionary } from '../utils/constants/dictionary';
 import { errorToMessage } from '../helpers/error-to-message';
 import { NFTMetadata } from '../types/nft-metadata.module';
-import { Hip412Metadata } from '../utils/hedera/hip412-metadata';
 import { FileStorage } from '../types/file-storage-service';
 
 export type FileStorageURL = `https://${string}/`;
@@ -141,7 +140,7 @@ export class UploadService {
     }
   }
 
-  public async uploadMetadataList(metadatas: (Hip412Metadata | NFTMetadata)[]): Promise<UploadServiceReturn[]> {
+  public async uploadMetadataList(metadatas: NFTMetadata[]): Promise<UploadServiceReturn[]> {
     const metadataUris = await Promise.all(map(metadatas, async (metadata) => this.handleBlobUpload(metadata)));
 
     return filter(metadataUris, (metadataUri): metadataUri is UploadServiceReturn => !isNull(metadataUri));
