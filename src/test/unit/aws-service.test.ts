@@ -20,6 +20,7 @@
 import { AWSService } from '../../services/file-storages/aws/aws-service';
 import { S3Client } from '@aws-sdk/client-s3';
 import { Upload } from '@aws-sdk/lib-storage';
+import { AWS_RES_DONE } from '../__mocks__/aws';
 
 jest.mock('@aws-sdk/client-s3');
 jest.mock('@aws-sdk/lib-storage');
@@ -43,12 +44,12 @@ describe('AWSService', () => {
     const mockFile = new Blob([new Uint8Array([1, 2, 3])]);
 
     (Upload as unknown as jest.Mock).mockImplementation(() => ({
-      done: jest.fn().mockResolvedValue({}),
+      done: jest.fn().mockResolvedValue(AWS_RES_DONE),
     }));
 
     const result = await awsService.uploadFile(mockFile);
 
-    expect(result).toEqual(expect.stringMatching(/^https:\/\/myAwsS3Bucket\.s3\.amazonaws\.com\/\d+\.json$/));
+    expect(result).toEqual('https://hederatest.s3.eu-central-1.amazonaws.com/1708599289764.jpg');
   });
 
   it('should throw an error when AWS S3 client is not initialized', async () => {
