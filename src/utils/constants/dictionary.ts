@@ -34,13 +34,9 @@ export const dictionary = {
     noApiKeys: 'Please provide at least one API key to use "NFT.storage".',
 
     // upload service errors
-    noFileStorageKeysFound: 'No file storage API keys found.',
-    uploadingFilesFailed: 'Uploading files failed.',
-    noFiles: 'No files to upload.',
-    noMetadata: 'No metadata to upload.',
-
     uploadService: {
-      uploadingMetadata: 'Uploading metadata file...',
+      noFiles: 'No files to upload.',
+      noMetadata: 'No metadata to upload.',
     },
     cannotFetchHbarExchangeRate: 'Can not fetch Hbar exchange rate.',
     ipfsGatewayRequired: 'IPFS gateway is required when metadata contains IPFS links.',

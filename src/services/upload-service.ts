@@ -59,7 +59,7 @@ export class UploadService {
         }
 
         if (files.length < 0) {
-          throw new Error(dictionary.errors.noFiles);
+          throw new Error(dictionary.errors.uploadService.noFiles);
         }
 
         try {
@@ -89,7 +89,7 @@ export class UploadService {
 
   public async uploadBlobFiles(files: (Blob | BufferFile)[]): Promise<UploadServiceReturn[]> {
     if (files.length < 0) {
-      throw new Error(dictionary.errors.noFiles);
+      throw new Error(dictionary.errors.uploadService.noFiles);
     }
 
     try {
@@ -122,7 +122,7 @@ export class UploadService {
 
   public async handleBlobUpload(metadata: Partial<NFTMetadata> | NFTMetadata): Promise<UploadServiceReturn | null> {
     if (!metadata) {
-      throw new Error(dictionary.errors.noMetadata);
+      throw new Error(dictionary.errors.uploadService.noMetadata);
     }
 
     try {

@@ -26,7 +26,7 @@ import { Upload } from '@aws-sdk/lib-storage';
 import { FileStorage } from '../../../types/file-storage-service';
 
 export class AWSService implements FileStorage {
-  public client: S3Client | null = null;
+  public client: S3Client;
   public awsAccessKeyId?: string;
   public awsSecretAccessKey?: string;
   public awsS3Region?: string;
@@ -48,10 +48,6 @@ export class AWSService implements FileStorage {
   }
 
   public async uploadFile(file: Blob): Promise<string> {
-    if (!this.client) {
-      throw new Error('No AWS S3 client initialized!');
-    }
-
     const buffer = new Uint8Array(await file.arrayBuffer());
     const fileTypeFromBufferInstance = filetypename(buffer);
 
@@ -75,11 +71,11 @@ export class AWSService implements FileStorage {
 
       const resDone = await res.done();
 
-      if (!resDone) {
+      if (!resDone || !resDone.Location) {
         throw new Error(dictionary.errors.awsUploadIssue);
       }
 
-      return resDone.Location || '';
+      return resDone.Location;
     } catch (error) {
       throw new Error(dictionary.errors.awsUploadingError(errorToMessage(error)));
     }
