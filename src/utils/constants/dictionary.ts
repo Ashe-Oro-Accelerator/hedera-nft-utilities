@@ -32,7 +32,6 @@ export const dictionary = {
     invalidNftId: 'Invalid NftId.',
   },
   createCollection: {
-    clientRequired: 'client is required. You need to log in first.',
     myPrivateKeyRequired: 'myPrivateKey is required',
     collectionNameRequired: 'collectionName is required',
     collectionSymbolRequired: 'collectionSymbol is required',
@@ -41,10 +40,6 @@ export const dictionary = {
       'If you want to use treasuryAccount to sign, you need to pass the treasuryAccountPrivateKey also',
     collectionNotCreated: 'Something went wrong while creating the collection',
     autoRenewAccountPrivateKeySignRequired: 'If you want to use autoRenewAccount to sign, you need to pass the autoRenewAccountPrivateKey also',
-    tooManyCustomFees: 'You can only have 10 custom fees',
-    accountIdRequired: 'accountId is required',
-    numeratorRequired: 'numerator is required',
-    denominatorRequired: 'denominator is required',
     hbarAmountOrAmountAndDenominatingToken:
       'Either hbarAmount should be set and both amount and denominatingTokenId should not be set, or amount and denominatingTokenId should be set and hbarAmount should not be set.',
   },
@@ -61,14 +56,6 @@ export const dictionary = {
     mediaFileNotSupported: 'Media file is not supported.',
   },
   hederaActions: {
-    clientRequired: 'client is required. You need to log in first.',
-    myPrivateKeyRequired: 'myPrivateKey is required',
-    collectionNameRequired: 'collectionName is required',
-    collectionSymbolRequired: 'collectionSymbol is required',
-    myAccountIdRequired: 'myAccountId is required',
-    treasuryAccountPrivateKeySignRequired:
-      'If you want to use treasuryAccount to sign, you need to pass the treasuryAccountPrivateKey also',
-    collectionNotCreated: 'Something went wrong while creating the collection',
     mintingError: 'There was an error while minting the NFT.',
     maxBatchSize: 'Max Buffer exceeded. Use batchSize smaller of equal to 10',
     minBatchSize: 'Min Buffer exceeded. Use batchSize greater than 0',
@@ -77,6 +64,8 @@ export const dictionary = {
     minAmount: 'Amount needs to be greater than 0',
     metadataRequired: 'metadata is required',
     supplyKeyRequired: 'supplyKey is required',
+    tooManyCustomFees: 'You can define up to 10 custom fees',
+    accountIdRequired: 'accountId is required',
   },
   mintToken: {
     pathRequired: 'Path to File required',

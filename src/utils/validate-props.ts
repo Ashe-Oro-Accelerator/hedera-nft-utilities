@@ -81,7 +81,7 @@ const hbarAmountOrAmountAndDenominatingToken = (props: fixedFeeValidationProps) 
 
 const validateCustomFees = (props: validateCreateCollectionProps) => {
   if (Object.prototype.hasOwnProperty.call(props, 'collectionSymbol')) {
-    if (props.customFees && props.customFees.length > 10) throw new Error(dictionary.createCollection.tooManyCustomFees);
+    if (props.customFees && props.customFees.length > 10) throw new Error(dictionary.hederaActions.tooManyCustomFees);
   }
 };
 
@@ -110,7 +110,7 @@ const validNftId = (nftId: string) => {
 };
 
 const validAccountId = (accountId: string) => {
-  if (!accountId) throw new Error(dictionary.createCollection.accountIdRequired);
+  if (!accountId) throw new Error(dictionary.hederaActions.accountIdRequired);
   try {
     AccountId.fromString(accountId);
   } catch (error) {
