@@ -17,7 +17,7 @@
  * limitations under the License.
  *
  */
-import type { BufferFile } from './bufferFile';
+import type { BufferFile } from './buffer-file';
 
 export interface CSVRow {
   [key: string]: string;

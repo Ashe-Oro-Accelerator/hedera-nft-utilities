@@ -18,14 +18,15 @@
  *
  */
 
-import { AccountId, NetworkName } from '@hashgraph/sdk';
+import { AccountId } from '@hashgraph/sdk';
+import { Network } from './mint-token';
 
 export type LocalNode = { [key: string]: string | AccountId };
 
 export type LogInType = {
   myAccountId: string;
   myPrivateKey: string;
-  network: NetworkName;
+  network: Network;
   localNode?: LocalNode;
   localMirrorNode?: string;
 };
