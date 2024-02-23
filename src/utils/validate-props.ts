@@ -88,7 +88,7 @@ const validPrivateKey = (privateKey: string) => {
   try {
     PrivateKey.fromString(privateKey);
   } catch (error) {
-    throw new Error(dictionary.validation.invalidPrivateKey);
+    throw new Error(dictionary.hederaActions.cannotParsePrivateKey);
   }
 };
 
@@ -105,7 +105,7 @@ const validAccountId = (accountId: string) => {
   try {
     AccountId.fromString(accountId);
   } catch (error) {
-    throw new Error(dictionary.validation.invalidAccountId);
+    throw new Error(dictionary.hederaActions.cannotParseAccountId);
   }
 };
 

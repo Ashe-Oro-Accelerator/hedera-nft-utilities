@@ -22,14 +22,27 @@ import { getFullSystemPath } from '../../helpers/get-full-system-path';
 export const dictionary = {
   errors: {
     unhandledError: 'Unknown error.',
+    // file storages
+
+    // pinata
+    pinataError: 'Cannot create Pinata provider. Please pass pinataJwtKey OR (pinataApiKey AND pinataSecretApiKey).',
+
+    awsUploadIssue: 'Error encountered using AWS SDK. Please restart the app and try again.',
+    awsUploadingError: (message: string) => `Failed to upload file to AWS S3: ${message}`,
+
+    // NFT storage
+    noApiKeys: 'Please provide at least one API key to use "NFT.storage".',
+
+    // upload service errors
+    uploadService: {
+      noFiles: 'No files to upload.',
+      noMetadata: 'No metadata to upload.',
+    },
     cannotFetchHbarExchangeRate: 'Can not fetch Hbar exchange rate.',
-  },
-  validation: {
-    invalidAccountId: 'Invalid AccountId.',
-    invalidPublicKey: 'Invalid PublicKey.',
-    invalidPrivateKey: 'Invalid PrivateKey.',
-    invalidTokenId: 'Invalid TokenId.',
-    invalidNftId: 'Invalid NftId.',
+    ipfsGatewayRequired: 'IPFS gateway is required when metadata contains IPFS links.',
+    ipfsFailedToFetch: 'Failed to fetch metadata using IPFS gateway',
+    tooManyRequests: (statusText: string, status: number) => `${statusText}. Status code: ${status}`,
+    unknownErrorWhileFetching: (serialNumber: number) => `Error fetching metadata for serialNumber ${serialNumber}`,
   },
   createCollection: {
     myPrivateKeyRequired: 'myPrivateKey is required',
@@ -43,10 +56,10 @@ export const dictionary = {
     hbarAmountOrAmountAndDenominatingToken:
       'Either hbarAmount should be set and both amount and denominatingTokenId should not be set, or amount and denominatingTokenId should be set and hbarAmount should not be set.',
   },
-  csvToJson: {
+  validation: {
     errorInCellWithHeader: (line: number, column: number) =>
       `Error in line number ${line}, column number ${column}. Check if your CSV file is well prepared.`,
-    tooManyValuesForValidationSchema: 'Too many values provided for the validation schema.',
+    invalidKeysDetected: (keys: string[]) => `Redundant key(s) detected: ['${keys.join("', '")}']`,
     csvFileIsEmpty: (path: string) => `No metadata found in CSV file "${getFullSystemPath(path)}".`,
     errorInRow: (line: number | string, error: string) =>
       `Error at: line number ${typeof line === 'number' ? line + 1 : line} in ${getFullSystemPath('exampleCSV.csv')}\n${error}`,
@@ -54,12 +67,21 @@ export const dictionary = {
     imageForNftNotFound:
       'Image for NFT not found. The name of the image file should match its corresponding metadata file name (ex: 1.jpg with 1.json) or specify directly the "image" property.',
     mediaFileNotSupported: 'Media file is not supported.',
+    arrayOfObjectsValidationError: (fileName: string, error: string) => `Error at: ${getFullSystemPath(fileName)} - ${error}`,
+    unsupportedImageMimeType: 'Unsupported image MIME type.',
+    requiredFieldMissing: 'Required field is missing',
+    requiredTypeFieldIsMissing: 'The required "type" field is missing.',
+    requiredAttributeFieldMissing: 'The required "attributes" field is missing.',
+    filePermissionDenied: 'Permission denied',
+    fileEmptyOrFormattingError: 'Unexpected end of JSON input',
+    directoryIsEmpty: 'Directory is empty',
   },
   hederaActions: {
     mintingError: 'There was an error while minting the NFT.',
     maxBatchSize: 'Max Buffer exceeded. Use batchSize smaller of equal to 10',
     minBatchSize: 'Min Buffer exceeded. Use batchSize greater than 0',
     cannotParseTokenId: 'Cannot parse tokenId',
+    cannotParsePrivateKey: 'Cannot parse privateKey',
     minAmount: 'Amount needs to be greater than 0',
     metadataRequired: 'metadata is required',
     tooManyCustomFees: 'You can define up to 10 custom fees',

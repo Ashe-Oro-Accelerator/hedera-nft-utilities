@@ -89,11 +89,11 @@ export class CSVFileReader {
     }
 
     if (header.header !== '' && header.header !== this.ATTRIBUTES && header.header !== this.PROPERTIES) {
-      refToErrorArray.push(dictionary.csvToJson.errorInCellWithHeader(1, header.index + 1));
+      refToErrorArray.push(dictionary.validation.errorInCellWithHeader(1, header.index + 1));
     }
 
     if ((propertyIndex > 1 && header.header === this.PROPERTIES) || (attributesIndex > 1 && header.header === this.ATTRIBUTES)) {
-      refToErrorArray.push(dictionary.csvToJson.errorInCellWithHeader(1, header.index + 1));
+      refToErrorArray.push(dictionary.validation.errorInCellWithHeader(1, header.index + 1));
     }
 
     if (currentType === this.PROPERTIES) {
@@ -109,12 +109,7 @@ export class CSVFileReader {
     return { result, currentType, propertyIndex, attributesIndex };
   }
 
-  static async readCSVFile(
-    absolutePath: string,
-    config?: {
-      limit?: number;
-    }
-  ): Promise<CSVRow[]> {
+  static async readCSVFile(absolutePath: string, limit?: number): Promise<CSVRow[]> {
     const separator = selectSeparator();
     const rows: CSVRow[] = [];
     const readStream = fs.createReadStream(absolutePath);
@@ -133,7 +128,7 @@ export class CSVFileReader {
             try {
               this.checkForErrorsAndLimit({
                 headersErrors,
-                limit: config?.limit,
+                limit,
                 currentRowCount: rows.length,
               });
 
