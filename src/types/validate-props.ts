@@ -18,7 +18,7 @@
  *
  */
 import { Client, PrivateKey } from '@hashgraph/sdk';
-import { CustomFeeType } from './create-collection.module';
+import { CustomFeeType } from './create-collection';
 
 export type sharedMintingValidationProps = {
   batchSize?: number;

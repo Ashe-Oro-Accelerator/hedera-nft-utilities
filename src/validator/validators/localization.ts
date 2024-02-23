@@ -18,7 +18,7 @@
  *
  */
 
-import { Instance, Error } from '../../types/validator.module';
+import { Instance, Error } from '../../types/validator';
 
 /**
  * The localization validator applies specific rules for the localization object
@@ -45,9 +45,7 @@ const localizationValidator = (instance: Instance) => {
   }
 
   // check for two-letter language codes in "locales"
-  const notTwoLetterCode = localization.locales.filter(
-    (locale) => locale.length != 2,
-  );
+  const notTwoLetterCode = localization.locales.filter((locale) => locale.length != 2);
   if (notTwoLetterCode.length > 0) {
     notTwoLetterCode.map((locale) => {
       errors.push({
@@ -61,7 +59,7 @@ const localizationValidator = (instance: Instance) => {
     // default locale should not appear in locales array
     errors.push({
       type: 'localization',
-      msg: 'Default locale should not appear in \'localization.locales\'',
+      msg: "Default locale should not appear in 'localization.locales'",
     });
   }
 

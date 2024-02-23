@@ -24,7 +24,7 @@ import {
   fixedFeeValidationProps,
   royaltyFeeValidationProps,
   increaseNFTSupplyValidationProps,
-} from '../types/validate-props.module';
+} from '../types/validate-props';
 import { dictionary } from './constants/dictionary';
 
 export const validatePropsForSharedNFTMinting = (props: sharedMintingValidationProps) => {
