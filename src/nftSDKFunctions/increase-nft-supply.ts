@@ -25,7 +25,7 @@ import { mintSharedMetadataFunction } from './mint-shared-metadata-function';
 import { getMirrorNodeUrlForNetwork } from '../utils/hedera/get-mirror-node-url-for-network';
 
 export const increaseNFTSupply = async ({ client, network, nftId, amount, batchSize, supplyKey, mirrorNodeUrl }: IncreaseNFTSupplyType) => {
-  validatePropsForIncreaseNFTSupply({ nftId, amount, supplyKey, batchSize });
+  validatePropsForIncreaseNFTSupply({ amount, batchSize });
   return getMetaDataFromMirrorNode(network, nftId, mirrorNodeUrl).then((metaData) =>
     mintSharedMetadataFunction({ client, tokenId: nftId.tokenId.toString(), amount, batchSize, metaData, supplyKey })
   );

@@ -66,7 +66,6 @@ export const validatePropsForRoyaltyFeeFunction = (props: royaltyFeeValidationPr
 
 export const validatePropsForIncreaseNFTSupply = (props: increaseNFTSupplyValidationProps) => {
   validateBatchSize(props.batchSize);
-  validNftId(props.nftId);
   validateAmount(props.amount);
 };
 
@@ -97,20 +96,12 @@ const validTokenId = (tokenId: string) => {
   try {
     TokenId.fromString(tokenId);
   } catch (error) {
-    throw new Error(dictionary.hederaActions.tokenIdRequired);
-  }
-};
-
-const validNftId = (nftId: string) => {
-  try {
-    NftId.fromString(nftId);
-  } catch (error) {
-    throw new Error(dictionary.hederaActions.nftIdRequired);
+    throw new Error(dictionary.hederaActions.cannotParseTokenId);
   }
 };
 
 const validAccountId = (accountId: string) => {
-  if (!accountId) throw new Error(dictionary.hederaActions.accountIdRequired);
+  if (!accountId) throw new Error(dictionary.hederaActions.cannotParseAccountId);
   try {
     AccountId.fromString(accountId);
   } catch (error) {

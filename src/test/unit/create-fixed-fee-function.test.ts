@@ -42,6 +42,6 @@ describe('createFixedFeeFunction', () => {
         collectorAccountId: '',
         hbarAmount: 100,
       })
-    ).toThrow(dictionary.hederaActions.accountIdRequired);
+    ).toThrow(dictionary.hederaActions.cannotParseAccountId);
   });
 });

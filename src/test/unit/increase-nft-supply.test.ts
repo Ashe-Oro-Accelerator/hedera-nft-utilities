@@ -69,9 +69,7 @@ describe('increaseNFTSupply', () => {
     await increaseNFTSupply(mockIncreaseNFTSupplyType);
 
     expect(validatePropsForIncreaseNFTSupply as jest.Mock).toHaveBeenCalledWith({
-      nftId: mockNftId,
       amount: 10,
-      supplyKey: generatedSupplyKey,
       batchSize: 5,
     });
   });

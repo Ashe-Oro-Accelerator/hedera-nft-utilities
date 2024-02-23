@@ -243,6 +243,6 @@ describe('mintSharedMetadataFunction', () => {
         amount: mockAmount,
         batchSize: mockBatchSize,
       })
-    ).rejects.toThrow(dictionary.hederaActions.tokenIdRequired);
+    ).rejects.toThrow(dictionary.hederaActions.cannotParseTokenId);
   });
 });

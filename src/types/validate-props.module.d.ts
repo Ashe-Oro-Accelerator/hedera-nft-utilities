@@ -37,10 +37,8 @@ export type uniqueMintingValidationProps = {
 };
 
 export type increaseNFTSupplyValidationProps = {
-  nftId: NftId;
   batchSize: number;
   amount: number;
-  supplyKey: PrivateKey;
 };
 
 export type validateCreateCollectionProps = {

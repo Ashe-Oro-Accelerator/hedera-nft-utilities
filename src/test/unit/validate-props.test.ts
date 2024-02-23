@@ -31,19 +31,23 @@ import { myAccountId, myPrivateKey } from '../__mocks__/consts';
 
 describe('validateProps_Value_Errors', () => {
   it('should throw an error if batchSize is greater than 10', () => {
-    expect(() => validatePropsForSharedNFTMinting({ batchSize: 11, tokenId: '0.0.123', amount: 50, metaData: 'test', supplyKey: PrivateKey.generateED25519() })).toThrow(dictionary.hederaActions.maxBatchSize);
+    expect(() => validatePropsForSharedNFTMinting({ batchSize: 11, tokenId: '0.0.123', amount: 50, metaData: 'test', supplyKey: PrivateKey.generateED25519() }))
+      .toThrow(dictionary.hederaActions.maxBatchSize);
   });
 
   it('should throw an error if batchSize is less than 1', () => {
-    expect(() => validatePropsForSharedNFTMinting({ batchSize: -1, tokenId: '0.0.123', amount: 50, metaData: 'test', supplyKey: PrivateKey.generateED25519() })).toThrow(dictionary.hederaActions.minBatchSize);
+    expect(() => validatePropsForSharedNFTMinting({ batchSize: -1, tokenId: '0.0.123', amount: 50, metaData: 'test', supplyKey: PrivateKey.generateED25519() }))
+      .toThrow(dictionary.hederaActions.minBatchSize);
   });
 
   it('should throw an error if tokenId is not provided', () => {
-    expect(() => validatePropsForSharedNFTMinting({ tokenId: '', batchSize: 3, amount: 50, metaData: 'test', supplyKey: PrivateKey.generateED25519() })).toThrow(dictionary.hederaActions.tokenIdRequired);
+    expect(() => validatePropsForSharedNFTMinting({ tokenId: '', batchSize: 3, amount: 50, metaData: 'test', supplyKey: PrivateKey.generateED25519() }))
+      .toThrow(dictionary.hederaActions.cannotParseTokenId);
   });
 
   it('should throw an error if metaData is not provided', () => {
-    expect(() => validatePropsForSharedNFTMinting({ metaData: '', tokenId: '0.0.123', batchSize: 3, amount: 50, supplyKey: PrivateKey.generateED25519() })).toThrow(dictionary.hederaActions.metadataRequired);
+    expect(() => validatePropsForSharedNFTMinting({ metaData: '', tokenId: '0.0.123', batchSize: 3, amount: 50, supplyKey: PrivateKey.generateED25519() }))
+      .toThrow(dictionary.hederaActions.metadataRequired);
   });
 });
 
@@ -57,7 +61,7 @@ describe('validateProps_Success', () => {
   });
 
   it('should not throw an error if amount is a number greater than 0', () => {
-    expect(() => validatePropsForSharedNFTMinting({ amount: 5, tokenId: '0.0.123', metaData: 'test', supplyKey: PrivateKey.generateED25519(), batchSize: 5  })).not.toThrow();
+    expect(() => validatePropsForSharedNFTMinting({ amount: 5, tokenId: '0.0.123', metaData: 'test', supplyKey: PrivateKey.generateED25519(), batchSize: 5 })).not.toThrow();
   });
 
   it('should not throw an error if metaData is a string', () => {
@@ -173,23 +177,9 @@ describe('validatePropsForCreateCollection', () => {
   });
 });
 
-describe('validatePropsForIncreaseNFTSupply', () => {
-  it('should throw an error if nftId is not provided', () => {
-    expect(() =>
-      validatePropsForIncreaseNFTSupply({
-        amount: 10,
-        batchSize: 5,
-        supplyKey: PrivateKey.generate(),
-        nftId: undefined,
-      })
-    ).toThrow(new Error(dictionary.hederaActions.nftIdRequired));
-  });
-
-});
-
 describe('validatePropsForFixedFeeFunction', () => {
   it('should throw an error if hbarAmount, amount, and denominatingTokenId are not set', () => {
-    expect(() => validatePropsForFixedFeeFunction({collectorAccountId: '0.0.123'})).toThrow(dictionary.createCollection.hbarAmountOrAmountAndDenominatingToken);
+    expect(() => validatePropsForFixedFeeFunction({ collectorAccountId: '0.0.123' })).toThrow(dictionary.createCollection.hbarAmountOrAmountAndDenominatingToken);
   });
 
   it('should throw an error if only denominatingTokenId is set', () => {
