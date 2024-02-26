@@ -17,9 +17,8 @@
  * limitations under the License.
  *
  */
-import { Client, CustomFixedFee, CustomRoyaltyFee, NftId, PrivateKey } from '@hashgraph/sdk';
+import { Client, NftId, PrivateKey } from '@hashgraph/sdk';
 import { CreateCollectionKeysType, CustomFeeType } from '../types/create-collection.module';
-import { JsonMetadataFromCSVInterface } from '../types/json-metadata-from-csv.module';
 import { Network } from '../types/mint-token.module';
 import { createCollectionFunction } from './create-collection';
 import { convertCSVToMetadataObjects } from './convert-csv-to-metadata-objects';
@@ -34,6 +33,7 @@ import { estimateCreateCollectionInDollars } from './estimate-create-collection-
 import { estimateCreateCollectionInHbar } from './estimate-create-collection-in-hbar';
 import { MetadataObject } from '../types/csv.module';
 import { convertMetadataObjectsToJsonFiles } from './convert-metadata-objects-to-json-files';
+import { getHolderAndDuration } from './get-holder-and-duration';
 
 export class HederaNFTSDK {
   accountId: string;
@@ -75,7 +75,7 @@ export class HederaNFTSDK {
     autoRenewAccount,
     autoRenewAccountPrivateKey,
     autoRenewPeriod,
-    memo
+    memo,
   }: {
     collectionName: string;
     collectionSymbol: string;
@@ -104,7 +104,7 @@ export class HederaNFTSDK {
       autoRenewAccount,
       autoRenewAccountPrivateKey,
       autoRenewPeriod,
-      memo
+      memo,
     });
   }
 
@@ -257,5 +257,9 @@ export class HederaNFTSDK {
       supplyKey: supplyKey || PrivateKey.fromString(this.privateKey),
       mirrorNodeUrl: this.mirrorNodeUrl,
     });
+  }
+
+  getHolderAndDuration({ tokenId, serialNumber, network = 'mainnet' }: { tokenId: string; serialNumber: number; network?: Network }) {
+    return getHolderAndDuration({ tokenId, serialNumber, network });
   }
 }
