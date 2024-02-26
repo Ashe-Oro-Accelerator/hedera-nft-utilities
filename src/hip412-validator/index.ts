@@ -26,9 +26,10 @@ import { errorToMessage } from '../helpers/error-to-message';
 import { MetadataObject } from '../types/csv.module';
 import { dictionary } from '../utils/constants/dictionary';
 import { REQUIRED } from '../utils/constants/nfts-limit-error';
-import { getMetadataObjectsForValidation, getNFTsFromToken, getSingleNFTDetails } from '../api/mirror-node';
+import { getMetadataObjectsForValidation, getSingleNFTDetails } from '../api/mirror-node';
 import { uriDecoder } from '../helpers/uri-decoder';
 import { ValidationError } from '../utils/validation-error';
+import { getNftMetadataFromCollection } from '../helpers/get-nft-metadatas-from-collection';
 
 interface FileValidationResult {
   isValid: boolean;
@@ -46,7 +47,7 @@ interface MetadataError {
   general: string[];
 }
 
-interface MetadataOnChainObjects {
+export interface MetadataOnChainObjects {
   metadata?: MetadataObject;
   serialNumber: number;
   error?: string;
@@ -168,17 +169,9 @@ export class Hip412Validator {
   };
 
   static async validateMetadataFromOnChainCollection(network: NetworkName, tokenId: string, ipfsGateway?: string, limit: number = 100) {
-    const nfts = await getNFTsFromToken(network, tokenId, limit);
-    const decodedMetadataArray = uriDecoder(nfts, ipfsGateway);
+    const metadataObjects = await getNftMetadataFromCollection(network, tokenId, limit, ipfsGateway);
 
-    const metadataObjects = await Promise.all(
-      decodedMetadataArray.map(async ({ metadata, serialNumber }) => {
-        return getMetadataObjectsForValidation(metadata, serialNumber);
-      })
-    );
-
-    const validationResponse = Hip412Validator.validateOnChainArrayOfObjects(metadataObjects);
-    return validationResponse;
+    return Hip412Validator.validateOnChainArrayOfObjects(metadataObjects);
   }
 
   static async validateSingleOnChainNFTMetadata(network: NetworkName, tokenId: string, serialNumber: number, ipfsGateway?: string) {
@@ -196,8 +189,6 @@ export class Hip412Validator {
         },
       };
     }
-    const validationResponse = Hip412Validator.validateSingleMetadataObject(metadataObject.metadata);
-
-    return validationResponse;
+    return Hip412Validator.validateSingleMetadataObject(metadataObject.metadata);
   }
 }
