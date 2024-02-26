@@ -43,9 +43,12 @@ describe('getHolderAndDuration', () => {
 
       await new Promise((resolve) => setTimeout(resolve, MIRROR_NODE_DELAY));
 
-      await expect(nftSDK.getHolderAndDuration({ tokenId, serialNumber: baseNFT[0].serialNumber, network: 'testnet' })).rejects.toThrow(
-        'NFT has not been transferred'
-      );
+      const result = await nftSDK.getHolderAndDuration({ tokenId, serialNumber: baseNFT[0].serialNumber, network: 'testnet' });
+
+      expect(result).toEqual({
+        holder: operatorAccountId,
+        holderSince: expect.any(String),
+      });
     },
     LONG_E2E_TIMEOUT
   );

@@ -13,8 +13,9 @@ export const getHolderAndDuration = async ({
   serialNumber: number;
   network: Network;
 }) => {
-  const detailsUrl = `${getMirrorNodeUrlForNetwork(network)}/tokens/${tokenId}/nfts/${serialNumber}`;
-  const transactionsUrl = `${getMirrorNodeUrlForNetwork(network)}/tokens/${tokenId}/nfts/${serialNumber}/transactions`;
+  const mirrorNodeUrl = getMirrorNodeUrlForNetwork(network);
+  const detailsUrl = `${mirrorNodeUrl}/tokens/${tokenId}/nfts/${serialNumber}`;
+  const transactionsUrl = `${mirrorNodeUrl}/tokens/${tokenId}/nfts/${serialNumber}/transactions`;
 
   const { data: nftDetails } = await axios.get<NFTDetails>(detailsUrl);
 
@@ -26,10 +27,10 @@ export const getHolderAndDuration = async ({
     data: { transactions },
   } = await axios.get<NFTTransactionsRequest>(transactionsUrl);
 
-  const firstCryptoTransfer = transactions.find((transaction) => transaction.type === 'CRYPTOTRANSFER');
+  const firstCryptoTransfer = transactions.find((transaction) => transaction.type === 'CRYPTOTRANSFER' || transaction.type === 'TOKENMINT');
 
   if (!firstCryptoTransfer) {
-    throw new Error('NFT has not been transferred');
+    throw new Error('NFT has not any transactions yet');
   }
 
   const date = fromUnixTime(Number(firstCryptoTransfer.consensus_timestamp));

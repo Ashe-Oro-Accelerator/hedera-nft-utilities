@@ -76,6 +76,6 @@ describe('getHolderAndDuration', () => {
         serialNumber: mockSerialNumber,
         network: mockNetwork,
       })
-    ).rejects.toThrow('NFT has not been transferred');
+    ).rejects.toThrow('NFT has not any transactions yet');
   });
 });
