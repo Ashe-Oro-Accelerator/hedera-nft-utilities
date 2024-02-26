@@ -113,7 +113,6 @@ const calculateRiskScoreFromTokenId = async ({
 };
 
 const calculateRiskScore = (metadata: Metadata, customWeights?: Weights): number => {
-  console.log('metadata:', metadata);
   const weights = customWeights ? customWeights : defaultWeights;
   let riskScore = 0;
 
