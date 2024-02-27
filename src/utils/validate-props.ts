@@ -17,7 +17,7 @@
  * limitations under the License.
  *
  */
-import { AccountId, NftId, PrivateKey, TokenId } from '@hashgraph/sdk';
+import { AccountId, PrivateKey, TokenId } from '@hashgraph/sdk';
 import {
   validateCreateCollectionProps,
   uniqueMintingValidationProps,
@@ -27,6 +27,11 @@ import {
   increaseNFTSupplyValidationProps,
 } from '../types/validate-props.module';
 import { dictionary } from './constants/dictionary';
+
+const MAX_CUSTOM_FEES_NUMBER = 10;
+const MAX_BATCH_SIZE_NUMBER = 10;
+const MIN_BATCH_SIZE_NUMBER = 1;
+const MIN_AMOUNT_NUMBER = 1;
 
 export const validatePropsForSharedNFTMinting = (props: sharedMintingValidationProps) => {
   validateBatchSize(props.batchSize);
@@ -80,7 +85,7 @@ const hbarAmountOrAmountAndDenominatingToken = (props: fixedFeeValidationProps) 
 
 const validateCustomFees = (props: validateCreateCollectionProps) => {
   if (Object.prototype.hasOwnProperty.call(props, 'collectionSymbol')) {
-    if (props.customFees && props.customFees.length > 10) throw new Error(dictionary.hederaActions.tooManyCustomFees);
+    if (props.customFees && props.customFees.length > MAX_CUSTOM_FEES_NUMBER) throw new Error(dictionary.hederaActions.tooManyCustomFees);
   }
 };
 
@@ -140,12 +145,12 @@ const validateCollectionName = (props: validateCreateCollectionProps) => {
 };
 
 const validateBatchSize = (batchSize: number) => {
-  if (batchSize > 10) throw new Error(dictionary.hederaActions.maxBatchSize);
-  if (batchSize < 1) throw new Error(dictionary.hederaActions.minBatchSize);
+  if (batchSize > MAX_BATCH_SIZE_NUMBER) throw new Error(dictionary.hederaActions.maxBatchSize);
+  if (batchSize < MIN_BATCH_SIZE_NUMBER) throw new Error(dictionary.hederaActions.minBatchSize);
 };
 
 const validateAmount = (amount: number) => {
-  if (!amount || amount < 1) throw new Error(dictionary.hederaActions.minAmount);
+  if (!amount || amount < MIN_AMOUNT_NUMBER) throw new Error(dictionary.hederaActions.minAmount);
 };
 
 const validateMetaData = (props: sharedMintingValidationProps) => {
