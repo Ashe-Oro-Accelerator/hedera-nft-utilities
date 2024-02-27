@@ -34,6 +34,7 @@ import { estimateCreateCollectionInDollars } from './estimate-create-collection-
 import { estimateCreateCollectionInHbar } from './estimate-create-collection-in-hbar';
 import { MetadataObject } from '../types/csv.module';
 import { convertMetadataObjectsToJsonFiles } from './convert-metadata-objects-to-json-files';
+import { privateKeyFromString } from '../helpers/private-key-from-string';
 
 export class HederaNFTSDK {
   accountId: string;
@@ -75,7 +76,7 @@ export class HederaNFTSDK {
     autoRenewAccount,
     autoRenewAccountPrivateKey,
     autoRenewPeriod,
-    memo
+    memo,
   }: {
     collectionName: string;
     collectionSymbol: string;
@@ -104,7 +105,7 @@ export class HederaNFTSDK {
       autoRenewAccount,
       autoRenewAccountPrivateKey,
       autoRenewPeriod,
-      memo
+      memo,
     });
   }
 
@@ -210,7 +211,7 @@ export class HederaNFTSDK {
       amount,
       batchSize,
       metaData,
-      supplyKey: supplyKey || PrivateKey.fromString(this.privateKey),
+      supplyKey: supplyKey || privateKeyFromString(this.privateKey),
     });
   }
 
@@ -254,7 +255,7 @@ export class HederaNFTSDK {
       nftId,
       amount,
       batchSize,
-      supplyKey: supplyKey || PrivateKey.fromString(this.privateKey),
+      supplyKey: supplyKey || privateKeyFromString(this.privateKey),
       mirrorNodeUrl: this.mirrorNodeUrl,
     });
   }

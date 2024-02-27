@@ -10,6 +10,7 @@ import {
   BATCH_SIZE,
 } from './e2e-consts';
 import { LONG_E2E_TIMEOUT, MIRROR_NODE_DELAY } from '../__mocks__/consts';
+import { privateKeyFromString } from '../../helpers/private-key-from-string';
 
 afterAll(async () => {
   nftSDK.client.close();
@@ -29,7 +30,7 @@ describe('E2E test for validating shared NFT Collection Metadata Against HIP412 
       amount: AMOUNT_OF_NFTS_TO_MINT,
       batchSize: BATCH_SIZE,
       metaData: LINK_TO_JSON_OBJECT_WITHOUT_ERRORS,
-      supplyKey: PrivateKey.fromString(operatorPrivateKey),
+      supplyKey: privateKeyFromString(operatorPrivateKey),
     });
 
     await new Promise((resolve) => setTimeout(resolve, MIRROR_NODE_DELAY));

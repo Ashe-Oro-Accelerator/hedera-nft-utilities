@@ -20,6 +20,7 @@
 import { LONG_E2E_TIMEOUT, MIRROR_NODE_DELAY } from '../__mocks__/consts';
 import { nftSDK, operatorPrivateKey } from './e2e-consts';
 import { NftId, PrivateKey, TokenId, TokenNftInfoQuery } from '@hashgraph/sdk';
+import { privateKeyFromString } from '../../helpers/private-key-from-string';
 
 afterAll(async () => {
   nftSDK.client.close();
@@ -40,7 +41,7 @@ describe('increaseNFTSupply function e2e', () => {
           tokenId,
           batchSize: 10,
           metadata: ['www.youtube.com'],
-          supplyKey: PrivateKey.fromString(operatorPrivateKey),
+          supplyKey: privateKeyFromString(operatorPrivateKey),
         });
         const nftInfo = await new TokenNftInfoQuery()
           .setNftId(new NftId(TokenId.fromString(tokenId), baseNFT[0].serialNumber))
@@ -53,7 +54,7 @@ describe('increaseNFTSupply function e2e', () => {
           nftId: nftInfo[0].nftId,
           amount,
           batchSize: 10,
-          supplyKey: PrivateKey.fromString(operatorPrivateKey),
+          supplyKey: privateKeyFromString(operatorPrivateKey),
         });
 
         for (const mintedNft of increaseSupplyResult) {

@@ -22,6 +22,7 @@ import { mintToken } from '../../nftSDKFunctions/mint-token';
 import { Client, PrivateKey } from '@hashgraph/sdk';
 import { myPrivateKey } from '../__mocks__/consts';
 import { dictionary } from '../../utils/constants/dictionary';
+import { privateKeyFromString } from '../../helpers/private-key-from-string';
 
 jest.mock('../../nftSDKFunctions/mint-token', () => ({
   mintToken: jest.fn((amount) => {
@@ -40,7 +41,7 @@ describe('mintSharedMetadataFunction', () => {
     const mockClient = {} as Client;
     const mockMetaData = 'meta1';
     const mockTokenId = 'tokenId';
-    const mockSupplyKey = PrivateKey.fromString(myPrivateKey);
+    const mockSupplyKey = privateKeyFromString(myPrivateKey);
     const mockAmount = 10;
     const mockBatchSize = 2;
 
@@ -68,7 +69,7 @@ describe('mintSharedMetadataFunction', () => {
     const mockClient = {} as Client;
     const mockMetaData = 'meta1';
     const mockTokenId = 'tokenId';
-    const mockSupplyKey = PrivateKey.fromString(myPrivateKey);
+    const mockSupplyKey = privateKeyFromString(myPrivateKey);
     const mockAmount = 1;
     const mockBatchSize = 2;
 
@@ -95,7 +96,7 @@ describe('mintSharedMetadataFunction', () => {
     const mockClient = {} as Client;
     const mockMetaData = 'meta1';
     const mockTokenId = 'tokenId';
-    const mockSupplyKey = PrivateKey.fromString(myPrivateKey);
+    const mockSupplyKey = privateKeyFromString(myPrivateKey);
     const mockAmount = 1;
     const mockBatchSize = 1;
 
@@ -122,7 +123,7 @@ describe('mintSharedMetadataFunction', () => {
     const mockClient = {} as Client;
     const mockMetaData = 'meta1';
     const mockTokenId = 'tokenId';
-    const mockSupplyKey = PrivateKey.fromString(myPrivateKey);
+    const mockSupplyKey = privateKeyFromString(myPrivateKey);
     const mockAmount = 10;
     const mockBatchSize = 10;
 
@@ -149,7 +150,7 @@ describe('mintSharedMetadataFunction', () => {
     const mockClient = {} as Client;
     const mockMetaData = 'meta1';
     const mockTokenId = 'tokenId';
-    const mockSupplyKey = PrivateKey.fromString(myPrivateKey);
+    const mockSupplyKey = privateKeyFromString(myPrivateKey);
     const mockAmount = 1;
     const mockBatchSize = -1;
 
@@ -174,7 +175,7 @@ describe('mintSharedMetadataFunction', () => {
     const mockClient = {} as Client;
     const mockMetaData = 'meta1';
     const mockTokenId = 'tokenId';
-    const mockSupplyKey = PrivateKey.fromString(myPrivateKey);
+    const mockSupplyKey = privateKeyFromString(myPrivateKey);
     const mockAmount = 1;
     const mockBatchSize = 11;
 
@@ -200,7 +201,7 @@ describe('mintSharedMetadataFunction', () => {
     const mockClient = {} as Client;
     const mockMetaData = '';
     const mockTokenId = 'tokenId';
-    const mockSupplyKey = PrivateKey.fromString(myPrivateKey);
+    const mockSupplyKey = privateKeyFromString(myPrivateKey);
     const mockAmount = 1;
     const mockBatchSize = 10;
 
@@ -225,7 +226,7 @@ describe('mintSharedMetadataFunction', () => {
     const mockClient = {} as Client;
     const mockMetaData = 'meta1';
     const mockTokenId = '';
-    const mockSupplyKey = PrivateKey.fromString(myPrivateKey);
+    const mockSupplyKey = privateKeyFromString(myPrivateKey);
     const mockAmount = 1;
     const mockBatchSize = 10;
 
