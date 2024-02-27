@@ -28,7 +28,7 @@ const toFixedWithoutRounding = (number: number, precision: number) => {
 
 const isWithinThreePercent = (estimatedHbarsValue: number, transactionFeeHbars: number): boolean => {
   const difference = Math.abs(transactionFeeHbars - estimatedHbarsValue);
-  const acceptableDifference = Math.abs(transactionFeeHbars * 0.03);
+  const acceptableDifference = Math.abs(transactionFeeHbars * 0.01);
 
   return difference <= acceptableDifference;
 };
