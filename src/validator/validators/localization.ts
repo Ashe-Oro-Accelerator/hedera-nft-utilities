@@ -19,6 +19,7 @@
  */
 
 import { Instance, Error } from '../../types/validator';
+import { dictionary } from '../../utils/constants/dictionary';
 
 /**
  * The localization validator applies specific rules for the localization object
@@ -40,7 +41,7 @@ const localizationValidator = (instance: Instance) => {
     // default should be two-letter language code
     errors.push({
       type: 'localization',
-      msg: `Default locale should be two-letter language code, got: ${localization.default}`,
+      msg: `${dictionary.errors.localization.defaultLocaleTwoLetterLanguageCode}: ${localization.default}`,
     });
   }
 
@@ -50,7 +51,7 @@ const localizationValidator = (instance: Instance) => {
     notTwoLetterCode.map((locale) => {
       errors.push({
         type: 'localization',
-        msg: `Locale should be two-letter language code, got: ${locale}`,
+        msg: `${dictionary.errors.localization.localeTwoLetterLanguageCode}: ${locale}`,
       });
     });
   }
@@ -59,7 +60,7 @@ const localizationValidator = (instance: Instance) => {
     // default locale should not appear in locales array
     errors.push({
       type: 'localization',
-      msg: "Default locale should not appear in 'localization.locales'",
+      msg: dictionary.errors.localization.defaultLocaleShouldNotAppear,
     });
   }
 
@@ -67,7 +68,7 @@ const localizationValidator = (instance: Instance) => {
   if (!localization.uri.includes('/{locale}.json')) {
     errors.push({
       type: 'localization',
-      msg: 'URI should be of format <protocol>://<hash>/{locale}.json',
+      msg: dictionary.errors.localization.wrongUriFormat,
     });
   }
 
