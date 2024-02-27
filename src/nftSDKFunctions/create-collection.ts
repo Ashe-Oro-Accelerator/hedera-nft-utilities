@@ -40,7 +40,6 @@ export const createCollectionFunction = async ({
   memo,
 }: CreateCollectionType): Promise<string> => {
   validatePropsForCreateCollection({
-    client,
     collectionName,
     collectionSymbol,
     treasuryAccount,
