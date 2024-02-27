@@ -19,7 +19,7 @@
  */
 
 import axios from 'axios';
-import { Metadata, RiskResult, Weights, KeyTypes, RiskLevelTypes, RiskLevels } from '../types/risk.module';
+import { Metadata, RiskResult, Weights, KeyTypes, RiskLevels, RiskLevel } from '../types/risk.module';
 import { getMirrorNodeUrlForNetwork } from '../utils/hedera/get-mirror-node-url-for-network';
 
 type Network = 'mainnet' | 'testnet' | 'previewnet' | 'localNode';
@@ -136,18 +136,18 @@ const calculateRiskScore = (metadata: Metadata, customWeights?: Weights): number
   return riskScore;
 };
 
-const calculateRiskLevel = ({ score, customRiskLevels }: { score: number; customRiskLevels?: RiskLevels }): string => {
-  const riskLevels = customRiskLevels ? customRiskLevels : defaultRiskLevels;
-  let riskLevel = '';
+const calculateRiskLevel = ({ score, customRiskLevels }: { score: number; customRiskLevels?: RiskLevels }): RiskLevel => {
+  const riskLevels = customRiskLevels || defaultRiskLevels;
 
-  for (const key in riskLevels) {
-    if (score <= riskLevels[key as RiskLevelTypes]) {
-      riskLevel = key;
-      break;
-    }
+  if (score <= riskLevels.NORISK) {
+    return 'NORISK';
+  } else if (score <= riskLevels.LOW) {
+    return 'LOW';
+  } else if (score <= riskLevels.MEDIUM) {
+    return 'MEDIUM';
+  } else {
+    return 'HIGH';
   }
-
-  return riskLevel;
 };
 
 export {

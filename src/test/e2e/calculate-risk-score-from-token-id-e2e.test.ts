@@ -95,13 +95,13 @@ describe('calculateRiskScoreFromTokenIdE2E', () => {
       const customRiskLevels: RiskLevels = {
         NORISK: 5,
         LOW: 60,
-        MEDIUM: 250,
-        HIGH: 500,
+        MEDIUM: 100,
+        HIGH: 200,
       };
 
       const riskResults = await calculateRiskScoreFromTokenId({ tokenId, network: 'testnet', customWeights, customRiskLevels });
       expect(riskResults.riskScore).toBe(220);
-      expect(riskResults.riskLevel).toBe('MEDIUM');
+      expect(riskResults.riskLevel).toBe('HIGH');
     },
     LONG_E2E_TIMEOUT
   );
