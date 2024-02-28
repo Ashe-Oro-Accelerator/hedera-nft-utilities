@@ -19,7 +19,7 @@
  */
 import { AccountId, PrivateKey, TokenCreateTransaction, TokenSupplyType, TokenType } from '@hashgraph/sdk';
 import { dictionary } from '../utils/constants/dictionary';
-import { CreateCollectionType } from '../types/create-collection.module';
+import { CreateCollectionType } from '../types/create-collection';
 import { validatePropsForCreateCollection } from '../utils/validate-props';
 import { getPrivateKeyFromString } from '../helpers/get-private-key-from-string';
 
