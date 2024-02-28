@@ -20,20 +20,8 @@
 import { nftSDK, operatorAccountId, operatorPrivateKey } from './e2e-consts';
 import { estimateCreateCollectionInHbar } from '../../nftSDKFunctions/estimate-create-collection-in-hbar';
 import { Hbar, PrivateKey, TokenCreateTransaction, TokenType } from '@hashgraph/sdk';
-
-const ACCEPTABLE_DIFFERENCE_PERCENT = 0.01;
-
-const toFixedWithoutRounding = (number: number, precision: number) => {
-  const scale = Math.pow(10, precision);
-  return Math.floor(number * scale) / scale;
-};
-
-const isWithinThreePercent = (estimatedHbarsValue: number, transactionFeeHbars: number): boolean => {
-  const difference = Math.abs(transactionFeeHbars - estimatedHbarsValue);
-  const acceptableDifference = Math.abs(transactionFeeHbars * ACCEPTABLE_DIFFERENCE_PERCENT);
-
-  return difference <= acceptableDifference;
-};
+import { toFixedWithoutRounding } from '../helpers/to-fixed-without-rounding';
+import { isWithinAcceptableDifference } from '../helpers/is-within-acceptable-difference';
 
 describe('estimateCreateCollectionInHbarE2E', () => {
   it('should work properly with default values', async () => {
@@ -63,6 +51,6 @@ describe('estimateCreateCollectionInHbarE2E', () => {
     const transactionFeeHbars = record.transactionFee.toTinybars().toNumber();
     const estimatedHbarsValue = estimatedHbars.toTinybars().toNumber();
 
-    expect(isWithinThreePercent(estimatedHbarsValue, transactionFeeHbars)).toBe(true);
+    expect(isWithinAcceptableDifference(estimatedHbarsValue, transactionFeeHbars)).toBe(true);
   });
 });
