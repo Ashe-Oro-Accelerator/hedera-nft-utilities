@@ -22,7 +22,7 @@ import { UploadService } from '../../services/upload-service';
 import { NftStorageService } from '../../services/file-storages/nft-storage/nft-storage-service';
 import { PinataService } from '../../services/file-storages/pinata/pinata-service';
 import { MockStorageService } from '../../services/file-storages/mock-storage/mock-storage-service';
-import { awsSecretKey, awsAccessKey, nftStorageApiKey, pinataApiKey, pinataJwtKey, pinataSecretApiKey, nftSDK } from './e2e-consts';
+import { awsSecretKey, awsAccessKey, nftStorageApiKey, pinataApiKey, pinataJwtKey, pinataSecretApiKey } from './e2e-consts';
 import { LONG_E2E_TIMEOUT } from '../__mocks__/consts';
 import { exampleNFTMetadata } from '../__mocks__/exampleNFTMetadata';
 import { AWSService } from '../../services/file-storages/aws/aws-service';
