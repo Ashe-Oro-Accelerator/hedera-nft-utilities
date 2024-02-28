@@ -19,16 +19,17 @@
  */
 import { NftId } from '@hashgraph/sdk';
 import axios from 'axios';
-import { NFTDetails, NFTS } from '../types/nfts.module';
-import { MetadataObject } from '../types/csv.module';
+import { NFTDetails, NFTS } from '../types/nfts';
 import { dictionary } from '../utils/constants/dictionary';
 import { errorToMessage } from '../helpers/error-to-message';
 import { NetworkName } from '@hashgraph/sdk/lib/client/Client';
 import { getMirrorNodeUrlForNetwork } from '../utils/hedera/get-mirror-node-url-for-network';
+import { MetadataObject } from '../types/csv';
+import { NFTMetadata } from '../types/nft-metadata';
 
 export type MetadataFromMirrorNode = {
   isSuccessful: boolean;
-  metadata?: MetadataObject;
+  metadata?: MetadataObject | NFTMetadata;
   serialNumber: number;
   error?: string;
 };

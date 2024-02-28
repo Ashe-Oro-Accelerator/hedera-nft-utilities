@@ -20,7 +20,7 @@
 import fs from 'fs';
 import path from 'path';
 
-import { Instance } from '../types/validator.module';
+import { Instance } from '../types/validator';
 
 /**
  * @param dir Absolute path to file you want to read contents for

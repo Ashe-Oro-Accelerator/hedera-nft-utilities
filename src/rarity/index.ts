@@ -18,12 +18,12 @@
  */
 
 import { readFiles, getJSONFilesForDir } from '../helpers/files';
-import { RarityResult, AttributeConfig, ValueObject, NFTFile, TraitOccurrence } from '../types/rarity.module';
-import { Attribute } from '../types/validator.module';
-import { getNftMetadataFromCollection } from '../helpers/get-nft-metadatas-from-collection';
+import { RarityResult, AttributeConfig, ValueObject, NFTFile, TraitOccurrence } from '../types/rarity';
+import { Attribute } from '../types/validator';
 import { NetworkName } from '@hashgraph/sdk/lib/client/Client';
-import { MetadataFromMirrorNode } from '../api/mirror-node';
-import { MetadataObject } from '../types/csv.module';
+import { getNftMetadataFromCollection } from '../helpers/get-nft-metadatas-from-collection';
+import { MetadataObject } from '../types/csv';
+import { NFTMetadata } from '../types/nft-metadata';
 
 /**
  *
@@ -135,7 +135,7 @@ const getAttributeMap = (files: NFTFile[]): AttributeConfig[] => {
  * @param {NFTFile[]} files Array of NFTFile objects
  * @return {AttributeConfig[]} Array of objects with attribute information
  * */
-const getAttributeMapData = (metadataArray: MetadataObject[]): AttributeConfig[] => {
+const getAttributeMapData = (metadataArray: NFTMetadata[]): AttributeConfig[] => {
   const attributesMap: AttributeConfig[] = [];
   metadataArray.forEach((metadata) => {
     if (!metadata.attributes)
@@ -173,32 +173,32 @@ const getAttributeMapData = (metadataArray: MetadataObject[]): AttributeConfig[]
  * @param {Array<Object>} metadataArray Array of JSON objects for rarity calculation
  * @return {RarityResult[]} Array of objects with rarity information for each NFT
  */
-const calculateRarityFromData = (metadataArray: MetadataObject[]): RarityResult[] => {
+const calculateRarityFromData = (metadataArray: NFTMetadata[]): RarityResult[] => {
   const attributesMap = getAttributeMapData(metadataArray);
 
   const normalizedRarities: RarityResult[] = [];
   let normalizedCount = 1;
   metadataArray.forEach((metadata) => {
     const traitRarities: { trait: string; value: string | number; rarity: number }[] = [];
+    if (metadata.attributes)
+      metadata.attributes?.forEach((NFTAttribute: Attribute) => {
+        const attributeConfigObject: AttributeConfig | undefined = attributesMap.find(
+          (attribute) => attribute.trait_type === NFTAttribute.trait_type
+        );
 
-    metadata.attributes.forEach((NFTAttribute: Attribute) => {
-      const attributeConfigObject: AttributeConfig | undefined = attributesMap.find(
-        (attribute) => attribute.trait_type === NFTAttribute.trait_type
-      );
+        if (!attributeConfigObject) throw new Error(`Attribute ${NFTAttribute.trait_type} not found in attributes map`);
+        const NFTsWithTrait: ValueObject | undefined = attributeConfigObject.values.find(
+          (valueObject) => valueObject.value === NFTAttribute.value
+        );
+        const mostCommonTrait = attributeConfigObject.values.reduce((prev, current) => (prev.count > current.count ? prev : current));
+        const traitRarity = 1 / (NFTsWithTrait?.count! / mostCommonTrait.count);
 
-      if (!attributeConfigObject) throw new Error(`Attribute ${NFTAttribute.trait_type} not found in attributes map`);
-      const NFTsWithTrait: ValueObject | undefined = attributeConfigObject.values.find(
-        (valueObject) => valueObject.value === NFTAttribute.value
-      );
-      const mostCommonTrait = attributeConfigObject.values.reduce((prev, current) => (prev.count > current.count ? prev : current));
-      const traitRarity = 1 / (NFTsWithTrait?.count! / mostCommonTrait.count);
-
-      traitRarities.push({
-        trait: NFTAttribute.trait_type,
-        value: NFTAttribute.value,
-        rarity: traitRarity,
+        traitRarities.push({
+          trait: NFTAttribute.trait_type,
+          value: NFTAttribute.value,
+          rarity: traitRarity,
+        });
       });
-    });
 
     const totalRarity = traitRarities.reduce((prev, current) => prev + current.rarity, 0);
     const attributeContributions = traitRarities.map((traitRarity) => ({
@@ -218,7 +218,7 @@ const calculateRarityFromData = (metadataArray: MetadataObject[]): RarityResult[
   return normalizedRarities;
 };
 
-const calculateTraitOccurrenceFromData = (metadataArray: { attributes: Attribute[] }[]): TraitOccurrence[] => {
+const calculateTraitOccurrenceFromData = (metadataArray: NFTMetadata[]): TraitOccurrence[] => {
   const attributesMap = getAttributeMapData(metadataArray);
 
   const traitOccurrences: TraitOccurrence[] = [];
@@ -245,9 +245,7 @@ const calculateTraitOccurrenceFromData = (metadataArray: { attributes: Attribute
 const calculateRarityFromOnChainData = async (network: NetworkName, tokenId: string, ipfsGateway?: string, limit: number = 100) => {
   const metadataObjects = await getNftMetadataFromCollection(network, tokenId, limit, ipfsGateway);
 
-  const filteredArray: MetadataObject[] = metadataObjects
-    .map((obj) => obj.metadata)
-    .filter((item): item is MetadataObject => item !== undefined);
+  const filteredArray = metadataObjects.map((obj) => obj.metadata).filter((item): item is NFTMetadata => item !== undefined);
 
   return calculateRarityFromData(filteredArray);
 };

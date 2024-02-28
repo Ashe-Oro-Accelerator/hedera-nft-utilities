@@ -23,13 +23,14 @@ import { NetworkName } from '@hashgraph/sdk/lib/client/Client';
 import { Hip412MetadataCSVSchema, Hip412MetadataSchema } from '../utils/validation-schemas/hip412-metadata-schema';
 import { validateObjectWithSchema, validationMetadataErrorOptions } from '../helpers/validate-object-with-schema';
 import { errorToMessage } from '../helpers/error-to-message';
-import { MetadataObject } from '../types/csv.module';
+import { MetadataObject } from '../types/csv';
 import { dictionary } from '../utils/constants/dictionary';
 import { REQUIRED } from '../utils/constants/nfts-limit-error';
-import { getMetadataObjectsForValidation, getSingleNFTDetails } from '../api/mirror-node';
+import { getMetadataObjectsForValidation, getSingleNFTDetails, MetadataFromMirrorNode } from '../api/mirror-node';
 import { uriDecoder } from '../helpers/uri-decoder';
 import { ValidationError } from '../utils/validation-error';
 import { getNftMetadataFromCollection } from '../helpers/get-nft-metadatas-from-collection';
+import { NFTMetadata } from '../types/nft-metadata';
 
 interface FileValidationResult {
   isValid: boolean;
@@ -54,7 +55,7 @@ export interface MetadataOnChainObjects {
 }
 
 export class Hip412Validator {
-  static validateSingleMetadataObject(object: MetadataObject): FileValidationResult {
+  static validateSingleMetadataObject(object: MetadataObject | NFTMetadata): FileValidationResult {
     const errors: string[] = [];
 
     try {
@@ -143,7 +144,7 @@ export class Hip412Validator {
   }
 
   static validateOnChainArrayOfObjects = (
-    metadataObjects: MetadataOnChainObjects[]
+    metadataObjects: Awaited<MetadataFromMirrorNode>[]
   ): { isValid: boolean; errors: Array<{ serialNumber: number; message: string[] }> } => {
     const errors: Array<{ serialNumber: number; message: string[] }> = [];
 

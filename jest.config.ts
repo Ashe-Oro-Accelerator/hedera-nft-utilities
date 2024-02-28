@@ -11,7 +11,7 @@ const config: JestConfigWithTsJest = {
     '^@mocks(.*)$': '<rootDir>/src/test/__mocks__$1',
   },
   roots: ['<rootDir>/src'],
-  testMatch: ['**/src/test/**/*.(spec|test).(ts|tsx)'],
+  testMatch: ['**/src/test/**/*.(spec|test).(ts|tsx)', '!**/src/test/e2e/**/*.(spec|test).(ts|tsx)'],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
 };
 
