@@ -26,23 +26,28 @@ afterAll(async () => {
   nftSDK.client.close();
 });
 
+let tokenId = '';
+let baseNFT = [] as any[];
+
+beforeAll(async () => {
+  tokenId = await nftSDK.createCollection({
+    collectionName: 'test_name',
+    collectionSymbol: 'test_symbol',
+  });
+  baseNFT = await nftSDK.mintUniqueMetadata({
+    tokenId,
+    batchSize: 10,
+    metadata: ['www.youtube.com'],
+    supplyKey: PrivateKey.fromString(operatorPrivateKey),
+  });
+
+  await new Promise((resolve) => setTimeout(resolve, MIRROR_NODE_DELAY));
+}, LONG_E2E_TIMEOUT);
+
 describe('getHolderAndDuration', () => {
   it(
     'should return holder and duration of an NFT that has been minted successfully',
     async () => {
-      const tokenId = await nftSDK.createCollection({
-        collectionName: 'test_name',
-        collectionSymbol: 'test_symbol',
-      });
-      const baseNFT = await nftSDK.mintUniqueMetadata({
-        tokenId,
-        batchSize: 10,
-        metadata: ['www.youtube.com'],
-        supplyKey: PrivateKey.fromString(operatorPrivateKey),
-      });
-
-      await new Promise((resolve) => setTimeout(resolve, MIRROR_NODE_DELAY));
-
       const result = await nftSDK.getHolderAndDuration({ tokenId, serialNumber: baseNFT[0].serialNumber, network: 'testnet' });
 
       expect(result).toEqual({
@@ -56,17 +61,6 @@ describe('getHolderAndDuration', () => {
   it(
     'should return holder and duration of an NFT that has been transferred to another account successfully',
     async () => {
-      const tokenId = await nftSDK.createCollection({
-        collectionName: 'test_name',
-        collectionSymbol: 'test_symbol',
-      });
-      const baseNFT = await nftSDK.mintUniqueMetadata({
-        tokenId,
-        batchSize: 10,
-        metadata: ['www.youtube.com'],
-        supplyKey: PrivateKey.fromString(operatorPrivateKey),
-      });
-
       const nftSerial = baseNFT[0].serialNumber;
       const nftId = new NftId(TokenId.fromString(tokenId), nftSerial);
 

@@ -62,4 +62,5 @@ export const NETWORK = 'testnet';
 export const MOCK_CLIENT = {} as Client;
 export const MOCK_META_DATA = 'meta1';
 export const MOCK_TOKEN_ID = '0.0.123';
+export const MOCK_SERIAL = 2;
 export const MOCK_SUPPLY_KEY = PrivateKey?.fromString(myPrivateKey);
