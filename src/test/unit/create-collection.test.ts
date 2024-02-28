@@ -21,7 +21,7 @@ import { Client, Key, PrivateKey } from '@hashgraph/sdk';
 import { createCollectionFunction } from '../../nftSDKFunctions/create-collection';
 import { myPrivateKey } from '../__mocks__/consts';
 import { dictionary } from '../../utils/constants/dictionary';
-import { privateKeyFromString } from '../../helpers/private-key-from-string';
+import { getPrivateKeyFromString } from '../../helpers/get-private-key-from-string';
 
 jest.mock('@hashgraph/sdk', () => {
   return {
@@ -147,8 +147,8 @@ describe('createCollectionFunction', () => {
     const client = Client.forTestnet();
     const collectionSymbol = 'test2';
     const keys = {
-      admin: privateKeyFromString(myPrivateKey),
-      supply: privateKeyFromString(myPrivateKey),
+      admin: getPrivateKeyFromString(myPrivateKey),
+      supply: getPrivateKeyFromString(myPrivateKey),
     };
     const treasuryAccount = '0.0.4321';
     const treasuryAccountPrivateKey = '0.0.4321';
@@ -169,8 +169,8 @@ describe('createCollectionFunction', () => {
   it('should throw an error if collectionSymbol is not provided', async () => {
     const client = Client.forTestnet();
     const keys = {
-      admin: privateKeyFromString(myPrivateKey),
-      supply: privateKeyFromString(myPrivateKey),
+      admin: getPrivateKeyFromString(myPrivateKey),
+      supply: getPrivateKeyFromString(myPrivateKey),
     };
     const treasuryAccount = '0.0.4321';
     const treasuryAccountPrivateKey = '0.0.4321';
@@ -194,7 +194,7 @@ describe('createCollectionFunction', () => {
     const collectionSymbol = 'test2';
     const keys = {
       admin: PrivateKey.generateED25519(),
-      supply: privateKeyFromString(myPrivateKey),
+      supply: getPrivateKeyFromString(myPrivateKey),
     };
 
     const tokenId = await createCollectionFunction({

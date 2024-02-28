@@ -20,14 +20,14 @@
 import { PrivateKey } from '@hashgraph/sdk';
 import { dictionary } from '../utils/constants/dictionary';
 
-export const privateKeyFromString = (string: string) => {
-  if (!string) throw new Error(dictionary.errors.privateKeyRequired);
+export const getPrivateKeyFromString = (privateKey: string) => {
+  if (!privateKey) throw new Error(dictionary.errors.privateKeyRequired);
 
   try {
-    return PrivateKey.fromStringED25519(string);
+    return PrivateKey.fromStringED25519(privateKey);
   } catch (e) {
     try {
-      return PrivateKey.fromStringECDSA(string);
+      return PrivateKey.fromStringECDSA(privateKey);
     } catch (e) {
       throw new Error(dictionary.errors.privateKeyInvalid);
     }

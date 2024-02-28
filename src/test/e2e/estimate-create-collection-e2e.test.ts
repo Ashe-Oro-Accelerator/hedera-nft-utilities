@@ -20,7 +20,7 @@
 import { nftSDK, operatorAccountId, operatorPrivateKey } from './e2e-consts';
 import { estimateCreateCollectionInHbar } from '../../nftSDKFunctions/estimate-create-collection-in-hbar';
 import { Hbar, PrivateKey, TokenCreateTransaction, TokenType } from '@hashgraph/sdk';
-import { privateKeyFromString } from '../../helpers/private-key-from-string';
+import { getPrivateKeyFromString } from '../../helpers/get-private-key-from-string';
 
 const toFixedWithoutRounding = (number: number, precision: number) => {
   const scale = Math.pow(10, precision);
@@ -55,7 +55,7 @@ describe('estimateCreateCollectionInHbarE2E', () => {
       .setTokenName(name)
       .setTokenSymbol(symbol)
       .setTokenType(TokenType.NonFungibleUnique)
-      .setSupplyKey(privateKeyFromString(operatorPrivateKey))
+      .setSupplyKey(getPrivateKeyFromString(operatorPrivateKey))
       .setTreasuryAccountId(operatorAccountId);
     const txResponse = await createToken.execute(nftSDK.client);
     const record = await txResponse.getRecord(nftSDK.client);

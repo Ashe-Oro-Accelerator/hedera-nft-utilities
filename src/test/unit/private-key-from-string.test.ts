@@ -17,29 +17,28 @@
  * limitations under the License.
  *
  */
-import { privateKeyFromString } from '../../helpers/private-key-from-string';
+import { getPrivateKeyFromString } from '../../helpers/get-private-key-from-string';
 import { dictionary } from '../../utils/constants/dictionary';
-import { myPrivateKey } from '../__mocks__/consts';
-import { secondPrivateKey } from '../e2e/e2e-consts';
+import { myPrivateKey, mySecondPrivateKey } from '../__mocks__/consts';
 
-describe('privateKeyFromString', () => {
+describe('getPrivateKeyFromString', () => {
   it('should not throw with valid ED25519 private key string', async () => {
     const privateKeyString = myPrivateKey;
-    expect(() => privateKeyFromString(privateKeyString)).not.toThrow();
+    expect(() => getPrivateKeyFromString(privateKeyString)).not.toThrow();
   });
 
   it('should not throw with valid ECDSA private key string', async () => {
-    const privateKeyString = secondPrivateKey;
-    expect(() => privateKeyFromString(privateKeyString)).not.toThrow();
+    const privateKeyString = mySecondPrivateKey;
+    expect(() => getPrivateKeyFromString(privateKeyString)).not.toThrow();
   });
 
   it('should throw an error with invalid private key string', async () => {
     const privateKeyString = 'invalidPrivateKeyString';
-    expect(() => privateKeyFromString(privateKeyString)).toThrow(dictionary.errors.privateKeyInvalid);
+    expect(() => getPrivateKeyFromString(privateKeyString)).toThrow(dictionary.errors.privateKeyInvalid);
   });
 
   it('should throw an error with no private key string', async () => {
     const privateKeyString = '';
-    expect(() => privateKeyFromString(privateKeyString)).toThrow(dictionary.errors.privateKeyRequired);
+    expect(() => getPrivateKeyFromString(privateKeyString)).toThrow(dictionary.errors.privateKeyRequired);
   });
 });

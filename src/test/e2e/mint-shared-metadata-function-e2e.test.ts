@@ -20,7 +20,7 @@
 import { NftId, PrivateKey, TokenId, TokenNftInfoQuery } from '@hashgraph/sdk';
 import { nftSDK, operatorPrivateKey } from './e2e-consts';
 import { LONG_E2E_TIMEOUT } from '../__mocks__/consts';
-import { privateKeyFromString } from '../../helpers/private-key-from-string';
+import { getPrivateKeyFromString } from '../../helpers/get-private-key-from-string';
 
 afterAll(async () => {
   nftSDK.client.close();
@@ -42,7 +42,7 @@ describe('mintSharedMetadata function e2e', () => {
           amount,
           batchSize: 2,
           metaData: 'www.youtube.com',
-          supplyKey: privateKeyFromString(operatorPrivateKey),
+          supplyKey: getPrivateKeyFromString(operatorPrivateKey),
         });
 
         expect(tokenId).toBeDefined();

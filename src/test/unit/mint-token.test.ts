@@ -21,7 +21,7 @@ import { mintToken } from '../../nftSDKFunctions/mint-token';
 import { Client, PrivateKey, Status } from '@hashgraph/sdk';
 import { myPrivateKey } from '../__mocks__/consts';
 import { dictionary } from '../../utils/constants/dictionary';
-import { privateKeyFromString } from '../../helpers/private-key-from-string';
+import { getPrivateKeyFromString } from '../../helpers/get-private-key-from-string';
 
 jest.mock('@hashgraph/sdk', () => ({
   Client: jest.fn(),
@@ -54,7 +54,7 @@ describe('mintToken', () => {
     const mockClient = {} as Client;
     const mockMetaData = ['meta1'];
     const mockTokenId = 'tokenId';
-    const mockSupplyKey = privateKeyFromString(myPrivateKey);
+    const mockSupplyKey = getPrivateKeyFromString(myPrivateKey);
 
     const result = await mintToken(mockMetaData, mockTokenId, mockSupplyKey, mockClient);
 
@@ -65,7 +65,7 @@ describe('mintToken', () => {
     const mockClient = {} as Client;
     const mockMetaData = ['a'.repeat(99)]; // 99 characters
     const mockTokenId = 'tokenId';
-    const mockSupplyKey = privateKeyFromString(myPrivateKey);
+    const mockSupplyKey = getPrivateKeyFromString(myPrivateKey);
 
     const result = await mintToken(mockMetaData, mockTokenId, mockSupplyKey, mockClient);
 
@@ -76,7 +76,7 @@ describe('mintToken', () => {
     const mockClient = {} as Client;
     const mockMetaData = ['a'.repeat(100)]; // 100 characters
     const mockTokenId = 'tokenId';
-    const mockSupplyKey = privateKeyFromString(myPrivateKey);
+    const mockSupplyKey = getPrivateKeyFromString(myPrivateKey);
 
     const result = await mintToken(mockMetaData, mockTokenId, mockSupplyKey, mockClient);
 
@@ -87,7 +87,7 @@ describe('mintToken', () => {
     const mockClient = {} as Client;
     const mockMetaData = ['a'.repeat(101)]; // 101 characters
     const mockTokenId = 'tokenId';
-    const mockSupplyKey = privateKeyFromString(myPrivateKey);
+    const mockSupplyKey = getPrivateKeyFromString(myPrivateKey);
 
     await expect(mintToken(mockMetaData, mockTokenId, mockSupplyKey, mockClient)).rejects.toThrow(dictionary.mintToken.tooLongCID);
   });
