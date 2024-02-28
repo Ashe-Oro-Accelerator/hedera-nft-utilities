@@ -20,8 +20,8 @@
 import { nftSDK, operatorAccountId, operatorPrivateKey } from '../e2e-consts';
 import { estimateCreateCollectionInHbar } from '../../../nftSDKFunctions/estimate-create-collection-in-hbar';
 import { Hbar, PrivateKey, TokenCreateTransaction, TokenType } from '@hashgraph/sdk';
-import { toFixedWithoutRounding } from '../helpers/to-fixed-without-rounding';
-import { isWithinAcceptableDifference } from '../helpers/is-within-acceptable-difference';
+import { toFixedWithoutRounding } from '../../helpers/to-fixed-without-rounding';
+import { isWithinAcceptableDifference } from '../../helpers/is-within-acceptable-difference';
 
 describe('estimateCreateCollectionInHbarE2E', () => {
   it('should work properly with default values', async () => {
