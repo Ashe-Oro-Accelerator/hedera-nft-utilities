@@ -1,8 +1,26 @@
-import { Network } from '../types/mint-token.module';
-import { getMirrorNodeUrlForNetwork } from '../utils/hedera/get-mirror-node-url-for-network';
-import axios from 'axios';
-import { NFTDetails, NFTTransactionsRequest } from '../types/nfts.module';
+/*-
+ *
+ * Hedera NFT Utilities
+ *
+ * Copyright (C) 2023 Hedera Hashgraph, LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
 import { fromUnixTime } from 'date-fns';
+import { dictionary } from '../utils/constants/dictionary';
+import { getSingleNFTDetails, getTransactionsFromMirrorNode } from '../api/mirror-node';
+import { NetworkName } from '@hashgraph/sdk/lib/client/Client';
 
 export const getHolderAndDuration = async ({
   tokenId,
@@ -11,33 +29,32 @@ export const getHolderAndDuration = async ({
 }: {
   tokenId: string;
   serialNumber: number;
-  network: Network;
+  network: NetworkName;
 }) => {
-  const mirrorNodeUrl = getMirrorNodeUrlForNetwork(network);
-  const detailsUrl = `${mirrorNodeUrl}/tokens/${tokenId}/nfts/${serialNumber}`;
-  const transactionsUrl = `${mirrorNodeUrl}/tokens/${tokenId}/nfts/${serialNumber}/transactions`;
+  const nftDetailsData = await getSingleNFTDetails(network, tokenId, serialNumber);
 
-  const { data: nftDetails } = await axios.get<NFTDetails>(detailsUrl);
-
-  if (nftDetails.deleted) {
-    throw new Error('NFT has been deleted');
+  if (nftDetailsData.deleted) {
+    throw new Error(dictionary.errors.nftDeleted);
   }
 
-  const {
-    data: { transactions },
-  } = await axios.get<NFTTransactionsRequest>(transactionsUrl);
+  const transactionsData = await getTransactionsFromMirrorNode(network, tokenId, serialNumber);
 
-  const firstCryptoTransfer = transactions.find((transaction) => transaction.type === 'CRYPTOTRANSFER' || transaction.type === 'TOKENMINT');
+  // We take the first 'CRYPTOTRANSFER' or 'TOKENMINT' transaction because these transactions represent the change of ownership of an NFT.
+  // 'CRYPTOTRANSFER' indicates that the NFT was transferred from one account to another, while 'TOKENMINT' indicates that a new NFT was minted.
+  // By taking the first of these transactions, we can determine the last owner of the NFT and the time when they became the owner
+  const lastOwnerTransfer = transactionsData.find(
+    (transaction) => transaction.type === 'CRYPTOTRANSFER' || transaction.type === 'TOKENMINT'
+  );
 
-  if (!firstCryptoTransfer) {
-    throw new Error('NFT has not any transactions yet');
+  if (!lastOwnerTransfer) {
+    throw new Error(dictionary.errors.nftNoTransactions);
   }
 
-  const date = fromUnixTime(Number(firstCryptoTransfer.consensus_timestamp));
+  const date = fromUnixTime(Number(lastOwnerTransfer.consensus_timestamp));
   const readableDate = date.toLocaleString();
 
   return {
-    holder: firstCryptoTransfer.receiver_account_id,
+    holder: lastOwnerTransfer.receiver_account_id,
     holderSince: readableDate,
   };
 };

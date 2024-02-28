@@ -28,7 +28,7 @@ afterAll(async () => {
 
 describe('getHolderAndDuration', () => {
   it(
-    'should throw an error when trying to get the holder and duration of an NFT that has not been transferred yet',
+    'should return holder and duration of an NFT that has been minted successfully',
     async () => {
       const tokenId = await nftSDK.createCollection({
         collectionName: 'test_name',

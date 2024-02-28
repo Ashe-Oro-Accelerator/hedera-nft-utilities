@@ -29,11 +29,11 @@ export interface NFTDetails {
   spender: null | string;
 }
 
-interface NFTTransactions {
+export interface NFTTransactions {
   consensus_timestamp: string;
   nonce: number;
   transaction_id: string;
-  type: 'CRYPTOTRANSFER' | 'TOKENMINT';
+  type: string;
   is_approval: boolean;
   receiver_account_id: string;
   sender_account_id: string;

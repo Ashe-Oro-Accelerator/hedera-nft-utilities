@@ -1,5 +1,6 @@
 import { getHolderAndDuration } from '../../nftSDKFunctions/get-holder-and-duration';
 import axios from 'axios';
+import { dictionary } from '../../utils/constants/dictionary';
 
 jest.mock('axios');
 
@@ -13,7 +14,7 @@ describe('getHolderAndDuration', () => {
   it('should return holder and duration', async () => {
     const mockTokenId = 'mockTokenId';
     const mockSerialNumber = 123;
-    const mockNetwork = 'mockNetwork';
+    const mockNetwork = 'testnet';
 
     const mockNFTDetails = { deleted: false };
     const mockTransactions = {
@@ -24,6 +25,7 @@ describe('getHolderAndDuration', () => {
           consensus_timestamp: 'mockConsensusTimestamp',
         },
       ],
+      links: { next: null },
     };
 
     mockAxios.get.mockImplementationOnce(() => Promise.resolve({ data: mockNFTDetails }));
@@ -44,7 +46,7 @@ describe('getHolderAndDuration', () => {
   it('should throw an error when the NFT has been deleted', async () => {
     const mockTokenId = 'mockTokenId';
     const mockSerialNumber = 123;
-    const mockNetwork = 'mockNetwork';
+    const mockNetwork = 'testnet';
 
     const mockNFTDetails = { deleted: true };
 
@@ -56,16 +58,16 @@ describe('getHolderAndDuration', () => {
         serialNumber: mockSerialNumber,
         network: mockNetwork,
       })
-    ).rejects.toThrow('NFT has been deleted');
+    ).rejects.toThrow(dictionary.errors.nftDeleted);
   });
 
   it('should throw an error when there are no transactions for the NFT', async () => {
     const mockTokenId = 'mockTokenId';
     const mockSerialNumber = 123;
-    const mockNetwork = 'mockNetwork';
+    const mockNetwork = 'testnet';
 
     const mockNFTDetails = { deleted: false };
-    const mockTransactions = { transactions: [] };
+    const mockTransactions = { transactions: [], links: { next: null } };
 
     mockAxios.get.mockImplementationOnce(() => Promise.resolve({ data: mockNFTDetails }));
     mockAxios.get.mockImplementationOnce(() => Promise.resolve({ data: mockTransactions }));
@@ -76,6 +78,6 @@ describe('getHolderAndDuration', () => {
         serialNumber: mockSerialNumber,
         network: mockNetwork,
       })
-    ).rejects.toThrow('NFT has not any transactions yet');
+    ).rejects.toThrow(dictionary.errors.nftNoTransactions);
   });
 });

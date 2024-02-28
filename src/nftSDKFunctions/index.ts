@@ -34,6 +34,7 @@ import { estimateCreateCollectionInHbar } from './estimate-create-collection-in-
 import { MetadataObject } from '../types/csv';
 import { convertMetadataObjectsToJsonFiles } from './convert-metadata-objects-to-json-files';
 import { getHolderAndDuration } from './get-holder-and-duration';
+import { NetworkName } from '@hashgraph/sdk/lib/client/Client';
 
 export class HederaNFTSDK {
   accountId: string;
@@ -259,7 +260,7 @@ export class HederaNFTSDK {
     });
   }
 
-  getHolderAndDuration({ tokenId, serialNumber, network = 'mainnet' }: { tokenId: string; serialNumber: number; network?: Network }) {
+  getHolderAndDuration({ tokenId, serialNumber, network = 'mainnet' }: { tokenId: string; serialNumber: number; network?: NetworkName }) {
     return getHolderAndDuration({ tokenId, serialNumber, network });
   }
 }

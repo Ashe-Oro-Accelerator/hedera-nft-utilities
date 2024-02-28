@@ -21,6 +21,8 @@ import { getFullSystemPath } from '../../helpers/get-full-system-path';
 
 export const dictionary = {
   errors: {
+    nftDeleted: 'NFT has been deleted.',
+    nftNoTransactions: 'NFT has not any transactions yet',
     unhandledError: 'Unknown error.',
     // file storages
 
@@ -58,7 +60,8 @@ export const dictionary = {
     treasuryAccountPrivateKeySignRequired:
       'If you want to use treasuryAccount to sign, you need to pass the treasuryAccountPrivateKey also',
     collectionNotCreated: 'Something went wrong while creating the collection',
-    autoRenewAccountPrivateKeySignRequired: 'If you want to use autoRenewAccount to sign, you need to pass the autoRenewAccountPrivateKey also',
+    autoRenewAccountPrivateKeySignRequired:
+      'If you want to use autoRenewAccount to sign, you need to pass the autoRenewAccountPrivateKey also',
     hbarAmountOrAmountAndDenominatingToken:
       'Either hbarAmount should be set and both amount and denominatingTokenId should not be set, or amount and denominatingTokenId should be set and hbarAmount should not be set.',
   },
