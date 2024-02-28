@@ -20,10 +20,9 @@
 import { readFiles, getJSONFilesForDir } from '../helpers/files';
 import { RarityResult, AttributeConfig, ValueObject, NFTFile, TraitOccurrence } from '../types/rarity';
 import { Attribute } from '../types/validator';
+import { NFTMetadata } from '../types/nft-metadata';
 import { NetworkName } from '@hashgraph/sdk/lib/client/Client';
 import { getNftMetadataFromCollection } from '../helpers/get-nft-metadatas-from-collection';
-import { MetadataObject } from '../types/csv';
-import { NFTMetadata } from '../types/nft-metadata';
 
 /**
  *
@@ -180,25 +179,25 @@ const calculateRarityFromData = (metadataArray: NFTMetadata[]): RarityResult[] =
   let normalizedCount = 1;
   metadataArray.forEach((metadata) => {
     const traitRarities: { trait: string; value: string | number; rarity: number }[] = [];
-    if (metadata.attributes)
-      metadata.attributes?.forEach((NFTAttribute: Attribute) => {
-        const attributeConfigObject: AttributeConfig | undefined = attributesMap.find(
-          (attribute) => attribute.trait_type === NFTAttribute.trait_type
-        );
 
-        if (!attributeConfigObject) throw new Error(`Attribute ${NFTAttribute.trait_type} not found in attributes map`);
-        const NFTsWithTrait: ValueObject | undefined = attributeConfigObject.values.find(
-          (valueObject) => valueObject.value === NFTAttribute.value
-        );
-        const mostCommonTrait = attributeConfigObject.values.reduce((prev, current) => (prev.count > current.count ? prev : current));
-        const traitRarity = 1 / (NFTsWithTrait?.count! / mostCommonTrait.count);
+    metadata.attributes?.forEach((NFTAttribute: Attribute) => {
+      const attributeConfigObject: AttributeConfig | undefined = attributesMap.find(
+        (attribute) => attribute.trait_type === NFTAttribute.trait_type
+      );
 
-        traitRarities.push({
-          trait: NFTAttribute.trait_type,
-          value: NFTAttribute.value,
-          rarity: traitRarity,
-        });
+      if (!attributeConfigObject) throw new Error(`Attribute ${NFTAttribute.trait_type} not found in attributes map`);
+      const NFTsWithTrait: ValueObject | undefined = attributeConfigObject.values.find(
+        (valueObject) => valueObject.value === NFTAttribute.value
+      );
+      const mostCommonTrait = attributeConfigObject.values.reduce((prev, current) => (prev.count > current.count ? prev : current));
+      const traitRarity = 1 / (NFTsWithTrait?.count! / mostCommonTrait.count);
+
+      traitRarities.push({
+        trait: NFTAttribute.trait_type,
+        value: NFTAttribute.value,
+        rarity: traitRarity,
       });
+    });
 
     const totalRarity = traitRarities.reduce((prev, current) => prev + current.rarity, 0);
     const attributeContributions = traitRarities.map((traitRarity) => ({
