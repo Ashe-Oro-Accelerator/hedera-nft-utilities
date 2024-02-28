@@ -18,20 +18,20 @@
  *
  */
 import { Client, NftId, PrivateKey } from '@hashgraph/sdk';
-import { CreateCollectionKeysType, CustomFeeType } from '../types/create-collection.module';
-import { Network } from '../types/mint-token.module';
+import { CreateCollectionKeysType, CustomFeeType } from '../types/create-collection';
+import { Network } from '../types/mint-token';
 import { createCollectionFunction } from './create-collection';
 import { convertCSVToMetadataObjects } from './convert-csv-to-metadata-objects';
 import { increaseNFTSupply } from './increase-nft-supply';
 import { logIn } from './log-in';
 import { mintSharedMetadataFunction } from './mint-shared-metadata-function';
 import { mintUniqueMetadataFunction } from './mint-unique-metadata-function';
-import { LocalNode } from '../types/login.module';
+import { LocalNode } from '../types/login';
 import { estimateNftMintingInHbar } from './estimate-nft-minting-in-hbar';
 import { estimateNftMintingInDollars } from './estimate-nft-minting-in-dollars';
 import { estimateCreateCollectionInDollars } from './estimate-create-collection-in-dollars';
 import { estimateCreateCollectionInHbar } from './estimate-create-collection-in-hbar';
-import { MetadataObject } from '../types/csv.module';
+import { MetadataObject } from '../types/csv';
 import { convertMetadataObjectsToJsonFiles } from './convert-metadata-objects-to-json-files';
 import { getHolderAndDuration } from './get-holder-and-duration';
 
