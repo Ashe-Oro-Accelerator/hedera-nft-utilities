@@ -21,9 +21,12 @@ import { getFullSystemPath } from '../../helpers/get-full-system-path';
 
 export const dictionary = {
   errors: {
+    nftDeleted: 'NFT has been deleted.',
+    nftNoTransactions: 'NFT has not any transactions yet',
+    privateKeyRequired: 'Private key is required',
+    privateKeyInvalid: 'Invalid private key string. Please provide a valid private key string.',
     unhandledError: 'Unknown error.',
     // file storages
-
     // pinata
     pinataError: 'Cannot create Pinata provider. Please pass pinataJwtKey OR (pinataApiKey AND pinataSecretApiKey).',
 
@@ -38,6 +41,16 @@ export const dictionary = {
       noFiles: 'No files to upload.',
       noMetadata: 'No metadata to upload.',
     },
+
+    // Rarity
+    rarity: {
+      attributeTypeNotFound: (trait_type: string) => `Attribute ${trait_type} not found in attributes map`,
+      attributeNotFoundInFile: (fileName: string) =>
+        `Attributes not found in file ${fileName}. Please ensure that your metadata file is valid.`,
+      attributeNotFoundInObject: (object: string) =>
+        `Attributes not found in object ${object}. Please ensure that your metadata file is valid.`,
+    },
+
     cannotFetchHbarExchangeRate: 'Can not fetch Hbar exchange rate.',
     ipfsGatewayRequired: 'IPFS gateway is required when metadata contains IPFS links.',
     ipfsFailedToFetch: 'Failed to fetch metadata using IPFS gateway',
@@ -58,7 +71,8 @@ export const dictionary = {
     treasuryAccountPrivateKeySignRequired:
       'If you want to use treasuryAccount to sign, you need to pass the treasuryAccountPrivateKey also',
     collectionNotCreated: 'Something went wrong while creating the collection',
-    autoRenewAccountPrivateKeySignRequired: 'If you want to use autoRenewAccount to sign, you need to pass the autoRenewAccountPrivateKey also',
+    autoRenewAccountPrivateKeySignRequired:
+      'If you want to use autoRenewAccount to sign, you need to pass the autoRenewAccountPrivateKey also',
     hbarAmountOrAmountAndDenominatingToken:
       'Either hbarAmount should be set and both amount and denominatingTokenId should not be set, or amount and denominatingTokenId should be set and hbarAmount should not be set.',
   },
