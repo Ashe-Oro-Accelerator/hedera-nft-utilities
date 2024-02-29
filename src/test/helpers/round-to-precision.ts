@@ -17,7 +17,7 @@
  * limitations under the License.
  *
  */
-export const toFixedWithoutRounding = (number: number, precision: number) => {
+export const roundToPrecision = (number: number, precision: number) => {
   const scale = Math.pow(10, precision);
   return Math.floor(number * scale) / scale;
 };

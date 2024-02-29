@@ -22,7 +22,7 @@ import { Hbar, TokenMintTransaction } from '@hashgraph/sdk';
 import { LONG_E2E_TIMEOUT } from '../../__mocks__/consts';
 import { estimateNftMintingInHbar } from '../../../nftSDKFunctions/estimate-nft-minting-in-hbar';
 import { mintingMaxTransactionFee } from '../../../utils/const';
-import { toFixedWithoutRounding } from '../../helpers/to-fixed-without-rounding';
+import { roundToPrecision } from '../../helpers/round-to-precision';
 import { isWithinAcceptableDifference } from '../../helpers/is-within-acceptable-difference';
 
 describe('mintSharedMetadata function e2e', () => {
@@ -53,7 +53,7 @@ describe('mintSharedMetadata function e2e', () => {
           amountOfNfts: amount,
           network: 'testnet',
         });
-        const estimatedHbars = new Hbar(toFixedWithoutRounding(estimatedHbarNumber, 6));
+        const estimatedHbars = new Hbar(roundToPrecision(estimatedHbarNumber, 6));
 
         const transactionFeeHbars = record.transactionFee.toTinybars().toNumber();
         const estimatedHbarsValue = estimatedHbars.toTinybars().toNumber();

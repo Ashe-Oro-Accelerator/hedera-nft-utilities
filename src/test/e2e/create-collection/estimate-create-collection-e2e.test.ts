@@ -20,7 +20,7 @@
 import { nftSDK, operatorAccountId, operatorPrivateKey } from '../e2e-consts';
 import { estimateCreateCollectionInHbar } from '../../../nftSDKFunctions/estimate-create-collection-in-hbar';
 import { Hbar, PrivateKey, TokenCreateTransaction, TokenType } from '@hashgraph/sdk';
-import { toFixedWithoutRounding } from '../../helpers/to-fixed-without-rounding';
+import { roundToPrecision } from '../../helpers/round-to-precision';
 import { isWithinAcceptableDifference } from '../../helpers/is-within-acceptable-difference';
 
 describe('estimateCreateCollectionInHbarE2E', () => {
@@ -34,7 +34,7 @@ describe('estimateCreateCollectionInHbarE2E', () => {
       collectionSymbol: symbol,
     });
 
-    const estimatedHbars = new Hbar(toFixedWithoutRounding(estimatedHbarNumber, 6));
+    const estimatedHbars = new Hbar(roundToPrecision(estimatedHbarNumber, 6));
 
     const createToken = new TokenCreateTransaction()
       .setTokenName(name)
