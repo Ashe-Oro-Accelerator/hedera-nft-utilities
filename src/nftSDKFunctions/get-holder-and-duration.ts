@@ -39,22 +39,15 @@ export const getHolderAndDuration = async ({
 
   const transactionsData = await getLastOwnershipTransferForNft(network, tokenId, serialNumber);
 
-  // We take the first 'CRYPTOTRANSFER' or 'TOKENMINT' transaction because these transactions represent the change of ownership of an NFT.
-  // 'CRYPTOTRANSFER' indicates that the NFT was transferred from one account to another, while 'TOKENMINT' indicates that a new NFT was minted.
-  // By taking the first of these transactions, we can determine the last owner of the NFT and the time when they became the owner
-  const lastOwnerTransfer = transactionsData.find(
-    (transaction) => transaction.type === 'CRYPTOTRANSFER' || transaction.type === 'TOKENMINT'
-  );
-
-  if (!lastOwnerTransfer) {
+  if (!transactionsData) {
     throw new Error(dictionary.errors.nftNoTransactions);
   }
 
-  const date = fromUnixTime(Number(lastOwnerTransfer.consensus_timestamp));
+  const date = fromUnixTime(Number(transactionsData.consensus_timestamp));
   const readableDate = date.toLocaleString();
 
   return {
-    holder: lastOwnerTransfer.receiver_account_id,
+    holder: transactionsData.receiver_account_id,
     holderSince: readableDate,
   };
 };

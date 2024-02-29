@@ -45,25 +45,27 @@ export const getLastOwnershipTransferForNft = async (
   tokenId: string,
   serialNumber: number,
   mirrorNodeUrl?: string
-): Promise<NFTTransactions[]> => {
+): Promise<NFTTransactions | undefined> => {
   const baseUrl = mirrorNodeUrl || getMirrorNodeUrlForNetwork(network);
   let nextLink: string = `${baseUrl}/tokens/${tokenId}/nfts/${serialNumber}/transactions`;
-  const allTransactions: NFTTransactions[] = [];
+  let requiredTransaction: NFTTransactions | undefined;
 
   do {
     try {
       const response = await axios.get<NFTTransactionsRequest>(nextLink);
-      allTransactions.push(...response.data.transactions);
-      const hasRequiredTransactionType = allTransactions.some(
+      // We take the first 'CRYPTOTRANSFER' or 'TOKENMINT' transaction because these transactions represent the change of ownership of an NFT.
+      // 'CRYPTOTRANSFER' indicates that the NFT was transferred from one account to another, while 'TOKENMINT' indicates that a new NFT was minted.
+      // By taking the first of these transactions, we can determine the last owner of the NFT and the time when they became the owner
+      requiredTransaction = response.data.transactions.find(
         (transaction) => transaction.type === 'CRYPTOTRANSFER' || transaction.type === 'TOKENMINT'
       );
-      if (hasRequiredTransactionType) break;
+      if (requiredTransaction) break;
       nextLink = response.data.links.next ? new URL(response.data.links.next, baseUrl).href : '';
     } catch (error) {
       throw new Error(errorToMessage(error));
     }
   } while (nextLink);
-  return allTransactions;
+  return requiredTransaction;
 };
 
 export async function getNFTsFromToken(network: NetworkName, tokenId: string, limit: number = 100): Promise<NFTDetails[]> {
