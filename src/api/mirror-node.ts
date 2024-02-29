@@ -19,7 +19,7 @@
  */
 import { NftId } from '@hashgraph/sdk';
 import axios from 'axios';
-import { NFTDetails, NFTS, NFTTransactions } from '../types/nfts';
+import { NFTDetails, NFTS, NFTTransactions, NFTTransactionsRequest } from '../types/nfts';
 import { dictionary } from '../utils/constants/dictionary';
 import { errorToMessage } from '../helpers/error-to-message';
 import { NetworkName } from '@hashgraph/sdk/lib/client/Client';
@@ -46,9 +46,24 @@ export const getTransactionsFirstPageFromMirrorNode = async (
   serialNumber: number,
   mirrorNodeUrl?: string
 ): Promise<NFTTransactions[]> => {
-  const url = mirrorNodeUrl || getMirrorNodeUrlForNetwork(network);
-  const response = await axios.get(`${url}/tokens/${tokenId}/nfts/${serialNumber}/transactions`);
-  return response.data.transactions;
+  const baseUrl = mirrorNodeUrl || getMirrorNodeUrlForNetwork(network);
+  let nextLink: string = `${baseUrl}/tokens/${tokenId}/nfts/${serialNumber}/transactions`;
+  const allTransactions: NFTTransactions[] = [];
+
+  do {
+    try {
+      const response = await axios.get<NFTTransactionsRequest>(nextLink);
+      allTransactions.push(...response.data.transactions);
+      const hasRequiredTransactionType = allTransactions.some(
+        (transaction) => transaction.type === 'CRYPTOTRANSFER' || transaction.type === 'TOKENMINT'
+      );
+      if (hasRequiredTransactionType) break;
+      nextLink = response.data.links.next ? new URL(response.data.links.next, baseUrl).href : '';
+    } catch (error) {
+      throw new Error(errorToMessage(error));
+    }
+  } while (nextLink);
+  return allTransactions;
 };
 
 export async function getNFTsFromToken(network: NetworkName, tokenId: string, limit: number = 100): Promise<NFTDetails[]> {
