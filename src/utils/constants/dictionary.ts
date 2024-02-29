@@ -23,6 +23,8 @@ export const dictionary = {
   errors: {
     nftDeleted: 'NFT has been deleted.',
     nftNoTransactions: 'NFT has not any transactions yet',
+    privateKeyRequired: 'Private key is required',
+    privateKeyInvalid: 'Invalid private key string. Please provide a valid private key string.',
     unhandledError: 'Unknown error.',
     // file storages
 
