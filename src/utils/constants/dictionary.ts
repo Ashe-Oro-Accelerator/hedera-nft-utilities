@@ -27,7 +27,6 @@ export const dictionary = {
     privateKeyInvalid: 'Invalid private key string. Please provide a valid private key string.',
     unhandledError: 'Unknown error.',
     // file storages
-
     // pinata
     pinataError: 'Cannot create Pinata provider. Please pass pinataJwtKey OR (pinataApiKey AND pinataSecretApiKey).',
 
@@ -42,6 +41,16 @@ export const dictionary = {
       noFiles: 'No files to upload.',
       noMetadata: 'No metadata to upload.',
     },
+
+    // Rarity
+    rarity: {
+      attributeTypeNotFound: (trait_type: string) => `Attribute ${trait_type} not found in attributes map`,
+      attributeNotFoundInFile: (fileName: string) =>
+        `Attributes not found in file ${fileName}. Please ensure that your metadata file is valid.`,
+      attributeNotFoundInObject: (object: string) =>
+        `Attributes not found in object ${object}. Please ensure that your metadata file is valid.`,
+    },
+
     cannotFetchHbarExchangeRate: 'Can not fetch Hbar exchange rate.',
     ipfsGatewayRequired: 'IPFS gateway is required when metadata contains IPFS links.',
     ipfsFailedToFetch: 'Failed to fetch metadata using IPFS gateway',
