@@ -19,7 +19,7 @@
  */
 import { fromUnixTime } from 'date-fns';
 import { dictionary } from '../utils/constants/dictionary';
-import { getSingleNFTDetails, getTransactionsFromMirrorNode } from '../api/mirror-node';
+import { getSingleNFTDetails, getTransactionsFirstPageFromMirrorNode } from '../api/mirror-node';
 import { NetworkName } from '@hashgraph/sdk/lib/client/Client';
 
 export const getHolderAndDuration = async ({
@@ -37,7 +37,7 @@ export const getHolderAndDuration = async ({
     throw new Error(dictionary.errors.nftDeleted);
   }
 
-  const transactionsData = await getTransactionsFromMirrorNode(network, tokenId, serialNumber);
+  const transactionsData = await getTransactionsFirstPageFromMirrorNode(network, tokenId, serialNumber);
 
   // We take the first 'CRYPTOTRANSFER' or 'TOKENMINT' transaction because these transactions represent the change of ownership of an NFT.
   // 'CRYPTOTRANSFER' indicates that the NFT was transferred from one account to another, while 'TOKENMINT' indicates that a new NFT was minted.

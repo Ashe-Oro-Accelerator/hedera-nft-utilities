@@ -49,7 +49,12 @@ describe('getHolderAndDuration', () => {
     'should return holder and duration of an NFT that has been minted successfully',
     async () => {
       const result = await nftSDK.getHolderAndDuration({ tokenId, serialNumber: baseNFT[0].serialNumber, network: 'testnet' });
+      const holderSinceDate = new Date(result.holderSince);
+      const today = new Date();
 
+      expect(holderSinceDate.getFullYear()).toEqual(today.getFullYear());
+      expect(holderSinceDate.getMonth()).toEqual(today.getMonth());
+      expect(holderSinceDate.getDate()).toEqual(today.getDate());
       expect(result).toEqual({
         holder: operatorAccountId,
         holderSince: expect.any(String),
@@ -83,7 +88,12 @@ describe('getHolderAndDuration', () => {
       await new Promise((resolve) => setTimeout(resolve, LONG_MIRROR_NODE_DELAY));
 
       const result = await nftSDK.getHolderAndDuration({ tokenId, serialNumber: nftSerial, network: 'testnet' });
+      const holderSinceDate = new Date(result.holderSince);
+      const today = new Date();
 
+      expect(holderSinceDate.getFullYear()).toEqual(today.getFullYear());
+      expect(holderSinceDate.getMonth()).toEqual(today.getMonth());
+      expect(holderSinceDate.getDate()).toEqual(today.getDate());
       expect(result).toEqual({
         holder: secondAccountId,
         holderSince: expect.any(String),
