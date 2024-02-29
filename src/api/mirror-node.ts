@@ -40,7 +40,7 @@ export const getMetaDataFromMirrorNode = async (network: NetworkName, nftId: Nft
   return atob(response.data.metadata);
 };
 
-export const getTransactionsFirstPageFromMirrorNode = async (
+export const getLastOwnershipTransferForNft = async (
   network: NetworkName,
   tokenId: string,
   serialNumber: number,
