@@ -25,19 +25,6 @@ import type { CSVRow, MetadataObject } from '../types/csv';
 const OMITTED_HEADER_COUNT = 1;
 
 export class JsonMetadataFromCSVConverter {
-  static saveCSVRowsAsJsonFiles = (metadataFromCSV: MetadataObject[], folderPath: string): void => {
-    if (fs.existsSync(folderPath)) {
-      fs.rmSync(folderPath, { recursive: true, force: true });
-    }
-
-    fs.mkdirSync(folderPath, { recursive: true });
-
-    metadataFromCSV.forEach((fileContent, index) => {
-      const fileName = `${folderPath}/${index + 1}.json`;
-      fs.writeFileSync(fileName, JSON.stringify(fileContent), { encoding: 'utf-8' });
-    });
-  };
-
   private static processCSVRowEntry(
     metadataObject: MetadataObject,
     header: string,

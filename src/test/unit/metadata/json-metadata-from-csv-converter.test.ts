@@ -21,6 +21,7 @@ import fs from 'fs';
 import cloneDeep from 'lodash/cloneDeep';
 import { CSVRow, MetadataObject } from '../../../types/csv';
 import { JsonMetadataFromCSVConverter } from '../../../services/json-metadata-from-csv-converter';
+import { saveCSVRowsAsJsonFiles } from '../../../helpers/save-csv-rows-as-json-files';
 import {
   JSON_METADATA_UNIT_TESTS_OUTPUT_METADATA_FOLDER_PATH,
   JSON_METADATA_UNIT_TESTS_OUTPUT_NEW_METADATA_FOLDER_PATH,
@@ -92,7 +93,7 @@ describe('JsonMetadataFromCSVConverter', () => {
         headerProperties: 'properties',
       });
 
-      JsonMetadataFromCSVConverter.saveCSVRowsAsJsonFiles(metadataObjectsFromCSVRows, JSON_METADATA_UNIT_TESTS_OUTPUT_METADATA_FOLDER_PATH);
+      saveCSVRowsAsJsonFiles(metadataObjectsFromCSVRows, JSON_METADATA_UNIT_TESTS_OUTPUT_METADATA_FOLDER_PATH);
 
       const firstJson = JSON.parse(fs.readFileSync(`${JSON_METADATA_UNIT_TESTS_OUTPUT_METADATA_FOLDER_PATH}/1.json`).toString());
       const secondJson = JSON.parse(fs.readFileSync(`${JSON_METADATA_UNIT_TESTS_OUTPUT_METADATA_FOLDER_PATH}/2.json`).toString());
@@ -114,10 +115,7 @@ describe('JsonMetadataFromCSVConverter', () => {
         headerProperties: 'properties',
       });
 
-      JsonMetadataFromCSVConverter.saveCSVRowsAsJsonFiles(
-        metadataObjectsFromCSVRows,
-        JSON_METADATA_UNIT_TESTS_OUTPUT_NEW_METADATA_FOLDER_PATH
-      );
+      saveCSVRowsAsJsonFiles(metadataObjectsFromCSVRows, JSON_METADATA_UNIT_TESTS_OUTPUT_NEW_METADATA_FOLDER_PATH);
 
       const firstJson = JSON.parse(fs.readFileSync(`${JSON_METADATA_UNIT_TESTS_OUTPUT_NEW_METADATA_FOLDER_PATH}/1.json`).toString());
       const secondJson = JSON.parse(fs.readFileSync(`${JSON_METADATA_UNIT_TESTS_OUTPUT_NEW_METADATA_FOLDER_PATH}/2.json`).toString());
