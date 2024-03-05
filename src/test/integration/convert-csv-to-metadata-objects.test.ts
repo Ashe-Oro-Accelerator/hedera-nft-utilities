@@ -18,14 +18,14 @@
  *
  */
 import fs from 'fs';
-import { CSVFileReader } from '../../csv-file-reader';
 import { CSV_EXAMPLE_WITH_ALL_FIELDS } from '../__mocks__/consts';
 import { convertCSVToMetadataObjects } from '../../nftSDKFunctions/convert-csv-to-metadata-objects';
+import { AMOUNT_OF_HEADERS } from '../../utils/constants/csv-constants';
 
 describe('convertCSVToMetadataObjects Integration Test', () => {
   it('should create correct number of metadata objects based on the CSV file', async () => {
     const csvContent = fs.readFileSync(CSV_EXAMPLE_WITH_ALL_FIELDS, 'utf-8');
-    const csvRows = csvContent.trim().split('\n').length - CSVFileReader.AMOUNT_OF_HEADERS;
+    const csvRows = csvContent.trim().split('\n').length - AMOUNT_OF_HEADERS;
     const metadataObjects = await convertCSVToMetadataObjects(CSV_EXAMPLE_WITH_ALL_FIELDS);
 
     expect(metadataObjects.length).toBe(csvRows);

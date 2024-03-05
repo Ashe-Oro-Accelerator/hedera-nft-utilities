@@ -23,6 +23,7 @@ import { dictionary } from './utils/constants/dictionary';
 import type { CSVRow } from './types/csv';
 import csvParser from 'csv-parser';
 import { selectSeparator } from './helpers/select-separator';
+import { ATTRIBUTES, PROPERTIES } from './utils/constants/csv-constants';
 
 const HEADER_ROW_ADJUSTMENT = 1;
 
@@ -40,10 +41,6 @@ export class CSVReaderError extends Error {
 }
 
 export class CSVFileReader {
-  static ATTRIBUTES = 'attributes' as const;
-  static PROPERTIES = 'properties' as const;
-  static AMOUNT_OF_HEADERS = 2;
-
   private static checkForErrorsAndLimit({
     headersErrors,
     limit,
@@ -78,31 +75,31 @@ export class CSVFileReader {
     let result: string | null = null;
 
     // TODO: try to simplyfy this
-    if (header.header === this.ATTRIBUTES) {
-      currentType = this.ATTRIBUTES;
+    if (header.header === ATTRIBUTES) {
+      currentType = ATTRIBUTES;
       attributesIndex++;
-    } else if (header.header === this.PROPERTIES) {
-      currentType = this.PROPERTIES;
+    } else if (header.header === PROPERTIES) {
+      currentType = PROPERTIES;
       propertyIndex = 1;
     } else if (!currentType) {
       return { result: header.header, currentType, propertyIndex, attributesIndex };
     }
 
-    if (header.header !== '' && header.header !== this.ATTRIBUTES && header.header !== this.PROPERTIES) {
+    if (header.header !== '' && header.header !== ATTRIBUTES && header.header !== PROPERTIES) {
       refToErrorArray.push(dictionary.validation.errorInCellWithHeader(1, header.index + 1));
     }
 
-    if ((propertyIndex > 1 && header.header === this.PROPERTIES) || (attributesIndex > 1 && header.header === this.ATTRIBUTES)) {
+    if ((propertyIndex > 1 && header.header === PROPERTIES) || (attributesIndex > 1 && header.header === ATTRIBUTES)) {
       refToErrorArray.push(dictionary.validation.errorInCellWithHeader(1, header.index + 1));
     }
 
-    if (currentType === this.PROPERTIES) {
-      result = `${this.PROPERTIES}_${propertyIndex}`;
+    if (currentType === PROPERTIES) {
+      result = `${PROPERTIES}_${propertyIndex}`;
       propertyIndex++;
     }
 
-    if (currentType === this.ATTRIBUTES) {
-      result = `${this.ATTRIBUTES}_${attributesIndex}`;
+    if (currentType === ATTRIBUTES) {
+      result = `${ATTRIBUTES}_${attributesIndex}`;
       attributesIndex++;
     }
 

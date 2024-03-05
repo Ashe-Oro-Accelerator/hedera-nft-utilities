@@ -18,17 +18,12 @@
  *
  */
 import { CSVFileReader } from '../csv-file-reader';
-import { JsonMetadataFromCSVConverter } from '../services/json-metadata-from-csv-converter';
 import { MetadataObject } from '../types/csv';
+import { prepareMetadataObjectsFromCSVRows } from './prepare-metadata-objects-from-csv-rows';
 
 export const convertCSVToMetadataObjects = async (csvFilePath: string, limit?: number): Promise<MetadataObject[]> => {
   const csvParsedRows = await CSVFileReader.readCSVFile(csvFilePath, limit);
-  const metadataObjects = JsonMetadataFromCSVConverter.parseCSVRowsToMetadataObjects({
-    csvParsedRows,
-    csvFilePath,
-    headerAttributes: CSVFileReader.ATTRIBUTES,
-    headerProperties: CSVFileReader.PROPERTIES,
-  });
+  const metadataObjects = prepareMetadataObjectsFromCSVRows({ csvParsedRows });
 
   return metadataObjects;
 };

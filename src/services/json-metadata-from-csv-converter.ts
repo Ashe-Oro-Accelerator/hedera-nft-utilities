@@ -17,10 +17,9 @@
  * limitations under the License.
  *
  */
-import fs from 'fs';
 import { dictionary } from '../utils/constants/dictionary';
-import { CSVFileReader } from '../csv-file-reader';
 import type { CSVRow, MetadataObject } from '../types/csv';
+import { AMOUNT_OF_HEADERS } from '../utils/constants/csv-constants';
 
 const OMITTED_HEADER_COUNT = 1;
 
@@ -53,11 +52,11 @@ export class JsonMetadataFromCSVConverter {
     headerProperties,
   }: {
     csvParsedRows: CSVRow[];
-    csvFilePath: string;
+    csvFilePath?: string;
     headerAttributes: string;
     headerProperties: string;
   }): MetadataObject[] {
-    if (csvParsedRows.length <= CSVFileReader.AMOUNT_OF_HEADERS - OMITTED_HEADER_COUNT) {
+    if (csvParsedRows.length <= AMOUNT_OF_HEADERS - OMITTED_HEADER_COUNT) {
       throw new Error(dictionary.validation.csvFileIsEmpty(csvFilePath));
     }
 
