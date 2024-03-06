@@ -18,7 +18,7 @@
  *
  */
 import fs from 'fs';
-import { CSV_EXAMPLE_WITH_ALL_FIELDS } from '../__mocks__/consts';
+import { CSV_EXAMPLE_WITH_ALL_FIELDS, CSV_EXAMPLE_EMPTY_FILE, CSV_EXAMPLE_WITH_HEADERS_ONLY } from '../__mocks__/consts';
 import { convertCSVToMetadataObjects } from '../../nftSDKFunctions/convert-csv-to-metadata-objects';
 import { AMOUNT_OF_HEADERS } from '../../utils/constants/csv-constants';
 
@@ -60,5 +60,10 @@ describe('convertCSVToMetadataObjects Integration Test', () => {
     const metadataObjects = await convertCSVToMetadataObjects(CSV_EXAMPLE_WITH_ALL_FIELDS, limit);
 
     expect(metadataObjects.length).toBe(limit);
+  });
+
+  it('should throw an error if the CSV file is empty or contains only headers', async () => {
+    await expect(convertCSVToMetadataObjects(CSV_EXAMPLE_EMPTY_FILE)).rejects.toThrow();
+    await expect(convertCSVToMetadataObjects(CSV_EXAMPLE_WITH_HEADERS_ONLY)).rejects.toThrow();
   });
 });

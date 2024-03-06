@@ -21,3 +21,4 @@
 export const ATTRIBUTES = 'attributes';
 export const PROPERTIES = 'properties';
 export const AMOUNT_OF_HEADERS = 2;
+export const OMITTED_HEADER_COUNT = 1;

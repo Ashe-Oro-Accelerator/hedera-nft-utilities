@@ -183,10 +183,9 @@ export class HederaNFTSDK {
     return convertMetadataObjectsToJsonFiles({ metadataObjects, savedJsonFilesLocation, limit });
   }
 
-  prepareMetadataObjectsFromCSVRows({ csvParsedRows, csvFilePath }: { csvParsedRows: CSVRow[]; csvFilePath?: string }): MetadataObject[] {
+  prepareMetadataObjectsFromCSVRows({ csvParsedRows }: { csvParsedRows: CSVRow[] }): MetadataObject[] {
     return prepareMetadataObjectsFromCSVRows({
       csvParsedRows,
-      csvFilePath,
     });
   }
 

@@ -1,7 +1,7 @@
 import { MetadataObject } from '../types/csv';
 import fs from 'fs';
 
-export const saveCSVRowsAsJsonFiles = (metadataFromCSV: MetadataObject[], folderPath: string): void => {
+export const saveMetadataObjectsAsJsonFiles = (metadataFromCSV: MetadataObject[], folderPath: string): void => {
   if (fs.existsSync(folderPath)) {
     fs.rmSync(folderPath, { recursive: true, force: true });
   }

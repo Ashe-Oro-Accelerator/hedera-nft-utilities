@@ -17,81 +17,69 @@
  * limitations under the License.
  *
  */
-import { dictionary } from '../utils/constants/dictionary';
 import type { CSVRow, MetadataObject } from '../types/csv';
-import { AMOUNT_OF_HEADERS } from '../utils/constants/csv-constants';
 
-const OMITTED_HEADER_COUNT = 1;
-
-export class JsonMetadataFromCSVConverter {
-  private static processCSVRowEntry(
-    metadataObject: MetadataObject,
-    header: string,
-    cell: string,
-    secondHeader: CSVRow,
-    headerAttributes: string,
-    headerProperties: string,
-    attributes: Record<string, string>[],
-    properties: Record<string, string>
-  ): MetadataObject {
-    if (cell && header.includes(headerAttributes)) {
-      attributes.push({ trait_type: secondHeader[header], value: cell });
-    } else if (cell && header.includes(headerProperties)) {
-      properties[secondHeader[header]] = cell;
-    } else if (cell) {
-      metadataObject[header] = cell;
-    }
-
-    return metadataObject;
+function processCSVRowEntry(
+  metadataObject: MetadataObject,
+  header: string,
+  cell: string,
+  secondHeader: CSVRow,
+  headerAttributes: string,
+  headerProperties: string,
+  attributes: Record<string, string>[],
+  properties: Record<string, string>
+): MetadataObject {
+  if (cell && header.includes(headerAttributes)) {
+    attributes.push({ trait_type: secondHeader[header], value: cell });
+  } else if (cell && header.includes(headerProperties)) {
+    properties[secondHeader[header]] = cell;
+  } else if (cell) {
+    metadataObject[header] = cell;
   }
 
-  static parseCSVRowsToMetadataObjects({
-    csvParsedRows,
-    csvFilePath,
-    headerAttributes,
-    headerProperties,
-  }: {
-    csvParsedRows: CSVRow[];
-    csvFilePath?: string;
-    headerAttributes: string;
-    headerProperties: string;
-  }): MetadataObject[] {
-    if (csvParsedRows.length <= AMOUNT_OF_HEADERS - OMITTED_HEADER_COUNT) {
-      throw new Error(dictionary.validation.csvFileIsEmpty(csvFilePath));
+  return metadataObject;
+}
+
+export function parseCSVRowsToMetadataObjects({
+  csvParsedRows,
+  headerAttributes,
+  headerProperties,
+}: {
+  csvParsedRows: CSVRow[];
+  headerAttributes: string;
+  headerProperties: string;
+}): MetadataObject[] {
+  const secondHeader = csvParsedRows[0];
+  csvParsedRows.shift();
+
+  const metadataObjectsFromCSVRows = csvParsedRows.map((csvRow): MetadataObject => {
+    const csvRowKeyValuesAsEntries = Object.entries(csvRow);
+    const properties: Record<string, string> = {};
+    const attributes: Record<string, string>[] = [];
+
+    const result = csvRowKeyValuesAsEntries.reduce<MetadataObject>((currentMetadataObject, [header, cell]) => {
+      return processCSVRowEntry(
+        currentMetadataObject,
+        header,
+        cell,
+        secondHeader,
+        headerAttributes,
+        headerProperties,
+        attributes,
+        properties
+      );
+    }, {});
+
+    if (Object.keys(properties).length) {
+      result.properties = properties;
     }
 
-    const secondHeader = csvParsedRows[0];
-    csvParsedRows.shift();
+    if (attributes.length) {
+      result.attributes = attributes;
+    }
 
-    const metadataObjectsFromCSVRows = csvParsedRows.map((csvRow): MetadataObject => {
-      const csvRowKeyValuesAsEntries = Object.entries(csvRow);
-      const properties: Record<string, string> = {};
-      const attributes: Record<string, string>[] = [];
+    return result;
+  });
 
-      const result = csvRowKeyValuesAsEntries.reduce<MetadataObject>((currentMetadataObject, [header, cell]) => {
-        return this.processCSVRowEntry(
-          currentMetadataObject,
-          header,
-          cell,
-          secondHeader,
-          headerAttributes,
-          headerProperties,
-          attributes,
-          properties
-        );
-      }, {});
-
-      if (Object.keys(properties).length) {
-        result.properties = properties;
-      }
-
-      if (attributes.length) {
-        result.attributes = attributes;
-      }
-
-      return result;
-    });
-
-    return metadataObjectsFromCSVRows;
-  }
+  return metadataObjectsFromCSVRows;
 }
