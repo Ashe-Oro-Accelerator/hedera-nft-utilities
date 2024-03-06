@@ -25,7 +25,6 @@ import { validateObjectWithSchema, validationMetadataErrorOptions } from '../hel
 import { errorToMessage } from '../helpers/error-to-message';
 import { MetadataObject } from '../types/csv';
 import { dictionary } from '../utils/constants/dictionary';
-import { REQUIRED } from '../utils/constants/nfts-limit-error';
 import { getMetadataObjectsForValidation, getSingleNFTDetails, MetadataFromMirrorNode } from '../api/mirror-node';
 import { uriDecoder } from '../helpers/uri-decoder';
 import { ValidationError } from '../utils/validation-error';
@@ -36,6 +35,17 @@ export interface FileValidationResult {
   isValid: boolean;
   fileName?: string;
   errors: string[];
+}
+
+interface DetailedFileValidationResult {
+  isValid: boolean;
+  errors: string[];
+  errorsCount: number;
+}
+
+interface ValidateArrayOfObjectsResult {
+  results: { [index: number]: DetailedFileValidationResult };
+  generalValid: boolean;
 }
 
 interface DirectoryValidationResult {
@@ -74,23 +84,35 @@ export class Hip412Validator {
     };
   }
 
-  static validateArrayOfObjects = (metadataObjects: MetadataObject[], filePath?: string): FileValidationResult => {
-    const errors: string[] = [];
+  static validateArrayOfObjects(metadataObjects: MetadataObject[]): ValidateArrayOfObjectsResult {
+    const results: { [index: number]: DetailedFileValidationResult } = {};
+    let generalValid = true;
 
-    for (const [index, metadataObject] of metadataObjects.entries()) {
+    metadataObjects.forEach((metadataObject, index) => {
+      const errors: string[] = [];
       try {
         validateObjectWithSchema(Hip412MetadataCSVSchema, metadataObject, validationMetadataErrorOptions);
       } catch (e) {
-        errors.push(
-          dictionary.validation.arrayOfObjectsValidationError(
-            filePath || `object ${index + 1}`,
-            errorToMessage(errorToMessage(e) === REQUIRED ? dictionary.validation.requiredFieldMissing : e)
-          )
-        );
+        generalValid = false;
+        const errorMessage = errorToMessage(e);
+        if (e instanceof ValidationError) {
+          errors.push(...e.errors);
+        } else {
+          errors.push(errorMessage);
+        }
       }
-    }
-    return { isValid: errors.length === 0, errors };
-  };
+      results[index] = {
+        isValid: errors.length === 0,
+        errorsCount: errors.length,
+        errors: errors.map((error) => error),
+      };
+    });
+
+    return {
+      generalValid,
+      results,
+    };
+  }
 
   static validateLocalFile(filePath: string): FileValidationResult {
     try {
