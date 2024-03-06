@@ -30,39 +30,13 @@ import { uriDecoder } from '../helpers/uri-decoder';
 import { ValidationError } from '../utils/validation-error';
 import { getNftMetadataFromCollection } from '../helpers/get-nft-metadatas-from-collection';
 import { NFTMetadata } from '../types/nft-metadata';
-
-export interface FileValidationResult {
-  isValid: boolean;
-  fileName?: string;
-  errors: string[];
-}
-
-interface DetailedFileValidationResult {
-  isValid: boolean;
-  errors: string[];
-  errorsCount: number;
-}
-
-interface ValidateArrayOfObjectsResult {
-  results: { [index: number]: DetailedFileValidationResult };
-  generalValid: boolean;
-}
-
-interface DirectoryValidationResult {
-  isValid: boolean;
-  errors: MetadataError[];
-}
-
-interface MetadataError {
-  fileName?: string;
-  general: string[];
-}
-
-export interface MetadataOnChainObjects {
-  metadata?: MetadataObject;
-  serialNumber: number;
-  error?: string;
-}
+import {
+  FileValidationResult,
+  DetailedFileValidationResult,
+  ValidateArrayOfObjectsResult,
+  DirectoryValidationResult,
+  MetadataError,
+} from '../types/hip412-validator';
 
 export class Hip412Validator {
   static validateSingleMetadataObject(object: MetadataObject | NFTMetadata): FileValidationResult {
