@@ -60,14 +60,14 @@ export class Hip412Validator {
 
   static validateArrayOfObjects(metadataObjects: MetadataObject[]): ValidateArrayOfObjectsResult {
     const results: { [index: number]: DetailedFileValidationResult } = {};
-    let generalValid = true;
+    let allObjectsValid = true;
 
     metadataObjects.forEach((metadataObject, index) => {
       const errors: string[] = [];
       try {
         validateObjectWithSchema(Hip412MetadataCSVSchema, metadataObject, validationMetadataErrorOptions);
       } catch (e) {
-        generalValid = false;
+        allObjectsValid = false;
         const errorMessage = errorToMessage(e);
         if (e instanceof ValidationError) {
           errors.push(...e.errors);
@@ -83,7 +83,7 @@ export class Hip412Validator {
     });
 
     return {
-      generalValid,
+      allObjectsValid,
       results,
     };
   }

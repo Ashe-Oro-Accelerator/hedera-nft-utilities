@@ -103,7 +103,7 @@ describe('validateArrayOfObjects', () => {
   it('identifies errors in an array with invalid metadata objects', async () => {
     const validationResult = Hip412Validator.validateArrayOfObjects(MIXED_METADATA_OBJECTS);
 
-    expect(validationResult.generalValid).toBe(false);
+    expect(validationResult.allObjectsValid).toBe(false);
 
     expect(validationResult.results[0].isValid).toBe(false);
     expect(validationResult.results[0].errorsCount).toBe(2);

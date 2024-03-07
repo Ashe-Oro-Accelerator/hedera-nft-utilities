@@ -14,7 +14,7 @@ export interface DetailedFileValidationResult {
 
 export interface ValidateArrayOfObjectsResult {
   results: { [index: number]: DetailedFileValidationResult };
-  generalValid: boolean;
+  allObjectsValid: boolean;
 }
 
 export interface DirectoryValidationResult {
