@@ -20,7 +20,6 @@
 import { isImageFile } from '../../helpers/is-image-file';
 import type { BufferFile } from '../../types/buffer-file';
 import isString from 'lodash/isString';
-import omit from 'lodash/omit';
 import { type ZodTypeAny, z } from 'zod';
 import { dictionary } from '../constants/dictionary';
 import { KNOWN_IMAGE_MIME_TYPES } from '../constants/mime-types-and-extensions';
