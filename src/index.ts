@@ -46,6 +46,7 @@ import { UploadService } from './services/upload-service';
 import { convertCSVToMetadataObjects } from './file-management/convert-csv-to-metadata-objects';
 import { convertMetadataObjectsToJsonFiles } from './file-management/convert-metadata-objects-to-json-files';
 import { prepareMetadataObjectsFromCSVRows } from './file-management/prepare-metadata-objects-from-csv-rows';
+import { getHolderAndDuration } from './getHolderAndDuration';
 
 export {
   // validation
@@ -109,6 +110,7 @@ export {
   HederaNFTSDK,
   FeeFactory,
   Hip412Validator,
+  getHolderAndDuration,
 
   // Upload Service
   UploadService,
