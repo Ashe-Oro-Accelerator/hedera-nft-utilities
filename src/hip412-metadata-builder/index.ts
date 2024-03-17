@@ -1,7 +1,7 @@
 import { Hip412Validator } from '../hip412-validator';
-import { Attribute, NFTMetadata } from '../types/nft-metadata';
+import { Attribute, FileMetadata, Localization, NFTMetadata, Property } from '../types/nft-metadata';
 import { FileValidationResult } from '../types/hip412-validator';
-import { DisplayType } from '../types/nft-metadata';
+import { dictionary } from '../utils/constants/dictionary';
 
 interface Hip412MetadataBuilderInterface {
   metadata: NFTMetadata;
@@ -22,7 +22,7 @@ export class Hip412MetadataBuilder {
 
   private setProperty<T extends keyof NFTMetadata>(key: T, value: NFTMetadata[T]): Hip412MetadataBuilder {
     if (this.metadataObject[key]) {
-      throw new Error(`${key} can only be set once.`);
+      throw new Error(dictionary.errors.metadataBuilder.fieldAlreadySet(key));
     }
     this.metadataObject[key] = value;
     return this;
@@ -56,24 +56,65 @@ export class Hip412MetadataBuilder {
     return this.setProperty('checksum', checksum);
   }
 
-  addAttribute(trait_type: string, value: string, display_type?: DisplayType, max_value?: string | number): Hip412MetadataBuilder {
-    const attribute: Attribute = { trait_type, value };
+  addAttribute({ trait_type, value, display_type, max_value }: Attribute): Hip412MetadataBuilder {
+    const attribute: Attribute = {
+      trait_type,
+      value,
+      ...(display_type && { display_type }),
+      ...(max_value !== undefined && { max_value }),
+    };
 
-    if (!this.metadataObject.attributes) {
-      this.metadataObject.attributes = [];
-    }
-
-    if (display_type !== undefined) {
-      attribute.display_type = display_type;
-    }
-    if (max_value !== undefined) {
-      attribute.max_value = max_value;
-    }
-
-    if (!this.metadataObject.attributes) {
-      this.metadataObject.attributes = [];
-    }
+    this.metadataObject.attributes = this.metadataObject.attributes || [];
     this.metadataObject.attributes.push(attribute);
+    return this;
+  }
+
+  addFile({ uri, type, checksum, is_default_file, metadata, metadata_uri }: FileMetadata): Hip412MetadataBuilder {
+    if (!uri || !type) {
+      throw new Error(dictionary.errors.metadataBuilder.uriAndTypeRequired);
+    }
+
+    const file: FileMetadata = {
+      uri,
+      type,
+      ...(checksum && { checksum }),
+      ...(is_default_file !== undefined && { is_default_file }),
+      ...(metadata && { metadata }),
+      ...(metadata_uri && { metadata_uri }),
+    };
+
+    if (!this.metadataObject.files) {
+      this.metadataObject.files = [];
+    }
+
+    this.metadataObject.files.push(file);
+    return this;
+  }
+
+  addProperty({ key, value }: { key: string; value: string | number | boolean | object }): Hip412MetadataBuilder {
+    if (!this.metadataObject.properties) {
+      this.metadataObject.properties = {};
+    }
+
+    this.metadataObject.properties[key] = value;
+    return this;
+  }
+
+  setLocalization({ uri, default: defaultLocale, locales }: Localization): Hip412MetadataBuilder {
+    if (this.metadataObject.localization) {
+      throw new Error(dictionary.errors.metadataBuilder.localizationAlreadySet);
+    }
+
+    if (!uri || !defaultLocale || !locales || locales.length === 0) {
+      throw new Error(dictionary.errors.metadataBuilder.localizatonFieldsMissing);
+    }
+
+    this.metadataObject.localization = {
+      uri,
+      default: defaultLocale,
+      locales,
+    };
+
     return this;
   }
 
