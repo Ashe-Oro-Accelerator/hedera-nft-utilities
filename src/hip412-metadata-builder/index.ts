@@ -3,7 +3,7 @@ import { Attribute, FileMetadata, Localization, NFTMetadata, Property } from '..
 import { FileValidationResult } from '../types/hip412-validator';
 import { dictionary } from '../utils/constants/dictionary';
 
-interface Hip412MetadataBuilderInterface {
+interface Hip412MetadataBuilderResult {
   metadata: NFTMetadata;
   validationResponse: FileValidationResult;
 }
@@ -118,7 +118,7 @@ export class Hip412MetadataBuilder {
     return this;
   }
 
-  build(): Hip412MetadataBuilderInterface {
+  build(): Hip412MetadataBuilderResult {
     const validationResponse = Hip412Validator.validateSingleMetadataObject(this.metadataObject);
     return { validationResponse, metadata: this.metadataObject };
   }
