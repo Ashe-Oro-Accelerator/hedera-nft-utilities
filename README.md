@@ -9,10 +9,11 @@
 This package includes all sorts of tooling for the Hedera NFT ecosystem, including:
 
 1. **Token metadata validation:** Verify your metadata against the [token metadata JSON schema V2](https://github.com/hashgraph/hedera-improvement-proposal/blob/main/HIP/hip-412.md) for NFTs, which returns errors and warnings against the standard. You can also define your own token metadata standard and add it to the package to use this schema for validation.
-2. **Local metadata validator:** Verify a local folder containing multiple JSON metadata files against the standard before publishing the NFT collection on the Hedera network. 
+2. **Local metadata validator:** Verify a local folder containing multiple JSON metadata files against the standard before publishing the NFT collection on the Hedera network.
 3. **Risk score calculation:** Calculate a risk score for an NFT collection from the token information or by passing a token ID of an NFT on the Hedera testnet or mainnet.
-4. **Rarity score calculation:** Calculate the rarity scores for a local folder containing multiple JSON metadata files for an NFT collection. 
-
+4. **Rarity score calculation:** Calculate the rarity scores for a local folder containing multiple JSON metadata files for an NFT collection.
+5. **Trait occurrence calculation:**
+6. **Hip412Validator:** A tool for validating metadata objects according to HIP-412, providing comprehensive verification of metadata compliance with the selected standard.
 
 ## Table of Contents
 
@@ -23,12 +24,12 @@ This package includes all sorts of tooling for the Hedera NFT ecosystem, includi
 - **Package: [Rarity score calculation](#rarity-score-calculation)**
 - **Package: [Trait occurrence calculation](#trait-occurrence-calculation)**
 - **Package: [NFTSDK](#nft-sdk-functions)**
+- **Package: [Hip412Validator](#hip412-validator)**
 - **[Questions, contact us, or improvement proposals?](#questions-or-improvement-proposals)**
 - **[Support](#Support)**
 - **[Contributing](#Contributing)**
 - **[Code of Conduct](#Code-of-Conduct)**
 - **[License](#License)**
-
 
 ## How to build the package?
 
@@ -58,16 +59,15 @@ Import the package into your project. You can import the `Validator` class and t
 const { Validator, defaultSchemaVersion } = require('@hashgraph/nft-utilities');
 ```
 
-You can use the `Validator` like below. 
+You can use the `Validator` like below.
+
 1. The first parameter is the JSON object you want to verify against a JSON schema
 2. The second parameter is the version of the token metadata JSON schema against which you want to validate your metadata instance. The default value is `2.0.0` (V2). In the future, new functionality might be added, releasing new version numbers.
 
 ```js
 const metadata = {
-    attributes: [
-        { trait_type: "Background", value: "Yellow" }
-    ],
-    creator: "NFT artist",
+  attributes: [{ trait_type: 'Background', value: 'Yellow' }],
+  creator: 'NFT artist',
 };
 const version = '2.0.0';
 
@@ -81,20 +81,20 @@ The output interface for issues contains `errors` and `warnings`.
 
 ```json
 {
-    "errors": [
-        {
-            "type": "Indicates which validator created the error. Possible values: schema, attribute, localization, and SHA256.",
-            "msg": "Indicates the specific error explanation to be displayed to the user",
-            "path": "Indicates the path of the property for which the error is returned"
-        }
-    ],
-    "warnings": [
-        {
-            "type": "schema",
-            "msg": "is not allowed to have the additional property 'someAdditionalProperty'",
-            "path": "Indicates the path of the property for which the error is returned"
-        }
-    ]
+  "errors": [
+    {
+      "type": "Indicates which validator created the error. Possible values: schema, attribute, localization, and SHA256.",
+      "msg": "Indicates the specific error explanation to be displayed to the user",
+      "path": "Indicates the path of the property for which the error is returned"
+    }
+  ],
+  "warnings": [
+    {
+      "type": "schema",
+      "msg": "is not allowed to have the additional property 'someAdditionalProperty'",
+      "path": "Indicates the path of the property for which the error is returned"
+    }
+  ]
 }
 ```
 
@@ -102,20 +102,20 @@ Here's an example:
 
 ```json
 {
-    "errors": [
-        {
-            "type": "attribute",
-            "msg": "Trait stamina of type 'percentage' must be between [0-100], found 157",
-            "path": "instance.attributes[0]"
-        }
-    ],
-    "warnings": [
-        {
-            "type": "schema",
-            "msg": "is not allowed to have the additional property 'imagePreview'",
-            "path": "instance"
-        }
-    ]
+  "errors": [
+    {
+      "type": "attribute",
+      "msg": "Trait stamina of type 'percentage' must be between [0-100], found 157",
+      "path": "instance.attributes[0]"
+    }
+  ],
+  "warnings": [
+    {
+      "type": "schema",
+      "msg": "is not allowed to have the additional property 'imagePreview'",
+      "path": "instance"
+    }
+  ]
 }
 ```
 
@@ -127,7 +127,7 @@ See: **[/examples/token-metadata-validator](https://github.com/hashgraph/hedera-
 
 #### Method 1: Use Validator constructor to pass custom schemas
 
-The easiest approach to adding new schemas is using the constructor of the `Validator` class. It accepts an array of JSON objects, each containing a JSON schema and tag for the schema. The tag is used to refer to the schema when validating metadata instances. 
+The easiest approach to adding new schemas is using the constructor of the `Validator` class. It accepts an array of JSON objects, each containing a JSON schema and tag for the schema. The tag is used to refer to the schema when validating metadata instances.
 
 Therefore, each tag needs to be unqiue. The following tags can't be used as they are already occupied:
 
@@ -141,40 +141,39 @@ const { Validator } = require('@hashgraph/nft-utilities');
 
 // Define your schema
 const customSchema = {
-    "title": "Token Metadata",
-    "type": "object",
-    "additionalProperties": false,
-    "properties": {
-        "name": {
-            "type": "string",
-            "description": "Identifies the asset to which this token represents."
-        }
+  title: 'Token Metadata',
+  type: 'object',
+  additionalProperties: false,
+  properties: {
+    name: {
+      type: 'string',
+      description: 'Identifies the asset to which this token represents.',
     },
-    "required": ["name"]
-}
+  },
+  required: ['name'],
+};
 
 // Create Validator instance with custom schema labeled "custom-v1"
-const validator = new Validator([{ schemaObject: customSchema, tag: "custom-v1" }]);
+const validator = new Validator([{ schemaObject: customSchema, tag: 'custom-v1' }]);
 
 // Verify metadata against custom schema
-const results = validator.validate(metadataInstance, "custom-v1");
+const results = validator.validate(metadataInstance, 'custom-v1');
 console.log(results);
 ```
 
 **Examples:** See: [/examples/token-metadata-calculation](https://github.com/hashgraph/hedera-nft-utilities/tree/main/examples/token-metadata-calculation/custom-schema-valid-metadata.js)
 
-
 #### Method 2: Rebuilding package
 
 > ⚠️ Warning: **This approach requires you to rebuild the package.**
 
-You can add custom JSON schemas to the `/schemas` folder. 
+You can add custom JSON schemas to the `/schemas` folder.
 
 You can then add the version to the `schemaMap` in `/schema/index.js` using the following code:
 
 ```js
-const token_metadata_2_0_0 = require("./HIP412@2.0.0.json");
-const myCustomSchema = require("./myschema.json"); // import your schema
+const token_metadata_2_0_0 = require('./HIP412@2.0.0.json');
+const myCustomSchema = require('./myschema.json'); // import your schema
 
 const schemaMap = new Map();
 schemaMap.set('2.0.0', token_metadata_2_0_0);
@@ -188,35 +187,35 @@ When you've added your schema to the map, you can validate against your schema v
 Set custom validation rules by importing new validators from the `/validators` folder into the `index.js` file. You can then add them to the `validate()` function. Stick to the `issues` format of errors and warnings (see section "Issues format" for the detailed description).
 
 ```js
-const { myCustomValidator, schemaValidator } = require("./validators");
+const { myCustomValidator, schemaValidator } = require('./validators');
 
 const validate = (instance, schemaVersion = defaultSchemaVersion) => {
-    let errors = [];
-    let warnings = [];
+  let errors = [];
+  let warnings = [];
 
-    const schema = this.getSchema(schemaVersion)
+  const schema = this.getSchema(schemaVersion);
 
-    // When errors against the schema are found, you don't want to continue verifying the NFT
-    // Warnings don't matter because they only contain "additional property" warnings that don't break the other validators
-    const schemaProblems = schemaValidator(instance, schema);
-    warnings.push(...schemaProblems.warnings);
-    if (schemaProblems.errors.length > 0) {
-        errors.push(...schemaProblems.errors);
-
-        return {
-            errors,
-            warnings
-        }
-    }
-
-    const customErrors = myCustomValidator(instance);
-    errors.push(...customErrors);
+  // When errors against the schema are found, you don't want to continue verifying the NFT
+  // Warnings don't matter because they only contain "additional property" warnings that don't break the other validators
+  const schemaProblems = schemaValidator(instance, schema);
+  warnings.push(...schemaProblems.warnings);
+  if (schemaProblems.errors.length > 0) {
+    errors.push(...schemaProblems.errors);
 
     return {
-        errors,
-        warnings
+      errors,
+      warnings,
     };
-}
+  }
+
+  const customErrors = myCustomValidator(instance);
+  errors.push(...customErrors);
+
+  return {
+    errors,
+    warnings,
+  };
+};
 ```
 
 ## Local validator
@@ -240,7 +239,7 @@ const { localValidation } = require('@hashgraph/nft-utilities');
 The `localValidation` expects an absolute path to your metadata files to verify them. The function prints the warnings and errors for all JSON files it finds in the provided folder path. It also returns the validation results as an object in case you want to use the results in your code.
 
 ```js
-localValidation("/Users/projects/nft/files");
+localValidation('/Users/projects/nft/files');
 ```
 
 This package uses the `Validator` class explained in the [previous section](#token-metadata-validator).
@@ -277,7 +276,7 @@ See: **[/examples/local-metadata-validator/index.js](https://github.com/hashgrap
 
 ## Risk score calculation
 
-Calculate risk score for a token from the token information or by passing a token ID of an NFT on the Hedera testnet or mainnet. 
+Calculate risk score for a token from the token information or by passing a token ID of an NFT on the Hedera testnet or mainnet.
 
 The total risk score is calculated based on the presence of certain `keys` for the token or the presence of an `INFINITE` `supply_type` in combination with a `supply_key`. Each key or property has an associated weight.
 
@@ -290,24 +289,24 @@ const defaultWeights = {
     supply_key: 20,
     kyc_key: 50,
     pause_key: 50,
-    fee_schedule_key: 40
+    fee_schedule_key: 40,
   },
   properties: {
-    supply_type_infinite: 20
-  }
+    supply_type_infinite: 20,
+  },
 };
 ```
 
 However, there's one edge case where the 20 weight for the supply key is not counted. When the supply type is set to `FINITE` and the total supply equals the max supply, there's no risk the supply key can further dilute the project because the project's minting limit has been reached.
 
-To determine the risk level, there are four categories each with an attached score. If the score is lower than or equal to a risk level, it will get that risk level. E.g. a token with a risk score of 200 will get a `HIGH` risk level. 
+To determine the risk level, there are four categories each with an attached score. If the score is lower than or equal to a risk level, it will get that risk level. E.g. a token with a risk score of 200 will get a `HIGH` risk level.
 
 ```js
 const defaultRiskLevels = {
-    NORISK: 0,
-    LOW: 40,
-    MEDIUM: 199,
-    HIGH: 200
+  NORISK: 0,
+  LOW: 40,
+  MEDIUM: 199,
+  HIGH: 200,
 };
 ```
 
@@ -341,19 +340,19 @@ const results = calculateRiskScoreFromData({ metadata: tokenInformation });
 Alternatively, use the `calculateRiskScoreFromTokenId` to retrieve risk information about a token by entering a token ID. This asynchronous function looks up the token information from the mirror node and returns the risk information.
 
 ```js
-const results = await calculateRiskScoreFromTokenId({ tokenId: "0.0.1270555" });
+const results = await calculateRiskScoreFromTokenId({ tokenId: '0.0.1270555' });
 ```
 
 ### Custom weights and risk levels
 
-Use custom weights and risk levels by passing them as the second and third parameter to the `calculateRiskScoreFromData` function. 
+Use custom weights and risk levels by passing them as the second and third parameter to the `calculateRiskScoreFromData` function.
 
 ```js
 const metadata: Metadata = {
-    supply_type: 'testSupply',
-    supply_key: 'testKey',
-    max_supply: 'testMaxSupply',
-    total_supply: 'testTotalSupply',
+  supply_type: 'testSupply',
+  supply_key: 'testKey',
+  max_supply: 'testMaxSupply',
+  total_supply: 'testTotalSupply',
 };
 
 const customWeights: Weights = {
@@ -364,32 +363,31 @@ const customWeights: Weights = {
     supply_key: 20,
     kyc_key: 50,
     pause_key: 50,
-    fee_schedule_key: 40
+    fee_schedule_key: 40,
   },
   properties: {
-    supply_type_infinite: 20
-  }
+    supply_type_infinite: 20,
+  },
 };
 
 const customRiskLevels: RiskLevels = {
-    NORISK: 0,
-    LOW: 40,
-    MEDIUM: 199,
-    HIGH: 200
+  NORISK: 0,
+  LOW: 40,
+  MEDIUM: 199,
+  HIGH: 200,
 };
 
-const results = calculateRiskScoreFromData({ metadata , customWeights, customRiskLevels});
+const results = calculateRiskScoreFromData({ metadata, customWeights, customRiskLevels });
 ```
-
 
 ### Interface
 
 The output interface for this function looks like this.
 
 ```json
-{ 
-    "riskScore": "number representing total risk score", 
-    "riskLevel": "<string: ENUM(NORISK, LOW, MEDIUM, HIGH)>"
+{
+  "riskScore": "number representing total risk score",
+  "riskLevel": "<string: ENUM(NORISK, LOW, MEDIUM, HIGH)>"
 }
 ```
 
@@ -403,7 +401,7 @@ Calculate the rarity for a local folder containing multiple JSON metadata files 
 The model works by dividing the number one by the division of the number of NFTs with a specific trait value and the number of NFTs with the most common trait value for that trait. Here's the formula:
 
 ```
-1 / (# of NFTs with trait value / # of NFTs with most common trait value) 
+1 / (# of NFTs with trait value / # of NFTs with most common trait value)
 ```
 
 This model outputs a score for each NFT. By sorting the NFTs, you'll get a ranking based on this scoring model.
@@ -416,33 +414,33 @@ Install the package:
 npm i -s @hashgraph/nft-utilities
 ```
 
-Import the package into your project and get `calculateRarity` function. Next, you need to pass an absolute path to a folder containing metadata JSON files. 
+Import the package into your project and get `calculateRarity` function. Next, you need to pass an absolute path to a folder containing metadata JSON files.
 
 ```js
 const { calculateRarity } = require('@hashgraph/nft-utilities');
 
-const absolutePathToFiles = "/Users/myUser/nft-utilities/examples/rarity-score-calculation/files";
+const absolutePathToFiles = '/Users/myUser/nft-utilities/examples/rarity-score-calculation/files';
 const results = calculateRarity(absolutePathToFiles);
-console.log(results)
+console.log(results);
 ```
 
 You can also avoid having to load data from files by using the `calculateRarityFromData` function.
 
 ```js
 const NFTdata = [
-    {
-        "name": "HANGRY BARBOON #2343",
-        "image": "ipfs://QmaHVnnp7qAmGADa3tQfWVNxxZDRmTL5r6jKrAo16mSd5y/2343.png",
-        "type": "image/png",
-        "attributes": [
-            { "trait_type": "Background", "value": "Yellow" },
-            { "trait_type": "Fur", "value": "Silver" },
-            { "trait_type": "Clothing", "value": "Herbal Jacket" },
-            { "trait_type": "Mouth", "value": "Smile" },
-            { "trait_type": "Sing", "value": "Sing" }
-        ]
-    }
-]
+  {
+    name: 'HANGRY BARBOON #2343',
+    image: 'ipfs://QmaHVnnp7qAmGADa3tQfWVNxxZDRmTL5r6jKrAo16mSd5y/2343.png',
+    type: 'image/png',
+    attributes: [
+      { trait_type: 'Background', value: 'Yellow' },
+      { trait_type: 'Fur', value: 'Silver' },
+      { trait_type: 'Clothing', value: 'Herbal Jacket' },
+      { trait_type: 'Mouth', value: 'Smile' },
+      { trait_type: 'Sing', value: 'Sing' },
+    ],
+  },
+];
 
 const results = calculateRarityFromData(NFTdata);
 ```
@@ -512,7 +510,8 @@ Here's a sample output. The total sum of the individual attributes is always 100
 
 ### Examples
 
-See: 
+See:
+
 - **[/examples/rarity-score-calculation/rarity-from-files.js](https://github.com/hashgraph/hedera-nft-utilities/tree/main/examples/rarity-score-calculation)**
 - **[/examples/rarity-score-calculation/rarity-from-data.js](https://github.com/hashgraph/hedera-nft-utilities/tree/main/examples/rarity-score-calculation)**
 
@@ -557,10 +556,10 @@ The output interface for this function looks like this.
 
 ```json
 [
-    { 
+    {
         "trait": "<string> trait name",
         "values": [
-            { 
+            {
                 "value": "<string> single value for trait",
                 "occurrence": "<string> percentage based occurrence with 2 digits after comma"
             },
@@ -610,7 +609,8 @@ Here's a sample output that shows the percentage of each value's occurrence for 
 
 ### Examples
 
-See: 
+See:
+
 - **[/examples/rarity-score-calculation/trait-occurrence-from-data.js](https://github.com/hashgraph/hedera-nft-utilities/tree/main/examples/rarity-score-calculation)**
 
 ## NFT SDK functions
@@ -638,14 +638,14 @@ new HederaNFTSDK(operatorAccountId, operatorPrivateKey, 'testnet');
 Create collection method takes in the following parameters:
 
 ```typescript
-    type CreateCollectionType = {
-      accountId: string,
-      privateKey: string,
-      network: Network,
-      localNode?: LocalNode,
-      localMirrorNode?: string,
-      mirrorNodeUrl?: string
-    };
+type CreateCollectionType = {
+  accountId: string;
+  privateKey: string;
+  network: Network;
+  localNode?: LocalNode;
+  localMirrorNode?: string;
+  mirrorNodeUrl?: string;
+};
 ```
 
 - `accountId`: The account ID of the operator account.
@@ -673,8 +673,8 @@ Create instance of `NFTSDK` class and call `createCollection` method by passing 
 const nftSDK = new HederaNFTSDK(operatorAccountId, operatorPrivateKey, 'testnet');
 
 const tokenId = await nftSDK.createCollection({
-    collectionName: 'test_name',
-    collectionSymbol: 'test_symbol',
+  collectionName: 'test_name',
+  collectionSymbol: 'test_symbol',
 });
 ```
 
@@ -683,20 +683,20 @@ const tokenId = await nftSDK.createCollection({
 Create collection method takes in the following parameters:
 
 ```typescript
-    type CreateCollectionType = {
-        collectionName: string;
-        collectionSymbol: string;
-        treasuryAccountPrivateKey?: string;
-        treasuryAccount?: string;
-        keys?: CreateCollectionKeysType;
-        maxSupply?: number;
-        customFees?: CustomFeeType[];
-        expirationTime?: Date;
-        autoRenewAccount?: string;
-        autoRenewAccountPrivateKey?: string;
-        autoRenewPeriod?: number;
-        memo?: string;
-    };
+type CreateCollectionType = {
+  collectionName: string;
+  collectionSymbol: string;
+  treasuryAccountPrivateKey?: string;
+  treasuryAccount?: string;
+  keys?: CreateCollectionKeysType;
+  maxSupply?: number;
+  customFees?: CustomFeeType[];
+  expirationTime?: Date;
+  autoRenewAccount?: string;
+  autoRenewAccountPrivateKey?: string;
+  autoRenewPeriod?: number;
+  memo?: string;
+};
 ```
 
 - `collectionName`: The name of the NFT collection.
@@ -716,11 +716,9 @@ Create collection method takes in the following parameters:
 
 Method return string which is the token ID of the newly created NFT collection.
 
-
 ### Examples
 
 See: **[/examples/local-metadata-validator/index.js](https://github.com/hashgraph/hedera-nft-utilities/tree/main/examples/local-metadata-validator)**
-
 
 ## NFT SDK Estimate Create Collection In Dolars
 
@@ -740,8 +738,8 @@ Create instance of `NFTSDK` class and call `estimateCreateCollectionInDollars` m
 const nftSDK = new HederaNFTSDK(operatorAccountId, operatorPrivateKey, 'testnet');
 
 const estimatedDollars = estimateCreateCollectionInDollars({
-    collectionName: 'test',
-    collectionSymbol: 'test2',
+  collectionName: 'test',
+  collectionSymbol: 'test2',
 });
 ```
 
@@ -750,14 +748,14 @@ const estimatedDollars = estimateCreateCollectionInDollars({
 Create collection method takes in the following parameters:
 
 ```typescript
-   type EstimateCreateCollectionInDollarsType = {
-      collectionName: string;
-      collectionSymbol: string;
-      treasuryAccountPrivateKey?: string;
-      treasuryAccount?: string;
-      keys?: CreateCollectionKeysType;
-      customFees?: CustomFeeType[];
-  };
+type EstimateCreateCollectionInDollarsType = {
+  collectionName: string;
+  collectionSymbol: string;
+  treasuryAccountPrivateKey?: string;
+  treasuryAccount?: string;
+  keys?: CreateCollectionKeysType;
+  customFees?: CustomFeeType[];
+};
 ```
 
 - `collectionName`: The name of the NFT collection.
@@ -771,11 +769,9 @@ Create collection method takes in the following parameters:
 
 Method return number which is the estimated cost of creating a new NFT collection in dollars.
 
-
 ### Examples
 
 See: **[/examples/local-metadata-validator/index.js](https://github.com/hashgraph/hedera-nft-utilities/tree/main/examples/local-metadata-validator)**
-
 
 ## NFT SDK Estimate Create Collection In Hbar
 
@@ -795,8 +791,8 @@ Create instance of `NFTSDK` class and call `estimateCreateCollectionInHbar` meth
 const nftSDK = new HederaNFTSDK(operatorAccountId, operatorPrivateKey, 'testnet');
 
 const estimatedDollars = estimateCreateCollectionInHbar({
-    collectionName: 'test',
-    collectionSymbol: 'test2',
+  collectionName: 'test',
+  collectionSymbol: 'test2',
 });
 ```
 
@@ -804,15 +800,15 @@ const estimatedDollars = estimateCreateCollectionInHbar({
 
 Create collection method takes in the following parameters:
 
-```typescript
-   type EstimateCreateCollectionInDollarsType = {
-      collectionName: string;
-      collectionSymbol: string;
-      treasuryAccountPrivateKey?: string;
-      treasuryAccount?: string;
-      keys?: CreateCollectionKeysType;
-      customFees?: CustomFeeType[];
-  };
+```ts
+type EstimateCreateCollectionInDollarsType = {
+  collectionName: string;
+  collectionSymbol: string;
+  treasuryAccountPrivateKey?: string;
+  treasuryAccount?: string;
+  keys?: CreateCollectionKeysType;
+  customFees?: CustomFeeType[];
+};
 ```
 
 - `collectionName`: The name of the NFT collection.
@@ -826,36 +822,166 @@ Create collection method takes in the following parameters:
 
 Method return number which is the estimated cost of creating a new NFT collection in dollars.
 
-
 ### Examples
 
 See: **[/examples/local-metadata-validator/index.js](https://github.com/hashgraph/hedera-nft-utilities/tree/main/examples/local-metadata-validator)**
 
+<!-- //////////////////////////////////////////// -->
 
+## HIP-412-VALIDATOR
 
+The `Hip412Validator` class is a comprehensive tool designed to facilitate the validation of NFT metadata against the standards outlined in the Hedera Improvement Proposal (HIP) 412. This class provides developers with a suite of methods to validate individual NFT metadata objects, arrays of metadata, local files, and directories containing NFT metadata, ensuring compliance with the HIP-412 schema. Additionally, it offers functionalities to validate metadata directly from the Hedera network, providing a robust solution for ensuring the integrity and compliance of NFT metadata within the Hedera ecosystem.
 
+### Methods & Initialization
 
+The class methods can be directly invoked to perform metadata validation.
 
+1. `validateSingleMetadataObject` - Validates a single NFT metadata object against the HIP-412 schema.
 
+### Usage
+
+```js
+const validationResult = Hip412Validator.validateSingleMetadataObject(metadataObject);
+```
+
+### Output
+
+This method returns an object contains:
+
+- `isValid` boolean flag
+- Array of errors
+
+---
+
+2. `validateArrayOfObjects` - Takes an array of metadata objects and validates each one against the HIP-412 schema, providing detailed results for each object.
+
+```js
+const validationResults = Hip412Validator.validateArrayOfObjects(arrayOfMetadataObjects);
+```
+
+### Output
+
+This method returns an object contains:
+
+`isValid`: A boolean flag indicating whether the metadata object at the index passed validation,
+`errors`: An array of strings listing all validation errors found for the metadata object,
+`errorsCount`: The number of errors found for the metadata object,
+`allObjectsValid`: A boolean flag indicating whether all metadata objects in the array passed validation without any errors.
+
+---
+
+3. `validateLocalFile` - This method allows for the validation of metadata within a local file. It reads the file content, parses the JSON, and validates it against the HIP-412 schema.
+
+```js
+const pathToFile = 'path/to/your/file';
+const fileValidationResult = Hip412Validator.validateLocalFile(pathToFile);
+```
+
+### Output
+
+This method returns an object contains:
+
+- `isValid` boolean flag
+- Array of errors
+
+---
+
+4. `validateLocalDirectory` - Validates all JSON metadata files within a specified directory, offering a comprehensive tool for pre-publish validation of NFT collections.
+
+```js
+const directoryPath = 'path/to/your/metadata/directory';
+const directoryValidationResult = Hip412Validator.validateLocalDirectory(directoryPath);
+```
+
+### Output
+
+This method returns an object contains:
+
+- `isValid`: A boolean flag indicating whether all files within the specified directory passed validation. It is true if all files are valid according to the HIP-412 schema, and false otherwise.
+- `errors`: An array of MetadataError objects, each corresponding to a file that failed validation. Each MetadataError object can include:
+  - `fileName`: The name of the file that encountered validation errors, helping to identify the source of the issue.
+  - `general`: An array of strings, with each string describing a specific validation error encountered in the file.
+
+---
+
+5. `validateSingleOnChainNFTMetadata ` - Targets the validation of metadata for a single NFT within a collection on the Hedera network. This method is particularly useful for in-depth analysis of individual NFTs.
+
+```ts
+type validateSingleOnChainNFTMetadataType = {
+  network: string;
+  tokenId: string;
+  serialNumber: string;
+  ipfsGateway?: string;
+};
+
+const singleNftValidationResult = await Hip412Validator.validateSingleOnChainNFTMetadata(network, tokenId, serialNumber, ipfsGateway);
+```
+
+- `network`: The network to use (mainnet, testnet or previewnet),
+- `tokenId`: The unique identifier of the NFT token within the Hedera network, used to locate and validate metadata for the specific token,
+- `serialNumber`: The serial number of the NFT, allowing for the validation of metadata for individual NFTs within a collection,
+- `ipfsGateway`: Optional. Specifies the IPFS gateway URL to be used for decoding the encoded NFT metadata URL.
+
+### Output
+
+This method returns an object contains:
+
+- `isValid` boolean flag
+- Array of errors
+
+---
+
+6. `validateMetadataFromOnChainCollection` - Fetches and validates metadata for an entire NFT collection directly from the Hedera network, leveraging either the testnet or mainnet. This method is crucial for verifying the compliance of on-chain NFT collections.
+
+```ts
+type validateSingleOnChainNFTMetadataType = {
+  network: string;
+  tokenId: string;
+  ipfsGateway?: string;
+  limit: number;
+};
+
+const collectionValidationResult = await Hip412Validator.validateMetadataFromOnChainCollection(network, tokenId, ipfsGateway, limit);
+```
+
+- `network`: The network to use (mainnet, testnet or previewnet),
+- `tokenId`: The unique identifier of the NFT token within the Hedera network, used to locate and validate metadata for the specific token,
+- `ipfsGateway`: Optional. Specifies the IPFS gateway URL to be used for decoding the encoded NFT metadata URL,
+- `limit`: Specifies how many NFT per page should be fetched. Default number is set to 100.
+
+### Output
+
+This method returns an object containing:
+
+- `isValid`: A boolean flag indicating whether all metadata objects passed validation without any errors.
+- `errors`: An array of objects, each containing a `serialNumber` identifying the specific NFT and a `message array` listing all validation errors found for that NFT.
+
+<!-- ////////////////////////////////////////////// -->
+
+---
 
 ## Questions or Improvement Proposals
 
 Please create an issue or PR on [this repository](https://github.com/hashgraph/hedera-nft-utilities). Make sure to join the [Hedera Discord server](https://hedera.com/discord) to ask questions or discuss improvement suggestions.
 
 # Support
+
 If you have a question on how to use the product, please see our
 [support guide](https://github.com/hashgraph/.github/blob/main/SUPPORT.md).
 
 # Contributing
+
 Contributions are welcome. Please see the
 [contributing guide](https://github.com/hashgraph/.github/blob/main/CONTRIBUTING.md)
 to see how you can get involved.
 
 # Code of Conduct
+
 This project is governed by the
 [Contributor Covenant Code of Conduct](https://github.com/hashgraph/.github/blob/main/CODE_OF_CONDUCT.md). By
 participating, you are expected to uphold this code of conduct. Please report unacceptable behavior
 to [oss@hedera.com](mailto:oss@hedera.com).
 
 # License
+
 [Apache License 2.0](LICENSE)
