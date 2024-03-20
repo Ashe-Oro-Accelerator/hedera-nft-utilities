@@ -1024,6 +1024,107 @@ The Hip412MetadataBuilder class is designed to be flexible, allowing for the add
 
 ---
 
+## Convert CSV To Metadata Objects
+
+The `convertCSVToMetadataObjects` function is designed to transform CSV files into an array of metadata objects compliant with the NFT metadata structure defined in the Hedera Improvement Proposal (HIP) 412. This utility function facilitates the conversion of bulk NFT data stored in CSV format into a structured JSON format that can be directly utilized for NFT minting or further processing within the NFT ecosystem.
+
+### Usage
+
+To convert a CSV file into an array of metadata objects, you need to provide the path to the CSV file. Optionally, you can also specify a limit to control the number of rows processed from the CSV file.
+
+```ts
+const csvFilePath = 'path/to/your/csv-file.csv';
+const metadataObjects = await convertCSVToMetadataObjects(csvFilePath, 100);
+```
+
+### Parameters
+
+- `csvFilePath`: A string that specifies the path to the CSV file containing the NFT metadata information,
+- `limit`: An optional parameter that defines the maximum number of rows to be processed from the CSV file. If not provided, all rows in the file will be processed.
+
+<strong>Important!</strong> The first two lines in the csv file are headers and they are skipped.
+
+### Output
+
+This function returns a promise that resolves to an array of MetadataObjects. Each `MetadataObject` in the array represents an individual NFT's metadata, structured according to the requirements of the HIP-412 schema.
+
+### Error Handling
+
+If the CSV file contains fewer data rows than the headers (after omitting specific header counts defined in the SDK), an error is thrown, indicating that the CSV file is empty or does not contain sufficient data for processing.
+
+---
+
+## Convert Metadata Objects to JSON Files
+
+The `convertMetadataObjectsToJsonFiles` function streamlines the process of converting an array of NFT metadata objects into individual JSON files. This utility is particularly useful for batch processing and storage of NFT metadata, facilitating easy upload and management of NFT collections. Before conversion, it validates each metadata object against the HIP-412 standard to ensure compliance.
+
+### Usage
+
+To convert metadata objects into JSON files, you need to provide the array of metadata objects, the destination path for the saved JSON files, and optionally, a limit to control the number of metadata objects processed.
+
+```ts
+const metadataObjects = [
+  {
+    /* Your Metadata Objects */
+  },
+];
+const savedJsonFilesLocation = 'path/to/save/json-files';
+const limit = 100; // Optional
+
+const conversionResult = await convertMetadataObjectsToJsonFiles({
+  metadataObjects,
+  savedJsonFilesLocation,
+  limit,
+});
+```
+
+### Parameters
+
+- `metadataObjects`: An array of MetadataObject items to be converted into JSON files. Each `MetadataObject` should conform to the structure required by the NFT metadata schema,
+- `savedJsonFilesLocation`: A string specifying the directory path where the resulting JSON files should be saved,
+- `limit`: An optional parameter specifying the maximum number of metadata objects to process. If not provided, all objects in the `metadataObjects` array will be processed.
+
+### Output
+
+This function returns a promise that resolves to an object with the following properties:
+
+- `isValid`: A boolean flag indicating whether all provided metadata objects are valid according to the HIP-412 validation process,
+- `errors`: An array containing detailed error information for each metadata object that failed validation. Each error object includes the index of the metadata object (objectIndex) and an array of error messages (errors),
+- `savedJsonFilesLocation`: The location where the JSON files have been saved.
+
+### Error Handling
+
+The `convertMetadataObjectsToJsonFiles` function strictly requires all metadata objects to pass HIP-412 validation before proceeding with the conversion to JSON files. The validation is performed upfront, and only if every metadata object is deemed valid, will the function save the JSON files to the specified location. If any of the metadata objects fail validation, no files will be saved, and the function will return detailed information about the errors encountered. This ensures the integrity and compliance of all NFT metadata before it is serialized into JSON format, allowing developers to rectify any issues in a single batch process.
+
+---
+
+## Prepare Metadata Objects From CSV Rows
+
+The `prepareMetadataObjectsFromCSVRows` function serves as an intermediary step in the conversion of CSV data into structured NFT metadata objects. It processes rows of CSV data, applying a predefined schema to transform them into an array of metadata objects suitable for NFT creation or further validation against the HIP-412 standard.
+
+### Usage
+
+To transform CSV rows into metadata objects, you need to provide the parsed rows from a CSV file. The function utilizes predefined headers for attributes and properties to map CSV data accurately into metadata objects.
+
+```ts
+const csvParsedRows = [{/* Array of parsed CSV rows */}];
+const metadataObjects = prepareMetadataObjectsFromCSVRows({ csvParsedRows });
+```
+
+### Parameters
+
+- `csvParsedRows`: An array of CSVRow objects, representing the rows parsed from a CSV file. Each CSVRow object is a key-value map corresponding to one row of data in the CSV, where keys are column headers, and values are the cell data for that row.
+
+### Output
+
+The function returns an array of metadata objects, with each object structured according to the NFT metadata schema. This array can be directly used for NFT minting, further validation, or conversion into JSON files for storage and distribution.
+
+### Transformation Logic
+
+The function relies on predefined headers for attributes (ATTRIBUTES) and properties (PROPERTIES) to map data from CSV rows into the structured format required by NFT metadata. This ensures that the resulting metadata objects are correctly formatted and include all necessary information for NFT creation, such as names, images, types, and other customizable attributes and properties.
+
+---
+
 ## Questions or Improvement Proposals
 
 Please create an issue or PR on [this repository](https://github.com/hashgraph/hedera-nft-utilities). Make sure to join the [Hedera Discord server](https://hedera.com/discord) to ask questions or discuss improvement suggestions.
