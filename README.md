@@ -826,9 +826,9 @@ Method return number which is the estimated cost of creating a new NFT collectio
 
 See: **[/examples/local-metadata-validator/index.js](https://github.com/hashgraph/hedera-nft-utilities/tree/main/examples/local-metadata-validator)**
 
-<!-- //////////////////////////////////////////// -->
+<br>
 
-## HIP-412-VALIDATOR
+## HIP 412 VALIDATOR
 
 The `Hip412Validator` class is a comprehensive tool designed to facilitate the validation of NFT metadata against the standards outlined in the Hedera Improvement Proposal (HIP) 412. This class provides developers with a suite of methods to validate individual NFT metadata objects, arrays of metadata, local files, and directories containing NFT metadata, ensuring compliance with the HIP-412 schema. Additionally, it offers functionalities to validate metadata directly from the Hedera network, providing a robust solution for ensuring the integrity and compliance of NFT metadata within the Hedera ecosystem.
 
@@ -956,7 +956,71 @@ This method returns an object containing:
 - `isValid`: A boolean flag indicating whether all metadata objects passed validation without any errors.
 - `errors`: An array of objects, each containing a `serialNumber` identifying the specific NFT and a `message array` listing all validation errors found for that NFT.
 
-<!-- ////////////////////////////////////////////// -->
+<br>
+
+## HIP 412 METADATA BUILDER
+
+The Hip412MetadataBuilder class streamlines the creation of NFT metadata objects in alignment with the Hedera Improvement Proposal (HIP) 412 standards. It provides a fluent interface to incrementally build up a metadata object with validation at each step, ensuring that the resulting metadata conforms to the required specifications. This builder class is essential for developers seeking to craft compliant NFT metadata for deployment on the Hedera network.
+
+### Methods & Initialization
+
+Upon instantiation, the Hip412MetadataBuilder initializes a metadata object with `name`, `image` and `type` empty fields. Users can then sequentially apply various setters and adders to populate this metadata object with the necessary details.
+
+## Initialization
+
+```js
+const metadataBuilder = new Hip412MetadataBuilder();
+```
+
+### Key Methods
+
+```ts
+- setName(name: string): 'Sets the name of the NFT',
+- setImage(image: string): 'Sets the image URL for the NFT',
+- setType(type: string): 'Sets the type of the NFT',
+- setDescription(description: string): 'Adds a description to the NFT metadata',
+- setCreator(creator: string): 'Defines the creator of the NFT',
+- setCreatorDID(creatorDID: string): 'Specifies the Decentralized Identifier (DID) for the creator',
+- setChecksum(checksum: string): 'Assigns a checksum for the metadata integrity verification',
+- addAttribute(attribute: Attribute): 'Appends a custom attribute to the NFT. Can be used multiple times',
+- addFile(file: FileMetadata): 'Adds a file (with URI, type, etc.) to the NFT metadata. Can be used multiple times',
+- addProperty({ key, value }): 'Includes a custom property to the NFT metadata. Can be used multiple times',
+- setLocalization(localization: Localization): 'Establishes localization information for the NFT metadata',
+- build(): 'Validates and finalizes the metadata object, returning both the metadata and its validation result'.
+```
+
+### Usage
+
+Here's an example of how to use the `Hip412MetadataBuilder` to construct NFT metadata:
+
+```ts
+const builder = new Hip412MetadataBuilder()
+  .setName('My Awesome NFT')
+  .setImage('https://example.com/my-awesome-nft.png')
+  .setType('image/png')
+  .setDescription('This is a description of my awesome NFT')
+  .addAttribute({
+    trait_type: 'Background',
+    value: 'Space',
+  })
+  .addFile({
+    uri: 'https://example.com/nft-metadata.json',
+    type: 'application/json',
+  })
+  .build();
+
+console.log(builder.metadata); // The constructed metadata object
+console.log(builder.validationResponse); // The validation results
+```
+
+### Output
+
+The `build` method returns an object containing:
+
+- `metadata`: the constructed NFT metadata object ready for publication or further manipulation,
+- `validationResponse`: an object including: `isValid` boolean flag and an `array of validation errors` if any issues were found with the metadata.
+
+The Hip412MetadataBuilder class is designed to be flexible, allowing for the addition of more complex metadata structures such as localized descriptions, multiple files, and custom attributes, ensuring that developers can fully utilize the HIP-412 standard for their NFT projects.
 
 ---
 
