@@ -22,6 +22,7 @@ This package includes all sorts of tooling for the Hedera NFT ecosystem, includi
 - **Package: [Risk score calculation](#risk-score-calculation)**
 - **Package: [Rarity score calculation](#rarity-score-calculation)**
 - **Package: [Trait occurrence calculation](#trait-occurrence-calculation)**
+- **Package: [NFTSDK](#nft-sdk-functions)**
 - **[Questions, contact us, or improvement proposals?](#questions-or-improvement-proposals)**
 - **[Support](#Support)**
 - **[Contributing](#Contributing)**
@@ -611,6 +612,231 @@ Here's a sample output that shows the percentage of each value's occurrence for 
 
 See: 
 - **[/examples/rarity-score-calculation/trait-occurrence-from-data.js](https://github.com/hashgraph/hedera-nft-utilities/tree/main/examples/rarity-score-calculation)**
+
+## NFT SDK functions
+
+Each of NFtSDK function are methods in class `NFTSDK` which is a wrapper around the Hedera NFT API. The class is used to create a new NFT collection, mint NFTs, and transfer NFTs.
+
+### Usage
+
+Install the package:
+
+```bash
+npm i -s @hashgraph/nft-utilities
+```
+
+Create new instance of `NFTSDK` class by passing the operator account ID, operator private key, and network to the constructor.
+HederaNFTSDK class has login function in constructor which logs in the operator account and sets the operator account ID and operator private key.
+You should create this instance only once. Every exported function will be automatically logged in with the operator account.
+
+```js
+new HederaNFTSDK(operatorAccountId, operatorPrivateKey, 'testnet');
+```
+
+### Parameters
+
+Create collection method takes in the following parameters:
+
+```typescript
+    type CreateCollectionType = {
+      accountId: string,
+      privateKey: string,
+      network: Network,
+      localNode?: LocalNode,
+      localMirrorNode?: string,
+      mirrorNodeUrl?: string
+    };
+```
+
+- `accountId`: The account ID of the operator account.
+- `privateKey`: The private key of the operator account.
+- `network`: The network to use (mainnet or testnet or previewnet).
+- `localNode`: The local node to use.
+- `localMirrorNode`: The local mirror node to use.
+- `mirrorNodeUrl`: The mirror node URL to use.
+
+## NFT SDK Create Collection
+
+The `create-collection` method is used to create a new NFT collection. This method takes in a collection name and an array of NFT metadata objects and returns a promise that resolves when the collection is successfully created.
+
+### Usage
+
+Install the package:
+
+```bash
+npm i -s @hashgraph/nft-utilities
+```
+
+Create instance of `NFTSDK` class and call `createCollection` method by passing the collection name and an array of NFT metadata objects.
+
+```js
+const nftSDK = new HederaNFTSDK(operatorAccountId, operatorPrivateKey, 'testnet');
+
+const tokenId = await nftSDK.createCollection({
+    collectionName: 'test_name',
+    collectionSymbol: 'test_symbol',
+});
+```
+
+### Parameters
+
+Create collection method takes in the following parameters:
+
+```typescript
+    type CreateCollectionType = {
+        collectionName: string;
+        collectionSymbol: string;
+        treasuryAccountPrivateKey?: string;
+        treasuryAccount?: string;
+        keys?: CreateCollectionKeysType;
+        maxSupply?: number;
+        customFees?: CustomFeeType[];
+        expirationTime?: Date;
+        autoRenewAccount?: string;
+        autoRenewAccountPrivateKey?: string;
+        autoRenewPeriod?: number;
+        memo?: string;
+    };
+```
+
+- `collectionName`: The name of the NFT collection.
+- `collectionSymbol`: The symbol of the NFT collection.
+- `treasuryAccountPrivateKey`: The private key of the treasury account. If not provided, the operator account will be used.
+- `treasuryAccount`: The treasury account ID. If not provided, the operator account will be used.
+- `keys`: The keys for the collection.
+- `maxSupply`: The maximum supply of the collection.
+- `customFees`: The custom fees for the collection.
+- `expirationTime`: The expiration time of the collection.
+- `autoRenewAccount`: The auto-renew account for the collection.
+- `autoRenewAccountPrivateKey`: The private key of the auto-renew account.
+- `autoRenewPeriod`: The auto-renew period for the collection.
+- `memo`: The memo for the collection.
+
+### Output
+
+Method return string which is the token ID of the newly created NFT collection.
+
+
+### Examples
+
+See: **[/examples/local-metadata-validator/index.js](https://github.com/hashgraph/hedera-nft-utilities/tree/main/examples/local-metadata-validator)**
+
+
+## NFT SDK Estimate Create Collection In Dolars
+
+The `estimateCreateCollectionInDollars` method is used to estimate the cost of creating a new NFT collection. This method takes in a collection name and an array of NFT metadata objects and returns a promise that resolves when the cost is successfully estimated.
+
+### Usage
+
+Install the package:
+
+```bash
+npm i -s @hashgraph/nft-utilities
+```
+
+Create instance of `NFTSDK` class and call `estimateCreateCollectionInDollars` method by passing the collection name and an array of NFT metadata objects.
+
+```js
+const nftSDK = new HederaNFTSDK(operatorAccountId, operatorPrivateKey, 'testnet');
+
+const estimatedDollars = estimateCreateCollectionInDollars({
+    collectionName: 'test',
+    collectionSymbol: 'test2',
+});
+```
+
+### Parameters
+
+Create collection method takes in the following parameters:
+
+```typescript
+   type EstimateCreateCollectionInDollarsType = {
+      collectionName: string;
+      collectionSymbol: string;
+      treasuryAccountPrivateKey?: string;
+      treasuryAccount?: string;
+      keys?: CreateCollectionKeysType;
+      customFees?: CustomFeeType[];
+  };
+```
+
+- `collectionName`: The name of the NFT collection.
+- `collectionSymbol`: The symbol of the NFT collection.
+- `treasuryAccountPrivateKey`: The private key of the treasury account. If not provided, the operator account will be used.
+- `treasuryAccount`: The treasury account ID. If not provided, the operator account will be used.
+- `keys`: The keys for the collection.
+- `customFees`: The custom fees for the collection.
+
+### Output
+
+Method return number which is the estimated cost of creating a new NFT collection in dollars.
+
+
+### Examples
+
+See: **[/examples/local-metadata-validator/index.js](https://github.com/hashgraph/hedera-nft-utilities/tree/main/examples/local-metadata-validator)**
+
+
+## NFT SDK Estimate Create Collection In Hbar
+
+The `estimateCreateCollectionInHbar` method is used to estimate the cost of creating a new NFT collection. This method takes in a collection name and an array of NFT metadata objects and returns a promise that resolves when the cost is successfully estimated.
+
+### Usage
+
+Install the package:
+
+```bash
+npm i -s @hashgraph/nft-utilities
+```
+
+Create instance of `NFTSDK` class and call `estimateCreateCollectionInHbar` method by passing the collection name and an array of NFT metadata objects.
+
+```js
+const nftSDK = new HederaNFTSDK(operatorAccountId, operatorPrivateKey, 'testnet');
+
+const estimatedDollars = estimateCreateCollectionInHbar({
+    collectionName: 'test',
+    collectionSymbol: 'test2',
+});
+```
+
+### Parameters
+
+Create collection method takes in the following parameters:
+
+```typescript
+   type EstimateCreateCollectionInDollarsType = {
+      collectionName: string;
+      collectionSymbol: string;
+      treasuryAccountPrivateKey?: string;
+      treasuryAccount?: string;
+      keys?: CreateCollectionKeysType;
+      customFees?: CustomFeeType[];
+  };
+```
+
+- `collectionName`: The name of the NFT collection.
+- `collectionSymbol`: The symbol of the NFT collection.
+- `treasuryAccountPrivateKey`: The private key of the treasury account. If not provided, the operator account will be used.
+- `treasuryAccount`: The treasury account ID. If not provided, the operator account will be used.
+- `keys`: The keys for the collection.
+- `customFees`: The custom fees for the collection.
+
+### Output
+
+Method return number which is the estimated cost of creating a new NFT collection in dollars.
+
+
+### Examples
+
+See: **[/examples/local-metadata-validator/index.js](https://github.com/hashgraph/hedera-nft-utilities/tree/main/examples/local-metadata-validator)**
+
+
+
+
+
+
+
 
 ## Questions or Improvement Proposals
 
