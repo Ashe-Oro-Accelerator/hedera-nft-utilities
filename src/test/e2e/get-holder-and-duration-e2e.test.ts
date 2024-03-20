@@ -38,7 +38,7 @@ beforeAll(async () => {
     tokenId,
     batchSize: 10,
     metadata: ['www.youtube.com'],
-    supplyKey: PrivateKey.fromString(operatorPrivateKey),
+    supplyKey: operatorPrivateKey,
   });
 
   await new Promise((resolve) => setTimeout(resolve, MIRROR_NODE_DELAY));
