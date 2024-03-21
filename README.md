@@ -24,8 +24,8 @@ This package includes all sorts of tooling for the Hedera NFT ecosystem, includi
 - **Package: [Risk score calculation](#risk-score-calculation)**
 - **Package: [Rarity score calculation](#rarity-score-calculation)**
 - **Package: [Trait occurrence calculation](#trait-occurrence-calculation)**
-- **Package: [NFTSDKMethods](#nft-sdk-methods)**
-- **Package: [FeeFactory](#feefactory)**
+- **Package: [NFT SDK Methods](#nft-sdk-methods)**
+- **Package: [Fee Factory](#fee-factory)**
 - **[Questions, contact us, or improvement proposals?](#questions-or-improvement-proposals)**
 - **[Support](#Support)**
 - **[Contributing](#Contributing)**
@@ -618,7 +618,7 @@ See:
 
 ## NFT SDK methods
 
-Each of NFtSDK function are methods in class `NFTSDK` which is a wrapper around the Hedera NFT API. The class is used to create a new NFT collection, mint NFTs, and transfer NFTs.
+Each of HederaNFTSDK function are methods in class `HederaNFTSDK` which is a wrapper around the Hedera HederaNFTSDK. The class is used to create a new NFT collection, mint NFTs, and transfer NFTs.
 
 ### Usage
 
@@ -628,7 +628,7 @@ Install the package:
 npm i -s @hashgraph/nft-utilities
 ```
 
-Create new instance of `NFTSDK` class by passing the operator account ID, operator private key, and network to the constructor.
+Create new instance of `HederaNFTSDK` class by passing the operator account ID, operator private key, and network to the constructor.
 HederaNFTSDK class has login function in constructor which logs in the operator account and sets the operator account ID and operator private key.
 You should create this instance only once. Every exported function will be automatically logged in with the operator account.
 
@@ -641,7 +641,7 @@ new HederaNFTSDK(operatorAccountId, operatorPrivateKey, 'testnet');
 Create collection method takes in the following parameters:
 
 ```typescript
-type CreateCollectionType = {
+type HederaNFTSDKType = {
   accountId: string,
   privateKey: string,
   network: Network,
@@ -653,7 +653,7 @@ type CreateCollectionType = {
 
 - `accountId`: The account ID of the operator account.
 - `privateKey`: The private key of the operator account.
-- `network`: The network to use (mainnet or testnet or previewnet or localNode).
+- `network`: The network to use (mainnet, testnet, previewnet or loocalNode).
 - `localNode`: The local node to use.
 - `localMirrorNode`: The local mirror node to use.
 - `mirrorNodeUrl`: The mirror node URL to use.
@@ -664,18 +664,12 @@ The `create-collection` method is used to create a new NFT collection. This meth
 
 ### Usage
 
-Install the package:
-
-```bash
-npm i -s @hashgraph/nft-utilities
-```
-
-Create instance of `NFTSDK` class and call `createCollection` method by passing proper parameters.
+Create instance of `HederaNFTSDK` class and call `createCollection` method by passing proper parameters.
 
 ```js
-const nftSDK = new HederaNFTSDK(operatorAccountId, operatorPrivateKey, 'testnet');
+const HederaNFTSDK = new HederaNFTSDK(operatorAccountId, operatorPrivateKey, 'testnet');
 
-const tokenId = await nftSDK.createCollection({
+const tokenId = await HederaNFTSDK.createCollection({
     collectionName: 'test_name',
     collectionSymbol: 'test_symbol',
 });
@@ -720,22 +714,16 @@ type CreateCollectionType = {
 Method return string which is the token ID of the newly created NFT collection.
 
 
-## NFT SDK Estimate Create Collection In Dollars
+## NFT SDK Estimate create collection cost in Dollars
 
 The `estimateCreateCollectionInDollars` method is used to estimate the cost of creating a new NFT collection. This method takes in a collection name and collection symbol and returns a promise that resolves when the cost is successfully estimated.
 
 ### Usage
 
-Install the package:
-
-```bash
-npm i -s @hashgraph/nft-utilities
-```
-
-Create instance of `NFTSDK` class and call `estimateCreateCollectionInDollars` method by passing the proper parameters.
+Create instance of `HederaNFTSDK` class and call `estimateCreateCollectionInDollars` method by passing the proper parameters.
 
 ```js
-const nftSDK = new HederaNFTSDK(operatorAccountId, operatorPrivateKey, 'testnet');
+const HederaNFTSDK = new HederaNFTSDK(operatorAccountId, operatorPrivateKey, 'testnet');
 
 const estimatedDollars = estimateCreateCollectionInDollars({
     collectionName: 'test',
@@ -767,25 +755,19 @@ type EstimateCreateCollectionInDollarsType = {
 
 ### Output
 
-Method return number which is the estimated cost of creating a new NFT collection in dollars.
+Method return number which is the estimated cost of creating a new NFT collection in Hbars.
 
 
-## NFT SDK Estimate Create Collection In Hbar
+## NFT SDK Estimate create collection cost in Hbar
 
 The `estimateCreateCollectionInHbar` method is used to estimate the cost of creating a new NFT collection. This method takes in a collection name and collection symbol and returns a promise that resolves when the cost is successfully estimated.
 
 ### Usage
 
-Install the package:
-
-```bash
-npm i -s @hashgraph/nft-utilities
-```
-
-Create instance of `NFTSDK` class and call `estimateCreateCollectionInHbar` method by passing the proper parameters.
+Create instance of `HederaNFTSDK` class and call `estimateCreateCollectionInHbar` method by passing the proper parameters.
 
 ```js
-const nftSDK = new HederaNFTSDK(operatorAccountId, operatorPrivateKey, 'testnet');
+const HederaNFTSDK = new HederaNFTSDK(operatorAccountId, operatorPrivateKey, 'testnet');
 
 const estimatedDollars = estimateCreateCollectionInHbar({
     collectionName: 'test',
@@ -826,18 +808,12 @@ The `mintSharedMetadata` method is used to mint NFTs with shared metadata. This 
 
 ### Usage
 
-Install the package:
-
-```bash
-npm i -s @hashgraph/nft-utilities
-```
-
-Create instance of `NFTSDK` class and call `mintSharedMetadata` method by passing the proper parameters.
+Create instance of `HederaNFTSDK` class and call `mintSharedMetadata` method by passing the proper parameters.
 
 ```js
-const nftSDK = new HederaNFTSDK(operatorAccountId, operatorPrivateKey, 'testnet');
+const HederaNFTSDK = new HederaNFTSDK(operatorAccountId, operatorPrivateKey, 'testnet');
 
-const mintedMetadata = await nftSDK.mintSharedMetadata({
+const mintedMetadata = await HederaNFTSDK.mintSharedMetadata({
     tokenId,
     amount,
     metaData: 'www.youtube.com',
@@ -863,7 +839,7 @@ type MintSharedType = {
 - `tokenId`: The token ID of the NFT collection.
 - `amount`: The amount of NFTs to mint.
 - `metaData`: The metadata of the NFTs.
-- `batchSize`: The batch size of the minting process.
+- `batchSize`: The amount of NFTs minted in a single on-chain transaction (defaults to 5).
 - `supplyKey`: The supply key of the NFTs.
 
 ### Output
@@ -881,19 +857,13 @@ The `mintUniqueMetadata` method is used to mint NFTs with unique metadata. This 
 
 ### Usage
 
-Install the package:
-
-```bash
-npm i -s @hashgraph/nft-utilities
-```
-
-Create instance of `NFTSDK` class and call `mintUniqueMetadata` method by passing the proper parameters.
+Create instance of `HederaNFTSDK` class and call `mintUniqueMetadata` method by passing the proper parameters.
 
 ```js
-const nftSDK = new HederaNFTSDK(operatorAccountId, operatorPrivateKey, 'testnet');
+const HederaNFTSDK = new HederaNFTSDK(operatorAccountId, operatorPrivateKey, 'testnet');
 
 // Pass the metadata as an array
-const mintedMetadata = await nftSDK.mintUniqueMetadata({
+const mintedMetadata = await HederaNFTSDK.mintUniqueMetadata({
     tokenId,
     supplyKey,
     batchSize: 2,
@@ -901,7 +871,7 @@ const mintedMetadata = await nftSDK.mintUniqueMetadata({
 });
 
 // Pass the path to the metadata file
-const mintedMetadata = await nftSDK.mintUniqueMetadata({
+const mintedMetadata = await HederaNFTSDK.mintUniqueMetadata({
     tokenId,
     supplyKey,
     batchSize: 2,
@@ -925,7 +895,7 @@ type MintUniqueType = {
 
 - `tokenId`: The token ID of the NFT collection.
 - `supplyKey`: The supply key of the NFTs.
-- `batchSize`: The batch size of the minting process.
+- `batchSize`: The amount of NFTs minted in a single on-chain transaction (defaults to 5).
 - `pathToMetadataURIsFile`: The path to the file containing the metadata URIs.
 - `metadata`: The metadata URIs of the NFTs.
 
@@ -938,25 +908,19 @@ type MintedNFTType = { serialNumber: number; content: string };
 ```
 
 
-## NFT SDK Estimate Mint Metadata In Dollars
+## NFT SDK Estimate minting cost in Dollars
 
 The `estimateNftMintingInDollars` method is used to estimate the cost of minting NFTs. This method takes in a nft amount and returns a promise that resolves when the cost is successfully estimated.
 
 ### Usage
 
-Install the package:
-
-```bash
-npm i -s @hashgraph/nft-utilities
-```
-
-Create instance of `NFTSDK` class and call `estimateNftMintingInDollars` method by passing the proper parameters.
+Create instance of `HederaNFTSDK` class and call `estimateNftMintingInDollars` method by passing the proper parameters.
 
 ```js
-const nftSDK = new HederaNFTSDK(operatorAccountId, operatorPrivateKey, 'testnet');
+const HederaNFTSDK = new HederaNFTSDK(operatorAccountId, operatorPrivateKey, 'testnet');
 const nfts = ['1', '2', '3', '4', '5'];
 
-const result = await nftSDK.estimateNftMintingInDollars({ amountOfNfts: nfts.length });
+const result = await HederaNFTSDK.estimateNftMintingInDollars({ amountOfNfts: nfts.length });
 ```
 
 ### Parameters
@@ -976,25 +940,19 @@ type EstimateMintDollarsType = {
 Method return number which is the estimated cost of minting NFTs in dollars.
 
 
-# NFT SDK Estimate Mint Metadata In Hbar
+## NFT SDK Estimate minting cost in Hbar
 
 The `estimateNftMintingInHbar` method is used to estimate the cost of minting NFTs. This method takes in a nft amount and returns a promise that resolves when the cost is successfully estimated.
 
 ### Usage
 
-Install the package:
-
-```bash
-npm i -s @hashgraph/nft-utilities
-```
-
-Create instance of `NFTSDK` class and call `estimateNftMintingInHbar` method by passing the proper parameters.
+Create instance of `HederaNFTSDK` class and call `estimateNftMintingInHbar` method by passing the proper parameters.
 
 ```js
-const nftSDK = new HederaNFTSDK(operatorAccountId, operatorPrivateKey, 'testnet');
+const HederaNFTSDK = new HederaNFTSDK(operatorAccountId, operatorPrivateKey, 'testnet');
 const nfts = ['1', '2', '3', '4', '5'];
 
-const result = await nftSDK.estimateNftMintingInHbar({ amountOfNfts: nfts.length });
+const result = await HederaNFTSDK.estimateNftMintingInHbar({ amountOfNfts: nfts.length });
 ```
 
 ### Parameters
@@ -1014,24 +972,18 @@ type EstimateMintHbarType = {
 Method return number which is the estimated cost of minting NFTs in hbar.
 
 
-# NFT SDK Increase NFT Supply
+## NFT SDK Increase NFT Supply
 
 The `increaseNFTSupply` method is used to increase the supply of NFTs.
 
 ### Usage
 
-Install the package:
-
-```bash
-npm i -s @hashgraph/nft-utilities
-```
-
-Create instance of `NFTSDK` class and call `increaseNFTSupply` method by passing the proper parameters.
+Create instance of `HederaNFTSDK` class and call `increaseNFTSupply` method by passing the proper parameters.
 
 ```js
-const nftSDK = new HederaNFTSDK(operatorAccountId, operatorPrivateKey, 'testnet');
+const HederaNFTSDK = new HederaNFTSDK(operatorAccountId, operatorPrivateKey, 'testnet');
 
-const increaseSupplyResult = await nftSDK.increaseNFTSupply({
+const increaseSupplyResult = await HederaNFTSDK.increaseNFTSupply({
     nftId: nft.nftId,
     amount: 5,
     batchSize: 10,
@@ -1054,7 +1006,7 @@ type IncreaseNFTSupplyType = {
 
 - `nftId`: The ID of the NFT.
 - `amount`: The amount of NFTs to mint.
-- `batchSize`: The batch size of the minting process.
+- `batchSize`: The amount of NFTs minted in a single on-chain transaction (defaults to 5).
 - `supplyKey`: The supply key of the NFTs.
 
 ### Output
@@ -1072,16 +1024,10 @@ The `getHolderAndDuration` method is used to get the holder and duration of an N
 
 ### Usage
 
-Install the package:
-
-```bash
-npm i -s @hashgraph/nft-utilities
-```
-
 Call `getHolderAndDuration` method by passing the proper parameters.
 
 ```js
-const result = await nftSDK.getHolderAndDuration({ tokenId, serialNumber: nftSerial, network: 'testnet' });
+const result = await HederaNFTSDK.getHolderAndDuration({ tokenId, serialNumber: nftSerial, network: 'testnet' });
 ```
 
 ### Parameters
@@ -1098,7 +1044,7 @@ type GetHolderAndDurationType = {
 
 - `tokenId`: The token ID of the NFT.
 - `serialNumber`: The serial number of the NFT.
-- `network`: The network to use (mainnet or testnet or previewnet or localNode).
+- `network`: The network to use (mainnet, testnet, previewnet or loocalNode).
 
 ### Output
 
@@ -1137,12 +1083,6 @@ The `fixedFee` method is used to create a fixed fee for NFT collections.
 
 ### Usage
 
-Install the package:
-
-```bash
-npm i -s @hashgraph/nft-utilities
-```
-
 Create new instance of `FeeFactory`
 
 ```js
@@ -1161,7 +1101,7 @@ const fixedFee = feeFactoryInstance.fixedFee({
 
 ### Parameters
 
-Create fixed fee method takes in the following parameters:
+Create fixed fee method takes in the following parameters(You need to pass either hbarAmount or (amount and denominatingTokenId)):
 
 ```typescript
 type FixedFeeType = {
@@ -1185,13 +1125,6 @@ The `royaltyFee` method is used to create a royalty fee for NFT collections.
 
 
 ### Usage
-
-Install the package:
-
-```bash
-npm i -s @hashgraph/nft-utilities
-```
-
 Create new instance of `FeeFactory`
 
 ```js
