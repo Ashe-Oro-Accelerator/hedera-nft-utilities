@@ -13,7 +13,11 @@ This package includes all sorts of tooling for the Hedera NFT ecosystem, includi
 3. **Risk score calculation:** Calculate a risk score for an NFT collection from the token information or by passing a token ID of an NFT on the Hedera testnet or mainnet.
 4. **Rarity score calculation:** Calculate the rarity scores for a local folder containing multiple JSON metadata files for an NFT collection.
 5. **Trait occurrence calculation:**
-6. **Hip412Validator:** A tool for validating metadata objects according to HIP-412, providing comprehensive verification of metadata compliance with the selected standard.
+6. **Hip 412 Validator:** A tool for validating metadata objects according to HIP-412, providing comprehensive verification of metadata compliance with the selected standard.
+7. **Hip 412 Metadata Builder:** Enables the creation and assembly of NFT metadata objects in a structured format and conducts instant validation within its build method, ensuring adherence to HIP-412 standards prior to deployment.
+8. **Convert CSV To Metadata Objects:** Facilitates the conversion of CSV file data into structured metadata objects, streamlining the initial stages of NFT metadata preparation.
+9. **Convert Metadata Objects to JSON Files:** Transforms validated metadata objects into JSON files, ensuring that NFT metadata is properly formatted and stored for deployment.
+10. **Prepare Metadata Objects From CSV Rows:** Processes rows of CSV data into ready to validate metadata objects, bridging the gap between raw data collection and NFT metadata standardization.
 
 ## Table of Contents
 
@@ -24,7 +28,11 @@ This package includes all sorts of tooling for the Hedera NFT ecosystem, includi
 - **Package: [Rarity score calculation](#rarity-score-calculation)**
 - **Package: [Trait occurrence calculation](#trait-occurrence-calculation)**
 - **Package: [NFTSDK](#nft-sdk-functions)**
-- **Package: [Hip412Validator](#hip412-validator)**
+- **Package: [Hip 412 Validator](#hip-412-validator)**
+- **Package: [Hip 412 Metadata Builder](#hip-412-metadata-builder)**
+- **Package: [Convert CSV To Metadata Objects](#convert-csv-to-metadata-objects)**
+- **Package: [Convert Metadata Objects to JSON Files](#convert-metadata-objects-to-json-files)**
+- **Package: [Prepare Metadata Objects From CSV Rows](#prepare-metadata-objects-from-csv-rows)**
 - **[Questions, contact us, or improvement proposals?](#questions-or-improvement-proposals)**
 - **[Support](#Support)**
 - **[Contributing](#Contributing)**
@@ -1107,7 +1115,11 @@ The `prepareMetadataObjectsFromCSVRows` function serves as an intermediary step 
 To transform CSV rows into metadata objects, you need to provide the parsed rows from a CSV file. The function utilizes predefined headers for attributes and properties to map CSV data accurately into metadata objects.
 
 ```ts
-const csvParsedRows = [{/* Array of parsed CSV rows */}];
+const csvParsedRows = [
+  {
+    /* Array of parsed CSV rows */
+  },
+];
 const metadataObjects = prepareMetadataObjectsFromCSVRows({ csvParsedRows });
 ```
 
