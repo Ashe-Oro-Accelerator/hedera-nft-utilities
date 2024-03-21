@@ -21,7 +21,7 @@ import { calculateRiskScoreFromData } from '../../../risk';
 import { Metadata, RiskLevels, Weights } from '../../../types/risk';
 
 const metadata: Metadata = {
-  supply_type: 'testSupply',
+  supply_type: 'FINITE',
   supply_key: 'testKey',
   max_supply: 'testMaxSupply',
   total_supply: 'testTotalSupply',
