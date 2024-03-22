@@ -618,7 +618,7 @@ See:
 
 ## NFT SDK methods
 
-Each of HederaNFTSDK function are methods in class `HederaNFTSDK` which is a wrapper around the Hedera HederaNFTSDK. The class is used to create a new NFT collection, mint NFTs, and transfer NFTs.
+Each of HederaNFTSDK function are methods in class `HederaNFTSDK` which is a wrapper around the native Hedera SDK. The class is used to create a new NFT collection, mint NFTs, and transfer NFTs.
 
 ### Usage
 
@@ -755,7 +755,7 @@ type EstimateCreateCollectionInDollarsType = {
 
 ### Output
 
-Method return number which is the estimated cost of creating a new NFT collection in Hbars.
+Method return number which is the estimated cost of creating a new NFT collection in dollars.
 
 
 ## NFT SDK Estimate create collection cost in Hbar
