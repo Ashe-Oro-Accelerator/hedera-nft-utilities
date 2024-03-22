@@ -799,7 +799,7 @@ type EstimateCreateCollectionInDollarsType = {
 
 ### Output
 
-Method return number which is the estimated cost of creating a new NFT collection in dollars.
+Method return number which is the estimated cost of creating a new NFT collection in hbars.
 
 
 ## NFT SDK Mint Shared Metadata
