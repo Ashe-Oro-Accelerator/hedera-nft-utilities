@@ -30,6 +30,8 @@ import { estimateNftMintingInHbar } from './estimate-nft-minting-in-hbar';
 import { estimateNftMintingInDollars } from './estimate-nft-minting-in-dollars';
 import { estimateCreateCollectionInDollars } from './estimate-create-collection-in-dollars';
 import { estimateCreateCollectionInHbar } from './estimate-create-collection-in-hbar';
+import { getHolderAndDuration } from './get-holder-and-duration';
+import { NetworkName } from '@hashgraph/sdk/lib/client/Client';
 import { getPrivateKeyFromString } from '../helpers/get-private-key-from-string';
 
 export class HederaNFTSDK {
@@ -176,7 +178,7 @@ export class HederaNFTSDK {
     amount: number;
     batchSize?: number;
     metaData: string;
-    supplyKey?: PrivateKey;
+    supplyKey?: string;
   }) {
     return mintSharedMetadataFunction({
       client: this.client,
@@ -184,7 +186,7 @@ export class HederaNFTSDK {
       amount,
       batchSize,
       metaData,
-      supplyKey: supplyKey || getPrivateKeyFromString(this.privateKey),
+      supplyKey: supplyKey ? getPrivateKeyFromString(supplyKey) : getPrivateKeyFromString(this.privateKey),
     });
   }
 
@@ -197,7 +199,7 @@ export class HederaNFTSDK {
   }: {
     tokenId: string;
     batchSize?: number;
-    supplyKey: PrivateKey;
+    supplyKey: string;
     pathToMetadataURIsFile?: string;
     metadata?: string[];
   }) {
@@ -205,31 +207,25 @@ export class HederaNFTSDK {
       client: this.client,
       tokenId,
       batchSize,
-      supplyKey,
+      supplyKey: getPrivateKeyFromString(supplyKey),
       pathToMetadataURIsFile,
       metadataArray: metadata,
     });
   }
 
-  increaseNFTSupply({
-    nftId,
-    amount,
-    batchSize = 5,
-    supplyKey,
-  }: {
-    nftId: NftId;
-    amount: number;
-    batchSize?: number;
-    supplyKey?: PrivateKey;
-  }) {
+  increaseNFTSupply({ nftId, amount, batchSize = 5, supplyKey }: { nftId: NftId; amount: number; batchSize?: number; supplyKey?: string }) {
     return increaseNFTSupply({
       client: this.client,
       network: this.network,
       nftId,
       amount,
       batchSize,
-      supplyKey: supplyKey || getPrivateKeyFromString(this.privateKey),
+      supplyKey: supplyKey ? getPrivateKeyFromString(supplyKey) : getPrivateKeyFromString(this.privateKey),
       mirrorNodeUrl: this.mirrorNodeUrl,
     });
+  }
+
+  getHolderAndDuration({ tokenId, serialNumber, network = 'mainnet' }: { tokenId: string; serialNumber: number; network?: NetworkName }) {
+    return getHolderAndDuration({ tokenId, serialNumber, network });
   }
 }
