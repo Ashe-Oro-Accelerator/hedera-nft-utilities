@@ -19,16 +19,7 @@
  */
 
 import axios from 'axios';
-import {
-  Metadata,
-  RiskResult,
-  Weights,
-  KeyTypes,
-  RiskLevels,
-  RiskLevel,
-  RiskScoreFactors,
-  KeysToRiskScoreCalculation,
-} from '../types/risk';
+import { Metadata, RiskResult, Weights, KeyTypes, RiskLevels, RiskLevel, RiskScoreFactors } from '../types/risk';
 import { getMirrorNodeUrlForNetwork } from '../utils/hedera/get-mirror-node-url-for-network';
 
 type Network = 'mainnet' | 'testnet' | 'previewnet' | 'localNode';
@@ -132,7 +123,7 @@ const calculateRiskScore = (metadata: Metadata, customWeights?: Weights): { risk
 
   // Iterate through the properties of the object
   for (const key in metadata) {
-    const typedKey = key as KeysToRiskScoreCalculation;
+    const typedKey = key as KeyTypes;
 
     // Check if the property is present in the weights object and not null
     if (metadata[typedKey] && (typedKey as KeyTypes) in weights.keys) {
@@ -144,10 +135,12 @@ const calculateRiskScore = (metadata: Metadata, customWeights?: Weights): { risk
 
   if (metadata.supply_type === 'INFINITE' && metadata.supply_key) {
     riskScore += weights.properties.supply_type_infinite;
+    riskScoreFactors['supply_type_infinite_and_supply_key_defined'] = weights.properties.supply_type_infinite;
   }
 
   if (metadata.supply_type === 'FINITE' && Number(metadata.max_supply) == Number(metadata.total_supply)) {
     riskScore -= weights.keys.supply_key;
+    riskScoreFactors['max_supply_equal_to_total_supply'] = weights.keys.supply_key;
   }
 
   return { riskScore, riskScoreFactors };

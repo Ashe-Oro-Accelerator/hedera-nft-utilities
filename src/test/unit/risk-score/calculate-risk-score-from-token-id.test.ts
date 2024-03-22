@@ -124,6 +124,24 @@ describe('calculateRiskScoreFromTokenId', () => {
     expect(riskScoreFactors).toEqual({ supply_type: 'FINITE', supply_key: 20, admin_key: 200 });
   });
 
+  it('should calculate risk score for a given token ID with max_supply and total_supply equal', async () => {
+    const metadataWithAdminKey = {
+      data: {
+        ...exampleMetadata.data,
+        max_supply: 100,
+        total_supply: 100,
+        admin_key: PrivateKey.generateED25519(),
+      },
+    };
+    mockAxios.get.mockResolvedValueOnce(metadataWithAdminKey);
+
+    const { riskScore, riskLevel, riskScoreFactors } = await calculateRiskScoreFromTokenId({ tokenId: '0.0.123456', network: 'testnet' });
+
+    expect(riskScore).toBe(200);
+    expect(riskLevel).toBe('HIGH');
+    expect(riskScoreFactors).toEqual({ supply_type: 'FINITE', supply_key: 20, admin_key: 200, max_supply_equal_to_total_supply: 20 });
+  });
+
   it('should calculate risk score for a given token ID with all keys provided, customWeights & customRiskLevels parameters', async () => {
     mockAxios.get.mockResolvedValueOnce(metadataWihAllKeysProvided);
 
