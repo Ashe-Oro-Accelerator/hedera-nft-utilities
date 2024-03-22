@@ -859,6 +859,15 @@ This method returns an object contains:
 - `isValid` boolean flag
 - Array of errors
 
+### Example result
+
+```ts
+type validationResult = {
+  isValid: boolean;
+  errors: string[];
+};
+```
+
 ---
 
 2. `validateArrayOfObjects` - Takes an array of metadata objects and validates each one against the HIP-412 schema, providing detailed results for each object.
@@ -876,6 +885,21 @@ This method returns an object contains:
 `errorsCount`: The number of errors found for the metadata object,
 `allObjectsValid`: A boolean flag indicating whether all metadata objects in the array passed validation without any errors.
 
+### Example result
+
+```ts
+type validationResult = {
+  allObjectsValid: boolean;
+  results: {
+    [index: number]: {
+      isValid: boolean;
+      errorsCount: number;
+      errors: string[];
+    };
+  };
+};
+```
+
 ---
 
 3. `validateLocalFile` - This method allows for the validation of metadata within a local file. It reads the file content, parses the JSON, and validates it against the HIP-412 schema.
@@ -892,6 +916,15 @@ This method returns an object contains:
 - `isValid` boolean flag
 - Array of errors
 
+### Example result
+
+```ts
+type validationResult = {
+  isValid: boolean;
+  errors: string[];
+};
+```
+
 ---
 
 4. `validateLocalDirectory` - Validates all JSON metadata files within a specified directory, offering a comprehensive tool for pre-publish validation of NFT collections.
@@ -906,9 +939,18 @@ const directoryValidationResult = Hip412Validator.validateLocalDirectory(directo
 This method returns an object contains:
 
 - `isValid`: A boolean flag indicating whether all files within the specified directory passed validation. It is true if all files are valid according to the HIP-412 schema, and false otherwise.
-- `errors`: An array of MetadataError objects, each corresponding to a file that failed validation. Each MetadataError object can include:
+- `errors`: An array of objects, each corresponding to a file that failed validation. Each object include:
   - `fileName`: The name of the file that encountered validation errors, helping to identify the source of the issue.
   - `general`: An array of strings, with each string describing a specific validation error encountered in the file.
+
+### Example result
+
+```ts
+type validationResult = {
+  isValid: boolean;
+  errors: string[];
+};
+```
 
 ---
 
@@ -937,6 +979,15 @@ This method returns an object contains:
 - `isValid` boolean flag
 - Array of errors
 
+### Example result
+
+```ts
+type validationResult = {
+  isValid: boolean;
+  errors: string[];
+};
+```
+
 ---
 
 6. `validateMetadataFromOnChainCollection` - Fetches and validates metadata for an entire NFT collection directly from the Hedera network, leveraging either the testnet or mainnet. This method is crucial for verifying the compliance of on-chain NFT collections.
@@ -964,6 +1015,15 @@ This method returns an object containing:
 - `isValid`: A boolean flag indicating whether all metadata objects passed validation without any errors.
 - `errors`: An array of objects, each containing a `serialNumber` identifying the specific NFT and a `message array` listing all validation errors found for that NFT.
 
+### Example result
+
+```ts
+type validationResult = {
+  isValid: boolean;
+  errors: string[];
+};
+```
+
 <br>
 
 ## HIP 412 METADATA BUILDER
@@ -983,18 +1043,18 @@ const metadataBuilder = new Hip412MetadataBuilder();
 ### Key Methods
 
 ```ts
-- setName(name: string): 'Sets the name of the NFT',
-- setImage(image: string): 'Sets the image URL for the NFT',
-- setType(type: string): 'Sets the type of the NFT',
+- setName(name: string): 'Sets the name of the NFT', // required
+- setImage(image: string): 'Sets the image URL for the NFT', // required
+- setType(type: string): 'Sets the type of the NFT', // required
 - setDescription(description: string): 'Adds a description to the NFT metadata',
 - setCreator(creator: string): 'Defines the creator of the NFT',
 - setCreatorDID(creatorDID: string): 'Specifies the Decentralized Identifier (DID) for the creator',
 - setChecksum(checksum: string): 'Assigns a checksum for the metadata integrity verification',
-- addAttribute(attribute: Attribute): 'Appends a custom attribute to the NFT. Can be used multiple times',
-- addFile(file: FileMetadata): 'Adds a file (with URI, type, etc.) to the NFT metadata. Can be used multiple times',
-- addProperty({ key, value }): 'Includes a custom property to the NFT metadata. Can be used multiple times',
+- addAttribute(attribute: Attribute): 'Appends a custom attribute to the NFT', //can be used multiple times
+- addFile(file: FileMetadata): 'Adds a file (with URI, type, etc.) to the NFT metadata', // can be used multiple times
+- addProperty({ key, value }): 'Includes a custom property to the NFT metadata', // can be used multiple times
 - setLocalization(localization: Localization): 'Establishes localization information for the NFT metadata',
-- build(): 'Validates and finalizes the metadata object, returning both the metadata and its validation result'.
+- build(): 'Validates and finalizes the metadata object, returning both the metadata and its validation result'. // required
 ```
 
 ### Usage
@@ -1002,7 +1062,7 @@ const metadataBuilder = new Hip412MetadataBuilder();
 Here's an example of how to use the `Hip412MetadataBuilder` to construct NFT metadata:
 
 ```ts
-const builder = new Hip412MetadataBuilder()
+const { metadata, validationResult } = new Hip412MetadataBuilder()
   .setName('My Awesome NFT')
   .setImage('https://example.com/my-awesome-nft.png')
   .setType('image/png')
@@ -1016,19 +1076,48 @@ const builder = new Hip412MetadataBuilder()
     type: 'application/json',
   })
   .build();
-
-console.log(builder.metadata); // The constructed metadata object
-console.log(builder.validationResponse); // The validation results
 ```
 
 ### Output
 
 The `build` method returns an object containing:
 
-- `metadata`: the constructed NFT metadata object ready for publication or further manipulation,
-- `validationResponse`: an object including: `isValid` boolean flag and an `array of validation errors` if any issues were found with the metadata.
+- `metadata`: This property holds the constructed metadata object that has been assembled using the builder methods. The metadata object follows the structure required by HIP-412, including attributes such as name, image, type, and any additional attributes or files that were added. This object is ready to be used for NFT creation or further processing.
 
-The Hip412MetadataBuilder class is designed to be flexible, allowing for the addition of more complex metadata structures such as localized descriptions, multiple files, and custom attributes, ensuring that developers can fully utilize the HIP-412 standard for their NFT projects.
+- `validationResult`: This property contains the results of validating the constructed metadata object against the HIP-412 standard. It provides feedback on the compliance of the metadata, including a boolean flag indicating validity (isValid) and detailed error information (as array of strings) for each metadata element that was evaluated.
+
+### example metadata result
+
+```json
+{
+  "name": "My Awesome NFT",
+  "image": "https://example.com/my-awesome-nft.png",
+  "type": "image/png",
+  "description": "This is a description of my awesome NFT",
+  "attributes": [
+    {
+      "trait_type": "Background",
+      "value": "Space"
+    }
+  ],
+  "files": [
+    {
+      "uri": "https://example.com/nft-metadata.json",
+      "type": "application/json"
+    }
+  ],
+  "format": "HIP412@2.0.0" // Automatically added by the builder to indicate compliance with a specific version of the standard
+}
+```
+
+### example validation result
+
+```ts
+type validationResult = {
+  isValid: boolean;
+  errors: string[];
+};
+```
 
 ---
 
