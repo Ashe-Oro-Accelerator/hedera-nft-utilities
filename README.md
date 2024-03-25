@@ -52,6 +52,8 @@ npm run build
 
 This command will produce a `dist` folder containing the outputted JavaScript files.
 
+---
+
 ## Token metadata validator
 
 Verify your metadata against the [token metadata V2 standard](https://github.com/hashgraph/hedera-improvement-proposal/blob/main/HIP/hip-412.md) for NFTs which returns errors and warnings against the standard.
@@ -229,6 +231,8 @@ const validate = (instance, schemaVersion = defaultSchemaVersion) => {
 };
 ```
 
+---
+
 ## Local validator
 
 Verify a local folder containing multiple JSON metadata files against the standard before publishing the NFT collection on the Hedera network.
@@ -405,6 +409,8 @@ The output interface for this function looks like this.
 ### Examples
 
 See: **[/examples/risk-score-calculation](https://github.com/hashgraph/hedera-nft-utilities/tree/main/examples/risk-score-calculation)**
+
+---
 
 ## Rarity score calculation
 
@@ -624,6 +630,8 @@ See:
 
 - **[/examples/rarity-score-calculation/trait-occurrence-from-data.js](https://github.com/hashgraph/hedera-nft-utilities/tree/main/examples/rarity-score-calculation)**
 
+---
+
 ## NFT SDK methods
 
 Each of HederaNFTSDK function are methods in class `HederaNFTSDK` which is a wrapper around the native Hedera SDK. The class is used to create a new NFT collection, mint NFTs, and transfer NFTs.
@@ -665,6 +673,8 @@ type HederaNFTSDKType = {
 - `localNode`: The local node to use.
 - `localMirrorNode`: The local mirror node to use.
 - `mirrorNodeUrl`: The mirror node URL to use.
+
+---
 
 ## NFT SDK Create Collection
 
@@ -724,6 +734,8 @@ Method return string which is the token ID of the newly created NFT collection.
 ### Examples
 
 See: **[/examples/local-metadata-validator/index.js](https://github.com/hashgraph/hedera-nft-utilities/tree/main/examples/local-metadata-validator)**
+
+---
 
 ## NFT SDK Estimate create collection cost in Dollars
 
@@ -815,9 +827,7 @@ type EstimateCreateCollectionInDollarsType = {
 
 Method return number which is the estimated cost of creating a new NFT collection in hbars.
 
-### Examples
-
-=======
+---
 
 ## NFT SDK Mint Shared Metadata
 
@@ -866,6 +876,8 @@ Method returns an array of objects containing the token ID and the serial number
 ```typescript
 type MintedNFTType = { serialNumber: number; content: string };
 ```
+
+---
 
 ## NFT SDK Mint Unique Metadata
 
@@ -923,6 +935,8 @@ Method returns an array of objects containing the token ID and the serial number
 type MintedNFTType = { serialNumber: number; content: string };
 ```
 
+---
+
 ## NFT SDK Estimate minting cost in Dollars
 
 The `estimateNftMintingInDollars` method is used to estimate the cost of minting NFTs. This method takes in a nft amount and returns a promise that resolves when the cost is successfully estimated.
@@ -954,6 +968,8 @@ type EstimateMintDollarsType = {
 
 Method return number which is the estimated cost of minting NFTs in dollars.
 
+---
+
 ## NFT SDK Estimate minting cost in Hbar
 
 The `estimateNftMintingInHbar` method is used to estimate the cost of minting NFTs. This method takes in a nft amount and returns a promise that resolves when the cost is successfully estimated.
@@ -984,6 +1000,8 @@ type EstimateMintHbarType = {
 ### Output
 
 Method return number which is the estimated cost of minting NFTs in hbar.
+
+---
 
 ## NFT SDK Increase NFT Supply
 
@@ -1359,7 +1377,7 @@ type validationResult = {
 };
 ```
 
-<br>
+---
 
 ## HIP 412 METADATA BUILDER
 
