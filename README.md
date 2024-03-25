@@ -1474,7 +1474,7 @@ const metadataObjects = await convertCSVToMetadataObjects(csvFilePath, 100);
 - `csvFilePath`: A string that specifies the path to the CSV file containing the NFT metadata information,
 - `limit`: An optional parameter that defines the maximum number of rows to be processed from the CSV file. If not provided, all rows in the file will be processed.
 
-<strong>Important!</strong> The first two lines in the csv file are headers and they are skipped.
+<strong>Important!</strong> The first two lines in the csv file are headers and they are skipped. You can find a valid csv example at the path `src/test/__mocks__/csv/csv-example-with-all-fields`
 
 ### Output
 
