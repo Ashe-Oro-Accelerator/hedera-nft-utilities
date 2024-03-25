@@ -65,6 +65,6 @@ export type Metadata = {
 
 export interface RiskResult {
   riskScore: number;
-  riskLevel: string;
+  riskLevel: RiskLevel;
   riskScoreFactors: RiskScoreFactors;
 }
