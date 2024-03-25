@@ -51,7 +51,6 @@ export type RiskLevelTypes = keyof RiskLevels;
 export type RiskScoreFactors = {
   [key in KeyTypes]?: number;
 } & {
-  supply_type?: 'INFINITE' | 'FINITE';
   supply_type_infinite_and_supply_key_defined?: number;
   max_supply_equal_to_total_supply?: number;
 };

@@ -58,7 +58,7 @@ describe('CalculateRiskScoreFromData', () => {
 
     expect(riskScore).toBe(20);
     expect(riskLevel).toBe('LOW');
-    expect(riskScoreFactors).toEqual({ supply_type: 'FINITE', supply_key: 20 });
+    expect(riskScoreFactors).toEqual({ supply_key: 20 });
   });
 
   it('should calculate risk score when fee_schedule_key is extra provided', () => {
@@ -70,7 +70,7 @@ describe('CalculateRiskScoreFromData', () => {
 
     expect(riskScore).toBe(60);
     expect(riskLevel).toBe('MEDIUM');
-    expect(riskScoreFactors).toEqual({ supply_type: 'FINITE', supply_key: 20, fee_schedule_key: 40 });
+    expect(riskScoreFactors).toEqual({ supply_key: 20, fee_schedule_key: 40 });
   });
 
   it('should calculate risk score when pause_key is extra provided', () => {
@@ -82,7 +82,7 @@ describe('CalculateRiskScoreFromData', () => {
 
     expect(riskScore).toBe(70);
     expect(riskLevel).toBe('MEDIUM');
-    expect(riskScoreFactors).toEqual({ supply_type: 'FINITE', supply_key: 20, pause_key: 50 });
+    expect(riskScoreFactors).toEqual({ supply_key: 20, pause_key: 50 });
   });
 
   it('should calculate risk score when admin_key is extra provided', () => {
@@ -94,7 +94,7 @@ describe('CalculateRiskScoreFromData', () => {
 
     expect(riskScore).toBe(220);
     expect(riskLevel).toBe('HIGH');
-    expect(riskScoreFactors).toEqual({ supply_type: 'FINITE', supply_key: 20, admin_key: 200 });
+    expect(riskScoreFactors).toEqual({ supply_key: 20, admin_key: 200 });
   });
 
   it('should calculate risk score with custom weights and custom risk levels', () => {
@@ -110,7 +110,7 @@ describe('CalculateRiskScoreFromData', () => {
 
     expect(riskScore).toBe(400);
     expect(riskLevel).toBe('MEDIUM');
-    expect(riskScoreFactors).toEqual({ supply_type: 'FINITE', supply_key: 200, kyc_key: 200 });
+    expect(riskScoreFactors).toEqual({ supply_key: 200, kyc_key: 200 });
   });
 
   it('should calculate risk score with custom weights ', () => {
@@ -125,7 +125,7 @@ describe('CalculateRiskScoreFromData', () => {
 
     expect(riskScore).toBe(400);
     expect(riskLevel).toBe('HIGH');
-    expect(riskScoreFactors).toEqual({ supply_type: 'FINITE', supply_key: 200, kyc_key: 200 });
+    expect(riskScoreFactors).toEqual({ supply_key: 200, kyc_key: 200 });
   });
 
   it('should calculate risk score with custom risk levels ', () => {
@@ -140,6 +140,6 @@ describe('CalculateRiskScoreFromData', () => {
 
     expect(riskScore).toBe(70);
     expect(riskLevel).toBe('MEDIUM');
-    expect(riskScoreFactors).toEqual({ supply_type: 'FINITE', supply_key: 20, kyc_key: 50 });
+    expect(riskScoreFactors).toEqual({ supply_key: 20, kyc_key: 50 });
   });
 });

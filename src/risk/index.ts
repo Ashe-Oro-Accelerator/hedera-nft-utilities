@@ -117,9 +117,7 @@ const calculateRiskScoreFromTokenId = async ({
 const calculateRiskScore = (metadata: Metadata, customWeights?: Weights): { riskScore: number; riskScoreFactors: RiskScoreFactors } => {
   const weights = customWeights ? customWeights : defaultWeights;
   let riskScore = 0;
-  const riskScoreFactors: RiskScoreFactors = {
-    supply_type: metadata.supply_type,
-  };
+  const riskScoreFactors: RiskScoreFactors = {};
 
   // Iterate through the properties of the object
   for (const key in metadata) {
