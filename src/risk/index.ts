@@ -133,7 +133,7 @@ const calculateRiskScore = (metadata: Metadata, customWeights?: Weights): { risk
 
   if (metadata.supply_type === 'INFINITE' && metadata.supply_key) {
     riskScore += weights.properties.supply_type_infinite;
-    riskScoreFactors['supply_type_infinite_and_supply_key_defined'] = -weights.properties.supply_type_infinite;
+    riskScoreFactors['supply_type_infinite_and_supply_key_defined'] = weights.properties.supply_type_infinite;
   }
 
   if (metadata.supply_type === 'FINITE' && Number(metadata.max_supply) == Number(metadata.total_supply)) {
