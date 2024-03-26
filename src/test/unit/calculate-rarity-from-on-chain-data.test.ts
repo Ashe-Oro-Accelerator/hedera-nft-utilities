@@ -1,6 +1,7 @@
 import { NetworkName } from '@hashgraph/sdk/lib/client/Client';
 import { calculateRarityFromOnChainData } from '../../rarity';
 import { getNftMetadataFromCollection } from '../../helpers/get-nft-metadatas-from-collection';
+import { dictionary } from '../../utils/constants/dictionary';
 
 const nftFromNode = [
   {
@@ -116,7 +117,7 @@ describe('calculateRarityFromOnChainData', () => {
     ]);
 
     await expect(calculateRarityFromOnChainData(network, tokenId, ipfsGateway, limit)).rejects.toThrowError(
-      'Attributes not found in object {"creator":"Hedera4"}. Please ensure that your metadata file is valid.'
+      dictionary.errors.rarity.attributeNotFoundInObject(JSON.stringify({ creator: 'Hedera4' }))
     );
   });
 });
